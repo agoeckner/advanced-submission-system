@@ -6,5 +6,5 @@
 
 # SubmissionManager handles the actual submission of assignments.
 class SubmissionManager:
-	def SubmissionManager(self):
+	def __init__(self):
 		pass

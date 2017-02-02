@@ -4,7 +4,7 @@
 # Purdue University
 #=================================
 
-# SubmissionInterface is used to submit assignments.
-class SubmissionInterface:
+# InstructorInterface is the instructor management portal.
+class InstructorInterface:
 	def __init__(self):
 		pass

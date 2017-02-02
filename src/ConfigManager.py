@@ -4,7 +4,7 @@
 # Purdue University
 #=================================
 
-# SubmissionInterface is used to submit assignments.
-class SubmissionInterface:
+# ConfigManager handles configuration and config files..
+class ConfigManager:
 	def __init__(self):
 		pass
