@@ -16,3 +16,11 @@ Documentation
 -------------
 
 Project documentation, including design and planning documents, is located in the 'doc' folder.
+
+
+Prerequisites
+-------------
+
+The following software must be installed for the Advanced Submission System to function.
+
+	* Python 3
