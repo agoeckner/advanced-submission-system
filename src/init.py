@@ -5,14 +5,16 @@
 #=================================
 
 import SubmissionInterface
-import SubmissionManager
 
-# Perform program initialization.
-def main():
-	print("Testing!")
+class AdvancedSubmissionSystem:
+	# Perform program initialization.
+	def __init__(self):
+		print("Advanced Submission System")
+		submissionUI = SubmissionInterface.SubmissionInterface()
+		submissionUI.show()
 
-# Perform 
+	# Perform 
 
 # Start the program.
 if __name__ == '__main__':
-	main()
+	AdvancedSubmissionSystem()
