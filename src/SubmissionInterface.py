@@ -29,8 +29,8 @@ class SubmissionInterface:
 			testWindow.border(1)
 			testWindow.box()
 
-			testWindow.addstr("Current time:\n", curses.A_REVERSE)
-			testWindow.addstr("    " + time.strftime("%H:%M:%S"))
+			testWindow.addstr(1, 2, "Current time:", curses.A_REVERSE)
+			testWindow.addstr(2, 2, "    " + time.strftime("%H:%M:%S"))
 
 			stdscr.refresh()
 			testWindow.refresh()
