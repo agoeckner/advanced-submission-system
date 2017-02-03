@@ -15,25 +15,27 @@ class SubmissionInterface:
 	def show(self):
 		print("Showing Submission UI")
 		
-		curses.wrapper(self.uiLoop)
+		curses.wrapper(self.draw)
 	
-	def uiLoop(self, stdscr):
+	def draw(self, stdscr):
 		# UI Setup
+		termSize = stdscr.getmaxyx()
 		curses.curs_set(0)
-		testWindow = curses.newwin(5, 40, 5, 5)
+		stdscr.hline(2, 0, curses.ACS_HLINE, termSize[1])
+		stdscr.refresh()
 		
+		# Top information panels.
+		topWindow = curses.newwin(2, termSize[1], 0, 0)
+		topWindow.addstr(0, termSize[1] - 12, "Current Time", curses.A_UNDERLINE)
+
 		# UI Loop
 		while True:
-			# Clear screen
-			testWindow.clear()
-			testWindow.border(1)
-			testWindow.box()
+			# Update top window.
+			# topWindow.clear()
+			topWindow.addstr(1, termSize[1] - 12, time.strftime("%I:%M:%S"))
+			topWindow.refresh()
 
-			testWindow.addstr(1, 2, "Current time:", curses.A_REVERSE)
-			testWindow.addstr(2, 2, "    " + time.strftime("%H:%M:%S"))
-
-			stdscr.refresh()
-			testWindow.refresh()
+			# stdscr.refresh()
 			# stdscr.getkey()
 			
 			# No need to refresh faster than 1 FPS for this example...
