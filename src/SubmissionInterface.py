@@ -24,16 +24,21 @@ class SubmissionInterface:
 		stdscr.hline(2, 0, curses.ACS_HLINE, termSize[1])
 		stdscr.refresh()
 		
-		# Top information panels.
-		topWindow = curses.newwin(2, termSize[1], 0, 0)
-		topWindow.addstr(0, termSize[1] - 12, "Current Time", curses.A_UNDERLINE)
+		# Information panel in the top-left corner.
+		infoPanel = curses.newwin(2, int(termSize[1] / 2), 0, 0)
+		infoPanel.addstr(0, 0, "ADVANCED SUBMISSION SYSTEM", curses.A_STANDOUT)
+		infoPanel.addstr(1, 0, "   Purdue Computer Science", curses.A_DIM)
+		infoPanel.refresh()
+		
+		# Time panel in the top-right corner.
+		timePanel = curses.newwin(2, 12, 0, termSize[1] - 12)
+		timePanel.addstr(0, 0, "Current Time", curses.A_UNDERLINE)
 
 		# UI Loop
 		while True:
-			# Update top window.
-			# topWindow.clear()
-			topWindow.addstr(1, termSize[1] - 12, time.strftime("%I:%M:%S"))
-			topWindow.refresh()
+			# Update time panel.
+			timePanel.addstr(1, 0, time.strftime("%I:%M:%S %p"))
+			timePanel.refresh()
 
 			# stdscr.refresh()
 			# stdscr.getkey()
