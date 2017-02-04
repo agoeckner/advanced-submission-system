@@ -6,6 +6,7 @@
 
 import curses
 import time
+import FilePicker
 
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
 PROGRAM_SUBTITLE = "Purdue Computer Science"
@@ -14,15 +15,18 @@ INTERFACE_TITLE = "SUBMIT ASSIGNMENT"
 # SubmissionInterface is used to submit assignments.
 class SubmissionInterface:
 
+	parent = None
+
 	# UI elements.
 	screenMain = None
 	screenSize = (0, 0)
 	panelTop = None
 	panelInfo = None
 	panelTime = None
+	picker = None
 
-	def __init__(self):
-		pass
+	def __init__(self, parent):
+		self.parent = parent
 	
 	def show(self):
 		try:
@@ -31,6 +35,7 @@ class SubmissionInterface:
 			raise
 		except Exception as err:
 			print("curseserror: " + str(err))
+			raise
 	
 	def _draw(self, stdscr):
 		self.screenMain = stdscr
@@ -43,6 +48,7 @@ class SubmissionInterface:
 			curses.curs_set(0)
 			stdscr.bkgd(curses.color_pair(0))
 			# stdscr.hline(2, 0, curses.ACS_HLINE, self.screenSize[1])
+			stdscr.nodelay(1)
 			stdscr.refresh()
 			
 			# Top panel.
@@ -67,19 +73,42 @@ class SubmissionInterface:
 			self.panelMain.bkgd(curses.color_pair(1))
 			self.panelMain.box()
 			self.panelMain.refresh()
+			
+			# File picker.
+			self.picker = FilePicker.FilePicker(
+				parent = self.panelMain,
+				positionYX = (1, 1),
+				sizeYX = (10, 40),
+				title = 'TESTING',
+				options = [
+					".autofsck", ".autorelabel", "bin/", "boot/", 
+					"cgroup/", "dev/", "etc/", "home/", "installimage.conf",
+					"installimage.debug", "lib/", "lib64/", "lost+found/",
+					"media/", "mnt/", "opt/", "proc/", "root/",
+					"sbin/", "selinux/", "srv/", "sys/",
+					"tmp/", "usr/", "var/"
+				],
+				footer="blah footer")
 
 			# UI Loop
 			while True:
 				self._drawUpdate()
 				# No need to refresh faster than 1 FPS for this example...
-				time.sleep(1)
+				time.sleep(0.1)
 		except Exception as err:
 			raise err
 
 	def _drawUpdate(self):
 		try:
+			# Get user input and handle interaction.
+			inputChar = self.screenMain.getch()
+			self.picker.onInput(inputChar)
+		
 			# Update time panel.
 			self.panelTime.addstr(1, 0, time.strftime("%I:%M:%S %p"))
 			self.panelTime.refresh()
+			
+			# Draw the file picker.
+			self.picker.redraw()
 		except Exception as err:
 			raise err
