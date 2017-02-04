@@ -31,13 +31,18 @@ class SubmissionInterface:
 		self.screenMain = stdscr
 		try:
 			# UI Setup
+			curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+			curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_CYAN)
+			curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
 			self.screenSize = stdscr.getmaxyx()
 			curses.curs_set(0)
+			stdscr.bkgd(curses.color_pair(0))
 			# stdscr.hline(2, 0, curses.ACS_HLINE, self.screenSize[1])
 			stdscr.refresh()
 			
 			# Top panel.
-			self.panelTop = curses.newwin(2, self.screenSize[1], 0, 0)
+			self.panelTop = stdscr.derwin(2, self.screenSize[1], 0, 0)
+			self.panelTop.bkgd(curses.color_pair(2))
 			
 			# Information panel on the left of the top panel.
 			self.panelInfo = self.panelTop.derwin(2, self.screenSize[1] - 12, 0, 0)
@@ -51,7 +56,8 @@ class SubmissionInterface:
 			self.panelTime.addstr(0, 0, "Current Time", curses.A_UNDERLINE)
 			
 			# Main panel.
-			self.panelMain = curses.newwin(self.screenSize[0] - 2, self.screenSize[1], 2, 0)
+			self.panelMain = stdscr.derwin(self.screenSize[0] - 4, self.screenSize[1] - 2, 3, 1)
+			self.panelMain.bkgd(curses.color_pair(1))
 			self.panelMain.box()
 			self.panelMain.refresh()
 
