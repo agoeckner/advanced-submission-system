@@ -28,7 +28,7 @@ class SubmissionInterface:
 		try:
 			curses.wrapper(self._draw)
 		except KeyboardInterrupt:
-			print("Nothing was submitted!")
+			raise
 		except Exception as err:
 			print("curseserror: " + str(err))
 	

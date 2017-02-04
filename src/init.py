@@ -10,7 +10,10 @@ class AdvancedSubmissionSystem:
 	# Perform program initialization.
 	def __init__(self):
 		submissionUI = SubmissionInterface.SubmissionInterface()
-		submissionUI.show()
+		try:
+			submissionUI.show()
+		except KeyboardInterrupt:
+			print("WARNING: Nothing was submitted!")
 
 	# Perform 
 
