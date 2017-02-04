@@ -26,6 +26,7 @@ class FilePicker:
 	more = ""
 	c_selected = ""
 	c_empty = ""
+	maxSelect = -1
 	
 	cursor = 0
 	offset = 0
@@ -55,13 +56,13 @@ class FilePicker:
 			# self.border[4], self.border[5],
 			# self.border[6], self.border[7]
 		# )
-		#TODO
-		# self.win.addstr(
-			# self.window_height + 4, 5, " " + self.footer + " "
-		# )
+		if(len(self.footer) > 0):
+			self.win.addstr(
+				self.window_height - 1, 5, " " + self.footer + " "
+			)
 		
 		position = 0
-		range = self.all_options[self.offset:self.offset+self.window_height]#+1] #TODO
+		range = self.all_options[self.offset:self.offset+self.window_height-1]#+1] #TODO
 		for option in range:
 			if option["selected"] == True:
 				line_label = self.c_selected + " "
@@ -78,20 +79,22 @@ class FilePicker:
 		
 		# hint for more content below
 		#TODO
-		# if self.offset + self.window_height <= self.length - 2:
-			# self.win.addstr(self.window_height + 3, 5, self.more)
+		if self.offset + self.window_height <= self.length:
+			self.win.addstr(self.window_height - 2, 5, self.more)
 		
-		self.win.addstr(0, 5, " " + self.title + " ")
-		self.win.addstr(
-			0, self.window_width - 8,
-			" " + str(self.selcount) + "/" + str(self.length) + " "
-		)
-		self.win.addstr(self.cursor + 2,1, self.arrow)
+		if len(self.title) > 0:
+			self.win.addstr(0, 5, " " + self.title + " ")
+		if self.maxSelect != 1:
+			self.win.addstr(
+				0, self.window_width - 8,
+				" " + str(self.selcount) + "/" + str(self.length) + " "
+			)
+		self.win.addstr(self.cursor,1, self.arrow)
 		self.win.refresh()
 
 	def check_cursor_up(self):
-		if self.cursor < 0:
-			self.cursor = 0
+		if self.cursor < 1:
+			self.cursor = 1
 			if self.offset > 0:
 				self.offset = self.offset - 1
 	
@@ -99,8 +102,8 @@ class FilePicker:
 		if self.cursor >= self.length:
 			self.cursor = self.cursor - 1
 	
-		if self.cursor > self.window_height:
-			self.cursor = self.window_height
+		if self.cursor >= self.window_height - 1:
+			self.cursor = self.window_height - 2
 			self.offset = self.offset + 1
 			
 			if self.offset + self.cursor >= self.length:
@@ -114,6 +117,9 @@ class FilePicker:
 		#elif c == curses.KEY_PPAGE:
 		#elif c == curses.KEY_NPAGE:
 		elif c == ord(' '):
+			if self.maxSelect == 1:
+				for opt in filter(lambda x: x["selected"], self.all_options):
+					opt["selected"] = False
 			self.all_options[self.selected]["selected"] = \
 				not self.all_options[self.selected]["selected"]
 		elif c == 10:
@@ -135,6 +141,7 @@ class FilePicker:
 		positionYX, 
 		sizeYX, 
 		options, 
+		maxSelect=-1, 
 		title='Select', 
 		arrow="-->",
 		footer="Space = toggle, Enter = accept, q = cancel",
@@ -152,6 +159,7 @@ class FilePicker:
 		self.c_empty = c_empty
 		self.window_height = sizeYX[0]
 		self.window_width = sizeYX[1]
+		self.maxSelect = maxSelect
 		
 		self.all_options = []
 		

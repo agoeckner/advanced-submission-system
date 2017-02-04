@@ -78,16 +78,20 @@ class SubmissionInterface:
 			self.picker = FilePicker.FilePicker(
 				parent = self.panelMain,
 				positionYX = (1, 1),
-				sizeYX = (self.screenSize[0] - 6, self.screenSize[1] - 4),
+				sizeYX = (10, int((self.screenSize[1] - 4) / 3)), #(self.screenSize[0] - 6, self.screenSize[1] - 4),
 				title = 'Select Course',
 				options = self.parent.submissionManager.getCourseList(),
-				footer="blah footer")
+				footer = "",
+				maxSelect = 1,
+				c_empty = "( )",
+				c_selected = "(X)",
+				arrow = " ->")
 
 			# UI Loop
 			while True:
 				self._drawUpdate()
 				# No need to refresh faster than 1 FPS for this example...
-				time.sleep(0.1)
+				time.sleep(0.01)
 		except Exception as err:
 			raise err
 
