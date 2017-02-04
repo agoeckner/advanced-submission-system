@@ -7,6 +7,10 @@
 import curses
 import time
 
+PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
+PROGRAM_SUBTITLE = "Purdue Computer Science"
+INTERFACE_TITLE = "SUBMIT ASSIGNMENT"
+
 # SubmissionInterface is used to submit assignments.
 class SubmissionInterface:
 
@@ -21,9 +25,10 @@ class SubmissionInterface:
 		pass
 	
 	def show(self):
-		print("Showing Submission UI")
 		try:
 			curses.wrapper(self._draw)
+		except KeyboardInterrupt:
+			print("Nothing was submitted!")
 		except Exception as err:
 			print("curseserror: " + str(err))
 	
@@ -46,9 +51,11 @@ class SubmissionInterface:
 			
 			# Information panel on the left of the top panel.
 			self.panelInfo = self.panelTop.derwin(2, self.screenSize[1] - 12, 0, 0)
-			self.panelInfo.addstr(0, 0, "ADVANCED SUBMISSION SYSTEM", curses.A_STANDOUT)
-			self.panelInfo.addstr(1, 3, "Purdue Computer Science", curses.A_DIM)
-			self.panelInfo.addstr(1, 35, "SUBMIT ASSIGNMENT", curses.A_NORMAL)
+			self.panelInfo.addstr(0, 0, PROGRAM_TITLE, curses.A_STANDOUT)
+			self.panelInfo.addstr(1, 3, PROGRAM_SUBTITLE, curses.A_DIM)
+			titlePosX = int((self.screenSize[1] - len(PROGRAM_TITLE) - 12 -
+				len(INTERFACE_TITLE)) / 2) + len(PROGRAM_TITLE)
+			self.panelInfo.addstr(1, titlePosX, INTERFACE_TITLE, curses.A_NORMAL)
 			self.panelInfo.refresh()
 			
 			# Time panel in the top-right corner.

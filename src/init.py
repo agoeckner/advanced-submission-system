@@ -9,7 +9,6 @@ import SubmissionInterface
 class AdvancedSubmissionSystem:
 	# Perform program initialization.
 	def __init__(self):
-		print("Advanced Submission System")
 		submissionUI = SubmissionInterface.SubmissionInterface()
 		submissionUI.show()
 
