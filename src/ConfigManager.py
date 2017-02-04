@@ -39,7 +39,8 @@ class ConfigManager:
 	config.set('course01', 'team', 'yes')
 	config.set('course01', 'max_submissions', '5')
 	config.set('course01', 'due', '02/12/2017')
-	with open('config.ini', 'a') as f:
+	
+	with open(globalConfigPath, 'a') as f:
 		config.write(f)
 
 	def remove(courseName):
@@ -49,20 +50,6 @@ class ConfigManager:
 		#modify(name, [new args]  OR object)
 		print("function to modify an existing course")
 
-	def create_config(path):
-	    """
-	    Create a config file
-	    """
-	    config = ConfigParser.ConfigParser()
-	    config.add_section("Settings")
-	    config.set("Settings", "font", "Courier")
-	    config.set("Settings", "font_size", "10")
-	    config.set("Settings", "font_style", "Normal")
-	    config.set("Settings", "font_info",
-	               "You are using %(font)s at %(font_size)s pt")
-	 
-	    with open(path, "wb") as config_file:
-	        config.write(config_file)
  
  
 	def get_config(path):
