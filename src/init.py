@@ -16,7 +16,7 @@ class AdvancedSubmissionSystem:
 		self.submissionManager = SubmissionManager.SubmissionManager(self)
 		self.submissionUI = SubmissionInterface.SubmissionInterface(self)
 		try:
-			submissionUI.show()
+			self.submissionUI.show()
 		except KeyboardInterrupt:
 			print("WARNING: Nothing was submitted!")
 

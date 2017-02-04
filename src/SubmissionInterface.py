@@ -74,20 +74,13 @@ class SubmissionInterface:
 			self.panelMain.box()
 			self.panelMain.refresh()
 			
-			# File picker.
+			# Course picker.
 			self.picker = FilePicker.FilePicker(
 				parent = self.panelMain,
 				positionYX = (1, 1),
-				sizeYX = (10, 40),
-				title = 'TESTING',
-				options = [
-					".autofsck", ".autorelabel", "bin/", "boot/", 
-					"cgroup/", "dev/", "etc/", "home/", "installimage.conf",
-					"installimage.debug", "lib/", "lib64/", "lost+found/",
-					"media/", "mnt/", "opt/", "proc/", "root/",
-					"sbin/", "selinux/", "srv/", "sys/",
-					"tmp/", "usr/", "var/"
-				],
+				sizeYX = (self.screenSize[0] - 6, self.screenSize[1] - 4),
+				title = 'Select Course',
+				options = self.parent.submissionManager.getCourseList(),
 				footer="blah footer")
 
 			# UI Loop
