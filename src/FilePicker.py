@@ -177,3 +177,4 @@ class FilePicker:
 			positionYX[0],
 			positionYX[1]
 		)
+		self.onInput(-1)

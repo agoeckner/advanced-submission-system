@@ -23,7 +23,8 @@ class SubmissionInterface:
 	panelTop = None
 	panelInfo = None
 	panelTime = None
-	picker = None
+	pickCourse = None
+	pickAssignment = None
 
 	def __init__(self, parent):
 		self.parent = parent
@@ -75,7 +76,7 @@ class SubmissionInterface:
 			self.panelMain.refresh()
 			
 			# Course picker.
-			self.picker = FilePicker.FilePicker(
+			self.pickCourse = FilePicker.FilePicker(
 				parent = self.panelMain,
 				positionYX = (1, 1),
 				sizeYX = (10, int((self.screenSize[1] - 4) / 3)), #(self.screenSize[0] - 6, self.screenSize[1] - 4),
@@ -86,6 +87,21 @@ class SubmissionInterface:
 				c_empty = "( )",
 				c_selected = "(X)",
 				arrow = " ->")
+			self.pickCourse.redraw()
+			
+			# Assignment picker.
+			self.pickAssignment = FilePicker.FilePicker(
+				parent = self.panelMain,
+				positionYX = (11, 1),
+				sizeYX = (10, int((self.screenSize[1] - 4) / 3)), #(self.screenSize[0] - 6, self.screenSize[1] - 4),
+				title = 'Select Assignment',
+				options = ["lab1", "lab2"],
+				footer = "",
+				maxSelect = 1,
+				c_empty = "( )",
+				c_selected = "(X)",
+				arrow = " ->")
+			self.pickAssignment.redraw()
 
 			# UI Loop
 			while True:
@@ -99,13 +115,14 @@ class SubmissionInterface:
 		try:
 			# Get user input and handle interaction.
 			inputChar = self.screenMain.getch()
-			self.picker.onInput(inputChar)
+			if inputChar != -1:
+				# Update list widgets.
+				self.pickCourse.onInput(inputChar)
+				self.pickCourse.redraw()
 		
 			# Update time panel.
 			self.panelTime.addstr(1, 0, time.strftime("%I:%M:%S %p"))
 			self.panelTime.refresh()
 			
-			# Draw the file picker.
-			self.picker.redraw()
 		except Exception as err:
 			raise err
