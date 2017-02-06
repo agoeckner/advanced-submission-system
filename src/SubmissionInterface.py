@@ -6,7 +6,7 @@
 
 import curses
 import time
-import FilePicker
+import Picker
 
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
 PROGRAM_SUBTITLE = "Purdue Computer Science"
@@ -76,7 +76,7 @@ class SubmissionInterface:
 			self.panelMain.refresh()
 			
 			# Course picker.
-			self.pickCourse = FilePicker.FilePicker(
+			self.pickCourse = Picker.Picker(
 				parent = self.panelMain,
 				positionYX = (1, 1),
 				sizeYX = (10, int((self.screenSize[1] - 4) / 3)), #(self.screenSize[0] - 6, self.screenSize[1] - 4),
@@ -90,7 +90,7 @@ class SubmissionInterface:
 			self.pickCourse.redraw()
 			
 			# Assignment picker.
-			self.pickAssignment = FilePicker.FilePicker(
+			self.pickAssignment = Picker.Picker(
 				parent = self.panelMain,
 				positionYX = (11, 1),
 				sizeYX = (10, int((self.screenSize[1] - 4) / 3)), #(self.screenSize[0] - 6, self.screenSize[1] - 4),

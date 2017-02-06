@@ -16,7 +16,7 @@
 
 import curses
 
-class FilePicker:
+class Picker:
 	"""Allows you to select from a list with curses"""
 	stdscr = None
 	win = None
