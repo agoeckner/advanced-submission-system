@@ -159,7 +159,7 @@ class Picker:
 		options, 
 		maxSelect=-1, 
 		title='Select', 
-		arrow="-->",
+		arrow=" =>",
 		footer="Space = toggle, Enter = accept, q = cancel",
 		more="...",
 		border="||--++++",
