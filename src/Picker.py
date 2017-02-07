@@ -50,17 +50,6 @@ class Picker:
 		
 	def redraw(self):
 		self.win.clear()
-		self.win.box()
-		# self.win.border(
-			# self.border[0], self.border[1],
-			# self.border[2], self.border[3],
-			# self.border[4], self.border[5],
-			# self.border[6], self.border[7]
-		# )
-		if(len(self.footer) > 0):
-			self.win.addstr(
-				self.window_height - 1, 5, " " + self.footer + " "
-			)
 		
 		# Don't add dots on selected items
 		# if self.offset > 0:
@@ -89,8 +78,13 @@ class Picker:
 		if self.offset + self.window_height <= self.length:
 			self.win.addstr(self.window_height - 2, 5, self.more)
 		
+		self.win.box()
+		if(len(self.footer) > 0):
+			self.win.addstr(
+				self.window_height - 1, 2, " " + self.footer + " "
+			)
 		if len(self.title) > 0:
-			self.win.addstr(0, 5, " " + self.title + " ")
+			self.win.addstr(0, 2, " " + self.title + " ")
 		if self.maxSelect != 1:
 			self.win.addstr(
 				0, self.window_width - 8,
