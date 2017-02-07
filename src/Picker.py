@@ -58,23 +58,22 @@ class Picker:
 			# elif self.all_options[self.offset+self.window_height-2]["selected"]:
 				# self.offset += 1
 		
-		position = 1
+		yPos = 1
 		range = self.all_options[self.offset:self.offset+self.window_height-1]
 		for option in range:
 			if option["selected"] == True:
 				line_label = self.c_selected + " "
 			else:
 				line_label = self.c_empty + " "
-			
-			self.win.addstr(position, 5, line_label + option["label"])
-			position = position + 1
+			xPos = 5 + option["level"] * 5
+			self.win.addstr(yPos, xPos, line_label + option["label"])
+			yPos = yPos + 1
 			
 		# hint for more content above
 		if self.offset > 0:
 			self.win.addstr(1, 1, self.more)
 		
 		# hint for more content below
-		#TODO
 		if self.offset + self.window_height <= self.length + 1:
 			self.win.addstr(self.window_height - 2, 1, self.more)
 		
@@ -125,6 +124,12 @@ class Picker:
 			if self.maxSelect == 1:
 				for opt in filter(lambda x: x["selected"], self.all_options):
 					opt["selected"] = False
+			elif self.all_options[self.selected]["isParent"]:
+				idx = self.selected + 1
+				level = self.all_options[self.selected]["level"]
+				while idx < self.length and self.all_options[idx]["level"] > level:
+					self.all_options[idx]["selected"] = not self.all_options[self.selected]["selected"]
+					idx += 1
 			self.all_options[self.selected]["selected"] = \
 				not self.all_options[self.selected]["selected"]
 		elif c == 10:
@@ -150,6 +155,29 @@ class Picker:
 			self.arrow = self.tempArrow
 			self.tempArrow = ""
 			self.redraw()
+	
+	def _buildOptionsTree(self, optionList, level = 0):
+		result = []
+		for option in optionList:
+			if type(option) is tuple:
+				result.append({
+					"label": option[0],
+					"level": level,
+					"selected": False,
+					"isParent": True
+				})
+				if len(option) > 1:
+					res = self._buildOptionsTree(option[1], level + 1)
+					for opt in res:
+						result.append(opt)
+			else:
+				result.append({
+					"label": option,
+					"level": level,
+					"selected": False,
+					"isParent": False
+				})
+		return result
 	
 	def __init__(
 		self, 
@@ -177,14 +205,8 @@ class Picker:
 		self.window_width = sizeYX[1]
 		self.maxSelect = maxSelect
 		
-		self.all_options = []
-		
-		for option in options:
-			self.all_options.append({
-				"label": option,
-				"selected": False
-			})
-			self.length = len(self.all_options)
+		self.all_options = self._buildOptionsTree(options)
+		self.length = len(self.all_options)
 		
 		# Set up window.
 		self.win = parent.derwin(
