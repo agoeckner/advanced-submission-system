@@ -109,6 +109,22 @@ class SubmissionInterface:
 				arrow = "==>")
 			self.pickAssignment.redraw()
 			self.inputManager.addElement(self.pickAssignment)
+			
+			# File picker.
+			self.pickFiles = Picker.Picker(
+				parent = self.panelMain,
+				positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
+				sizeYX = (self.screenSize[0] - 8,
+					2 * int((self.screenSize[1] - 3) / 3)),
+				title = 'Files',
+				options = ["folder/", "file.txt"],
+				footer = "",
+				maxSelect = -1,
+				c_empty = "[ ]",
+				c_selected = "[X]",
+				arrow = "==>")
+			self.pickFiles.redraw()
+			self.inputManager.addElement(self.pickFiles)
 
 			# UI Loop
 			while True:
