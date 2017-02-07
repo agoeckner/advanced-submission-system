@@ -79,11 +79,12 @@ class SubmissionInterface:
 			self.panelMain.refresh()
 			
 			# Course picker.
+			pickCourseSizeY = int((self.screenSize[0] - 4) / 3)
 			self.pickCourse = Picker.Picker(
 				parent = self.panelMain,
 				positionYX = (1, 1),
-				sizeYX = (10, int((self.screenSize[1] - 4) / 3)), #(self.screenSize[0] - 6, self.screenSize[1] - 4),
-				title = 'Select Course',
+				sizeYX = (pickCourseSizeY, int((self.screenSize[1] - 4) / 3)),
+				title = 'Course',
 				options = self.parent.submissionManager.getCourseList(),
 				footer = "",
 				maxSelect = 1,
@@ -96,9 +97,10 @@ class SubmissionInterface:
 			# Assignment picker.
 			self.pickAssignment = Picker.Picker(
 				parent = self.panelMain,
-				positionYX = (11, 1),
-				sizeYX = (10, int((self.screenSize[1] - 4) / 3)), #(self.screenSize[0] - 6, self.screenSize[1] - 4),
-				title = 'Select Assignment',
+				positionYX = (pickCourseSizeY + 1, 1),
+				sizeYX = (self.screenSize[0] - 5 - pickCourseSizeY,
+					int((self.screenSize[1] - 4) / 3)),
+				title = 'Assignment',
 				options = ["lab1", "lab2"],
 				footer = "",
 				maxSelect = 1,
