@@ -19,6 +19,7 @@ class SubmissionInterface:
 
 	parent = None
 	inputManager = None
+	run = True
 
 	# UI elements.
 	screenMain = None
@@ -38,11 +39,16 @@ class SubmissionInterface:
 	def show(self):
 		try:
 			curses.wrapper(self._draw)
+			self.onExit()
 		except KeyboardInterrupt:
 			raise
 		except Exception as err:
 			print("curseserror: " + str(err))
 			raise
+	
+	def onExit(self):
+		# Shutdown message.
+		print("Goodbye!")
 	
 	def _draw(self, stdscr):
 		self.screenMain = stdscr
@@ -115,7 +121,7 @@ class SubmissionInterface:
 			self.pickFiles = Picker.Picker(
 				parent = self.panelMain,
 				positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
-				sizeYX = (self.screenSize[0] - 8,
+				sizeYX = (self.screenSize[0] - 9,
 					2 * int((self.screenSize[1] - 3) / 3)),
 				title = 'Files',
 				options = ["folder/", "file.txt"],
@@ -129,14 +135,15 @@ class SubmissionInterface:
 			# Submit button.
 			self.btnSubmit = Button.Button(
 				parent = self.panelMain,
-				positionYX = (self.screenSize[0] - 7,
+				positionYX = (self.screenSize[0] - 8,
 					2 * int((self.screenSize[1] - 4) / 3) - 4),
 				label = "SUBMIT")
+			self.btnSubmit.setCallback(self.onBtnSubmit)
 			self.btnSubmit.redraw()
 			self.inputManager.addElement(self.btnSubmit)
 
 			# UI Loop
-			while True:
+			while self.run:
 				self._drawUpdate()
 				# No need to refresh faster than 1 FPS for this example...
 				time.sleep(0.01)
@@ -158,3 +165,36 @@ class SubmissionInterface:
 			
 		except Exception as err:
 			raise err
+	
+	def displayMessage(self, message, textAttr=curses.A_NORMAL):
+		self.panelMain.addstr(
+			self.screenSize[0] - 7,
+			int((self.screenSize[1] - 4) / 3) + 2,
+			message,
+			textAttr)
+		self.panelMain.refresh()
+	
+	def onBtnSubmit(self):
+		# self.run = False
+		course = self.pickCourse.getSelected()
+		assignment = self.pickAssignment.getSelected()
+		files = self.pickFiles.getSelected()
+		if len(course) != 1:
+			self.displayMessage("Please select a course.", curses.A_STANDOUT)
+			return
+		elif len(assignment) != 1:
+			self.displayMessage("Please select an assignment.", curses.A_STANDOUT)
+			return
+		elif len(files) < 1:
+			self.displayMessage("Please select at least one file.", curses.A_STANDOUT)
+			return
+		self.displayMessage("                                ") # clear message
+		
+		# Submit the assignment.
+		course = course[0]
+		assignment = assignment[0]
+		if self.parent.submissionManager.submitAssignment(course, assignment, files):
+			# Execution done.
+			self.run = false
+		else:
+			self.displayMessage("ERROR: Submission failed.", curses.A_STANDOUT)
