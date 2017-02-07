@@ -58,7 +58,7 @@ class Picker:
 			# elif self.all_options[self.offset+self.window_height-2]["selected"]:
 				# self.offset += 1
 		
-		position = 0
+		position = 1
 		range = self.all_options[self.offset:self.offset+self.window_height-1]
 		for option in range:
 			if option["selected"] == True:
@@ -92,6 +92,10 @@ class Picker:
 			)
 		self.win.addstr(self.cursor,1, self.arrow)
 		self.win.refresh()
+	
+	def cursorDown(self):
+		if self.cursor >= self.length:
+			return
 
 	def check_cursor_up(self):
 		if self.cursor < 1:
@@ -100,14 +104,14 @@ class Picker:
 				self.offset = self.offset - 1
 	
 	def check_cursor_down(self):
-		if self.cursor >= self.length:
+		if self.cursor > self.length:
 			self.cursor = self.cursor - 1
 	
 		if self.cursor >= self.window_height - 1:
 			self.cursor = self.window_height - 2
 			self.offset = self.offset + 1
 			
-			if self.offset + self.cursor >= self.length:
+			if self.offset + self.cursor > self.length:
 				self.offset = self.offset - 1
 	
 	def onInput(self, c):
@@ -131,7 +135,7 @@ class Picker:
 		self.check_cursor_down()
 
 		# compute selected position only after dealing with limits
-		self.selected = self.cursor + self.offset
+		self.selected = self.cursor + self.offset - 1
 		
 		temp = self.getSelected()
 		self.selcount = len(temp)
@@ -174,9 +178,6 @@ class Picker:
 		self.maxSelect = maxSelect
 		
 		self.all_options = []
-		
-		# TODO: This is a dirty hack.
-		options.insert(0, "")
 		
 		for option in options:
 			self.all_options.append({
