@@ -6,6 +6,7 @@
 
 import curses
 import time
+import InputManager
 import Picker
 
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
@@ -16,6 +17,7 @@ INTERFACE_TITLE = "SUBMIT ASSIGNMENT"
 class SubmissionInterface:
 
 	parent = None
+	inputManager = None
 
 	# UI elements.
 	screenMain = None
@@ -28,6 +30,7 @@ class SubmissionInterface:
 
 	def __init__(self, parent):
 		self.parent = parent
+		self.inputManager = InputManager.InputManager(self)
 	
 	def show(self):
 		try:
@@ -86,8 +89,9 @@ class SubmissionInterface:
 				maxSelect = 1,
 				c_empty = "( )",
 				c_selected = "(X)",
-				arrow = " ->")
+				arrow = "==>")
 			self.pickCourse.redraw()
+			self.inputManager.addElement(self.pickCourse)
 			
 			# Assignment picker.
 			self.pickAssignment = Picker.Picker(
@@ -100,8 +104,9 @@ class SubmissionInterface:
 				maxSelect = 1,
 				c_empty = "( )",
 				c_selected = "(X)",
-				arrow = " ->")
+				arrow = "==>")
 			self.pickAssignment.redraw()
+			self.inputManager.addElement(self.pickAssignment)
 
 			# UI Loop
 			while True:
@@ -117,8 +122,8 @@ class SubmissionInterface:
 			inputChar = self.screenMain.getch()
 			if inputChar != -1:
 				# Update list widgets.
-				self.pickCourse.onInput(inputChar)
-				self.pickCourse.redraw()
+				inp = self.inputManager.onInput(inputChar)
+				self.inputManager.currentElement.redraw()
 		
 			# Update time panel.
 			self.panelTime.addstr(1, 0, time.strftime("%I:%M:%S %p"))

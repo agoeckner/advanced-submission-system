@@ -27,6 +27,7 @@ class Picker:
 	c_selected = ""
 	c_empty = ""
 	maxSelect = -1
+	tempArrow = ""
 	
 	cursor = 0
 	offset = 0
@@ -134,6 +135,17 @@ class Picker:
 		
 		temp = self.getSelected()
 		self.selcount = len(temp)
+
+	def onLoseFocus(self):
+		self.tempArrow = self.arrow
+		self.arrow = ""
+		self.redraw()
+	
+	def onFocus(self):
+		if self.tempArrow is not "":
+			self.arrow = self.tempArrow
+			self.tempArrow = ""
+			self.redraw()
 	
 	def __init__(
 		self, 
