@@ -4,6 +4,8 @@
 # Purdue University
 #=================================
 
+import os, pwd, grp, sys, tarfile
+
 # SubmissionManager handles the actual submission of assignments.
 class SubmissionManager:
 	parent = None
@@ -21,4 +23,27 @@ class SubmissionManager:
 	# files is a list of file strings
 	# Return true on success, false on failure
 	def submitAssignment(self, course, assignment, files):
-		return False
+		#groups is a list of all groups the user belongs to
+		goups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
+		gid = pwd.getpwnam(user).pw_gid
+		groups.append(grp.getgrgid(gid).gr_name)
+		
+		#if assignment isn't in groups, user isn't in the group
+		if assignment not in groups:
+			print('You do not have access to ' + assignment)
+			return false
+		
+		tar = tarfile.open('submission.tar.gz', 'w:gz')
+
+		#TODO: parse config file to locate path
+		path = ''
+
+		for f in files:
+			tar.add(f)
+
+		print('zipping files to ' + path)
+		
+		#uncomment when all is done
+		#shutil.move('submission.tar.gz', path)
+		return true
+		
