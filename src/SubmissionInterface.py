@@ -5,6 +5,8 @@
 #=================================
 
 import curses
+import os
+import os.path
 import time
 import Button
 import InputManager
@@ -13,6 +15,7 @@ import Picker
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
 PROGRAM_SUBTITLE = "Purdue Computer Science"
 INTERFACE_TITLE = "SUBMIT ASSIGNMENT"
+SUBMISSION_FOLDER = os.getcwd()
 
 # SubmissionInterface is used to submit assignments.
 class SubmissionInterface:
@@ -124,7 +127,7 @@ class SubmissionInterface:
 				sizeYX = (self.screenSize[0] - 9,
 					2 * int((self.screenSize[1] - 3) / 3)),
 				title = 'Files',
-				options = ["folder/", "file.txt"],
+				options = [self._getFileList(SUBMISSION_FOLDER)],
 				footer = "",
 				maxSelect = -1,
 				c_empty = "[ ]",
@@ -198,3 +201,15 @@ class SubmissionInterface:
 			self.run = false
 		else:
 			self.displayMessage("ERROR: Submission failed.", curses.A_STANDOUT)
+	
+	def _getFileList(self, directory):
+		dirName = directory
+		dirList = []
+		
+		for entry in sorted(os.listdir(directory), key = str.lower):
+			if os.path.isdir(entry):
+				dirList.append(self._getFileList(entry))
+			else:
+				dirList.append(entry)
+		
+		return (dirName, dirList)
