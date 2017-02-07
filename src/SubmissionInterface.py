@@ -6,6 +6,7 @@
 
 import curses
 import time
+import Button
 import InputManager
 import Picker
 
@@ -27,6 +28,8 @@ class SubmissionInterface:
 	panelTime = None
 	pickCourse = None
 	pickAssignment = None
+	pickFile = None
+	btnSubmit = None
 
 	def __init__(self, parent):
 		self.parent = parent
@@ -98,7 +101,7 @@ class SubmissionInterface:
 			self.pickAssignment = Picker.Picker(
 				parent = self.panelMain,
 				positionYX = (pickCourseSizeY + 1, 1),
-				sizeYX = (self.screenSize[0] - 5 - pickCourseSizeY,
+				sizeYX = (self.screenSize[0] - 6 - pickCourseSizeY,
 					int((self.screenSize[1] - 4) / 3)),
 				title = 'Assignment',
 				options = ["lab1", "lab2"],
@@ -125,6 +128,15 @@ class SubmissionInterface:
 				arrow = "==>")
 			self.pickFiles.redraw()
 			self.inputManager.addElement(self.pickFiles)
+			
+			# Submit button.
+			self.btnSubmit = Button.Button(
+				parent = self.panelMain,
+				positionYX = (self.screenSize[0] - 7,
+					2 * int((self.screenSize[1] - 4) / 3) - 4),
+				label = "SUBMIT")
+			self.btnSubmit.redraw()
+			self.inputManager.addElement(self.btnSubmit)
 
 			# UI Loop
 			while True:
