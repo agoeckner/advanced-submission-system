@@ -84,7 +84,7 @@ class Picker:
 				self.window_height - 1, 2, " " + self.footer + " "
 			)
 		if len(self.title) > 0:
-			self.win.addstr(0, 2, " " + self.title + " ")
+			self.win.addstr(0, 1, " " + self.title + " ")
 		if self.maxSelect != 1:
 			self.win.addstr(
 				0, self.window_width - 8,

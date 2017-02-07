@@ -93,7 +93,7 @@ class SubmissionInterface:
 				maxSelect = 1,
 				c_empty = "( )",
 				c_selected = "(X)",
-				arrow = "==>")
+				arrow = " =>")
 			self.pickCourse.redraw()
 			self.inputManager.addElement(self.pickCourse)
 			
@@ -109,7 +109,7 @@ class SubmissionInterface:
 				maxSelect = 1,
 				c_empty = "( )",
 				c_selected = "(X)",
-				arrow = "==>")
+				arrow = " =>")
 			self.pickAssignment.redraw()
 			self.inputManager.addElement(self.pickAssignment)
 			
@@ -125,7 +125,7 @@ class SubmissionInterface:
 				maxSelect = -1,
 				c_empty = "[ ]",
 				c_selected = "[X]",
-				arrow = "==>")
+				arrow = " =>")
 			self.pickFiles.redraw()
 			self.inputManager.addElement(self.pickFiles)
 			
