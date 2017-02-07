@@ -7,7 +7,9 @@ import optparse
 import os
 from ConfigParser import SafeConfigParser
 from distutils.util import strtobool
-from pathlib import Path
+from pathlib import Path    # needs:  sudo pip install pathlib
+from dateutil.parser import parse # needs: sudo pip install python-dateutil
+from datetime import datetime
 
 
 
@@ -15,44 +17,117 @@ from pathlib import Path
 class ConfigManager:
 
 	def __init__(self):
-		globalConfigPath = "as_config.config"
+		return	
 
-	def main():
-		print("test config generator")
-		write();
-		read("aaa");
-		remove("aaa");
-		modify("aaa");
+''' Begin API for managing course config file '''
+	def addProject(self, courseConfigFile, projectName, dueDate, team, maxSubmissions, lateDays):
+		## example : addProject( "testCourse.config", "lab1", "12-05-2017", true, 100, 0)
+		## courseConfigFile = os.getcwd() + '/' courseName + ".config"
+
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unablle to find "  + courseConfigFile)
+			return false
+
+		try:
+			dueDate = parse(dueDate)
+		except ValueError:
+			print("ERROR: incorrect format for dueDate specified \n Setting due date to 2099-12-31")
+			dueDate = parse("2099-12-31") ## infinity date in the future
+
+		try:
+			teamProj = bool(team)
+		except:
+			print("ERROR: incorrect format for team specified. Use true/false")
+			teamProj = false
 
 
-	def createCourse(courseName, projectName, dueDate, team):
-	## write( courseName, bool team, ...,)
-	## could also use class object and pass to write
-	fileName = courseName + projectName + ".config"
-	my_file = Path()
-	if my_file.is_file():
-		return false
-	print("creating course")
+		config = get_config(courseConfigFile)
+		config.add_section(projectName)
+		config.set(projectName, 'team', team)
+		config.set(projectName, 'max_submissions', max_submissions)
+		config.set(projectName, 'due', str(dueDate) )
+		config.set(projectName, 'late days', lateDays )
 
-	config = SafeConfigParser()
-	config.add_section(courseName + '-'+ projectName)
-	config.set('course01', 'team', 'yes')
-	config.set('course01', 'max_submissions', '5')
-	config.set('course01', 'due', '02/12/2017')
+		
+		with open(courseConfigFile, 'wb') as f:
+			config.write(f)
+		return true
+
+	def removeProject(self, courseConfigFile, projectName):
+		## e.g. removeProject("testCourse.config", "lab1" )
+		print("removing " + projectName + " from " + courseConfigFile)
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return false
+
+		config = get_config(courseConfigFile)
+		config.remove_section(projectName)
+
+		with open(path, "wb") as config_file:
+			config.write(config_file)
+		return true
 	
-	with open(globalConfigPath, 'a') as f:
-		config.write(f)
-
-	def remove(courseName):
-		print("function to remove a course from system")
-	
-	def modify(courseName):
-		#modify(name, [new args]  OR object)
+	def modifyProject(self, courseConfigFile, projectName, dueDate, team, maxSubmissions, lateDays):
+		## example : modifyProject( "testCourse.config", "lab2", "12-05-2017", true, 100, 0)
 		print("function to modify an existing course")
+		removeProject(courseConfigFile,  projectName )
+		addProject( courseConfigFile, projectName, dueDate , team, maxSubmissions, lateDays)
+		##update_setting(path, section, setting, value)
 
+	def getProjects(self, courseConfigFile):
+		config = ConfigParser.RawConfigParser()
+		config.read(courseConfigFile)
+		return config.sections()
+
+
+	def getProjectInfo(self, courseConfigFile, projectName):
+		config = ConfigParser.RawConfigParser()
+		config.read(courseConfigFile)
+
+		for proj in config.sections()
+			if proj == projectName
+				return config.options(proj)
+
+''' Begin API for managing global config file '''
+
+
+	def addCourse(self, globalConfigFile, courseName, courseConfigFile):
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return false
+		my_file = Path(globalConfigFile)
+		if not my_file.is_file():
+			print("Unablle to find "  + globalConfigFile)
+			return false
+
+
+		config = get_config(courseConfigFile)
+		config.add_section(courseName)
+		config.set(courseName, 'course_config_file', courseConfigFile)
+		## config.set(courseName, 'contact info: ', contactInfo)
+
+		with open(courseConfigFile, 'wb') as f:
+			config.write(f)
+		return true
+
+	def removeCourse(self, globalConfigFile, courseName):
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return false
+		config = ConfigParser.RawConfigParser()
+		config.read(courseConfigFile)
+
+		config.remove_section(courseName)
+		return true
+
+
+''' Begin ConfigParser API '''
  
- 
-	def get_config(path):
+	def get_config(self,path):
 	    """
 	    Returns the config object
 	    """
@@ -64,7 +139,7 @@ class ConfigManager:
 	    return config
 	 
 	 
-	def get_setting(path, section, setting):
+	def get_setting(self, path, section, setting):
 	    """
 	    Print out a setting
 	    """
@@ -93,11 +168,12 @@ class ConfigManager:
 	    config.remove_option(section, setting)
 	    with open(path, "wb") as config_file:
 	        config.write(config_file)
+
+def main():
+		print("***Testing config generator***")
+		cm = ConfigManager();
+		
+
 		
 if __name__ == '__main__':
     main()
-
-
-
-
-	
