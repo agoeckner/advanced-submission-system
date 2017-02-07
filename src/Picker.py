@@ -65,7 +65,7 @@ class Picker:
 				line_label = self.c_selected + " "
 			else:
 				line_label = self.c_empty + " "
-			xPos = 5 + option["level"] * 5
+			xPos = 5 + option["level"] * 4
 			self.win.addstr(yPos, xPos, line_label + option["label"])
 			yPos = yPos + 1
 			
