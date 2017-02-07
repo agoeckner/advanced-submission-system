@@ -10,6 +10,9 @@ import curses
 class Button:
 	parent = None
 	label = ""
+	callback = None
+	callbackArgs = None
+	callbackKWArgs = None
 	win = None
 	
 	def __init__(self, parent, label, sizeYX=None, positionYX=(0,0)):
@@ -24,6 +27,11 @@ class Button:
 			positionYX[1]
 		)
 	
+	def setCallback(self, callback, *args, **kwargs):
+		self.callback = callback
+		self.callbackArgs = args
+		self.callbackKWArgs = kwargs
+	
 	def onFocus(self):
 		self.win.addstr(0, 0, "> " + self.label + " <", curses.A_REVERSE)
 		self.redraw()
@@ -36,6 +44,6 @@ class Button:
 		self.win.refresh()
 	
 	def onInput(self, inputChar):
-		if inputChar == curses.KEY_ENTER:
-			pass
+		if inputChar == curses.KEY_ENTER or inputChar == ord(' '):
+			self.callback(*self.callbackArgs, **self.callbackKWArgs)
 		return None
