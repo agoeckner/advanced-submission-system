@@ -71,12 +71,12 @@ class Picker:
 			
 		# hint for more content above
 		if self.offset > 0:
-			self.win.addstr(1, 5, self.more)
+			self.win.addstr(1, 1, self.more)
 		
 		# hint for more content below
 		#TODO
-		if self.offset + self.window_height <= self.length:
-			self.win.addstr(self.window_height - 2, 5, self.more)
+		if self.offset + self.window_height <= self.length + 1:
+			self.win.addstr(self.window_height - 2, 1, self.more)
 		
 		self.win.box()
 		if(len(self.footer) > 0):
