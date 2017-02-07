@@ -5,17 +5,20 @@
 #=================================
 
 import SubmissionInterface
+import SubmissionManager
 
 class AdvancedSubmissionSystem:
+	submissionManager = None
+	submissionUI = None
+
 	# Perform program initialization.
 	def __init__(self):
-		submissionUI = SubmissionInterface.SubmissionInterface()
+		self.submissionManager = SubmissionManager.SubmissionManager(self)
+		self.submissionUI = SubmissionInterface.SubmissionInterface(self)
 		try:
-			submissionUI.show()
+			self.submissionUI.show()
 		except KeyboardInterrupt:
 			print("WARNING: Nothing was submitted!")
-
-	# Perform 
 
 # Start the program.
 if __name__ == '__main__':

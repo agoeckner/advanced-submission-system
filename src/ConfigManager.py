@@ -127,6 +127,7 @@ class ConfigManager:
 
 ''' Begin ConfigParser API '''
  
+
 	def get_config(self,path):
 	    """
 	    Returns the config object
@@ -134,11 +135,12 @@ class ConfigManager:
 	    if not os.path.exists(path):
 	        create_config(path)
 	 
-	    config = ConfigParser.ConfigParser()
-	    config.read(path)
-	    return config
+		config = ConfigParser.ConfigParser()
+		config.read(path)
+		return config
 	 
 	 
+
 	def get_setting(self, path, section, setting):
 	    """
 	    Print out a setting
@@ -150,14 +152,15 @@ class ConfigManager:
 	    return value
 	 
 	 
+
 	def update_setting(path, section, setting, value):
-	    """
-	    Update a setting
-	    """
-	    config = get_config(path)
-	    config.set(section, setting, value)
-	    with open(path, "wb") as config_file:
-	        config.write(config_file)
+		"""
+		Update a setting
+		"""
+		config = get_config(path)
+		config.set(section, setting, value)
+		with open(path, "wb") as config_file:
+			config.write(config_file)
 	 
 	 
 	def delete_setting(path, section, setting):
@@ -177,3 +180,4 @@ def main():
 		
 if __name__ == '__main__':
     main()
+
