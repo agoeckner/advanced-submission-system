@@ -62,15 +62,21 @@ class Picker:
 				self.window_height - 1, 5, " " + self.footer + " "
 			)
 		
+		# Don't add dots on selected items
+		# if self.offset > 0:
+			# if self.all_options[self.offset]["selected"]:
+				# self.offset -= 1
+			# elif self.all_options[self.offset+self.window_height-2]["selected"]:
+				# self.offset += 1
+		
 		position = 0
-		range = self.all_options[self.offset:self.offset+self.window_height-1]#+1] #TODO
+		range = self.all_options[self.offset:self.offset+self.window_height-1]
 		for option in range:
 			if option["selected"] == True:
 				line_label = self.c_selected + " "
 			else:
 				line_label = self.c_empty + " "
 			
-			#REMOVED POSITION + 2: TODO
 			self.win.addstr(position, 5, line_label + option["label"])
 			position = position + 1
 			
@@ -174,6 +180,9 @@ class Picker:
 		self.maxSelect = maxSelect
 		
 		self.all_options = []
+		
+		# TODO: This is a dirty hack.
+		options.insert(0, "")
 		
 		for option in options:
 			self.all_options.append({
