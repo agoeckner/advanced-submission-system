@@ -87,6 +87,11 @@ class SubmissionInterface:
 			# Main panel.
 			self.panelMain = stdscr.derwin(self.screenSize[0] - 4, self.screenSize[1] - 2, 3, 1)
 			self.panelMain.bkgd(curses.color_pair(1))
+			self.panelMain.addstr(
+				self.screenSize[0] - 6,
+				self.screenSize[1] - 36,
+				"Tip: Use the spacebar to select.",
+				curses.A_DIM)
 			self.panelMain.box()
 			self.panelMain.refresh()
 			
