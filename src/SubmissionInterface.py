@@ -8,9 +8,9 @@ import curses
 import os
 import os.path
 import time
-import Button
-import InputManager
-import Picker
+import ui.Button as Button
+import ui.InputManager as InputManager
+import ui.Picker as Picker
 
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
 PROGRAM_SUBTITLE = "Purdue Computer Science"
