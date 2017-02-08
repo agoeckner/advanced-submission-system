@@ -25,10 +25,8 @@ class addAndDelete:
 	#deletes a course directory in the instructor's directory
 	#courseName is the name of the directory to be deleted
 	#instructor is the instructor's username which is used to find their personal directory
-	def deleteCourse(courseName, instructor): #{
-		instructorsPath = getInstructorPath(instructor)
-		
-		path = instructorsPath + courseName
+	def deleteCourse(courseName): #{
+		parent.ConfigParser.removeCourse(GLOBAL_PATH, courseName) #removes the course from the global config file
 		
 		deleteFolder(path) #deletes the course and all assignments under it
 	#}
@@ -37,9 +35,7 @@ class addAndDelete:
 	#assignmentName is the name of the new directory
 	#courseName is the directory under which the new directory is to be made
 	#configParameters are the arguments to be put in the assignments local config file
-	def addAssignment(assignmentName, instructor, courseName, configParameters): #{
-		#Get the instructors directory path from the config file
-		instructorsPath = getInstructorPath(instructor)
+	def addAssignment(): #{
 		
 		
 	#}
