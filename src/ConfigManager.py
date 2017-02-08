@@ -123,7 +123,12 @@ class ConfigManager:
 
 		config.remove_section(courseName)
 		return true
-
+	
+	##returns a list of all the courses
+	def getCourseList(): #{
+		config = get_config(GLOBAL_PATH)
+		return config.sections()
+	#}
 
 ''' Begin ConfigParser API '''
  
