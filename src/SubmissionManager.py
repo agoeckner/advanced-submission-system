@@ -32,20 +32,21 @@ class SubmissionManager:
 	# Return true on success, false on failure
 	def submitAssignment(self, course, assignment, files):
 		#groups is a list of all groups the user belongs to
-		'''
-		goups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
+		
+		user = pwd.getpwuid(os.getuid()).pw_name
+		groups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
 		gid = pwd.getpwnam(user).pw_gid
 		groups.append(grp.getgrgid(gid).gr_name)
 		
 		#if course isn't in groups, user isn't in the class
 		if course not in groups:
 			print('You do not have access to ' + course)
-			return False
-		'''
+			#return False
+		
 		tar = tarfile.open('submission.tar.gz', 'w:gz')
 
 		#TODO: parse config file to locate path
-		path = ''
+		path = '/homes/prof/' + course + '/' + assignment + '/'
 
 		for f in files:
 			try:
