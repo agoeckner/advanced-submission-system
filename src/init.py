@@ -4,6 +4,7 @@
 # Purdue University
 #=================================
 
+import os
 import SubmissionInterface
 import SubmissionManager
 
@@ -13,6 +14,10 @@ class AdvancedSubmissionSystem:
 
 	# Perform program initialization.
 	def __init__(self):
+		# Fix for ncurses over PuTTY.
+		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
+		
+		# Setup
 		self.submissionManager = SubmissionManager.SubmissionManager(self)
 		self.submissionUI = SubmissionInterface.SubmissionInterface(self)
 		try:
