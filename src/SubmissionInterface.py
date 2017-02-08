@@ -216,7 +216,7 @@ class SubmissionInterface:
 		assignment = assignment[0]
 		if self.parent.submissionManager.submitAssignment(course, assignment, files):
 			# Execution done.
-			self.run = false
+			self.run = False
 		else:
 			self.displayMessage("ERROR: Submission failed.", curses.A_STANDOUT)
 	

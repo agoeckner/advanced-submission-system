@@ -32,6 +32,7 @@ class SubmissionManager:
 	# Return true on success, false on failure
 	def submitAssignment(self, course, assignment, files):
 		#groups is a list of all groups the user belongs to
+		'''
 		goups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
 		gid = pwd.getpwnam(user).pw_gid
 		groups.append(grp.getgrgid(gid).gr_name)
@@ -39,19 +40,23 @@ class SubmissionManager:
 		#if course isn't in groups, user isn't in the class
 		if course not in groups:
 			print('You do not have access to ' + course)
-			return false
-		
+			return False
+		'''
 		tar = tarfile.open('submission.tar.gz', 'w:gz')
 
 		#TODO: parse config file to locate path
 		path = ''
 
 		for f in files:
-			tar.add(f)
+			try:
+				tar.add(f)
+				break
+			except RuntimeError:
+				print('file ' + f + ' not found')
 
 		print('zipping files to ' + path)
 		
 		#uncomment when all is done
 		#shutil.move('submission.tar.gz', path)
-		return true
+		return True
 		
