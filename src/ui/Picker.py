@@ -122,11 +122,12 @@ class Picker:
 				self.offset = self.offset - 1
 	
 	def onInput(self, c):
+		enter = (c == ord('\n') or c == curses.KEY_ENTER)
 		if c == curses.KEY_UP:
 			self.cursor = self.cursor - 1
 		elif c == curses.KEY_DOWN:
 			self.cursor = self.cursor + 1
-		elif c == ord(' ') or c == ord('\n') or c == curses.KEY_ENTER:
+		elif c == ord(' ') or enter:
 			# For radio lists, only allow a single selection.
 			if self.maxSelect == 1:
 				for opt in filter(lambda x: x["selected"], self.all_options):
@@ -145,10 +146,11 @@ class Picker:
 			# Call the callback.
 			if self.callback is not None:
 				self.callback(*self.callbackArgs, **self.callbackKWArgs)
-			
-		elif c == 10:
-			return
 				
+			# Jump to next if ENTER pressed.
+			if enter:
+				return "TAB_NEXT"
+			
 		# deal with interaction limits
 		self.check_cursor_up()
 		self.check_cursor_down()
