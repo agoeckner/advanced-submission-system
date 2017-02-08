@@ -122,9 +122,7 @@ class Picker:
 			self.cursor = self.cursor - 1
 		elif c == curses.KEY_DOWN:
 			self.cursor = self.cursor + 1
-		#elif c == curses.KEY_PPAGE:
-		#elif c == curses.KEY_NPAGE:
-		elif c == ord(' '):
+		elif c == ord(' ') or c == ord('\n') or c == curses.KEY_ENTER:
 			if self.maxSelect == 1:
 				for opt in filter(lambda x: x["selected"], self.all_options):
 					opt["selected"] = False
