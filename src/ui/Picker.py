@@ -29,6 +29,10 @@ class Picker:
 	maxSelect = -1
 	tempArrow = ""
 	
+	callback = None
+	callbackArgs = None
+	callbackKWArgs = None
+	
 	cursor = 0
 	offset = 0
 	selected = 0
@@ -123,17 +127,25 @@ class Picker:
 		elif c == curses.KEY_DOWN:
 			self.cursor = self.cursor + 1
 		elif c == ord(' ') or c == ord('\n') or c == curses.KEY_ENTER:
+			# For radio lists, only allow a single selection.
 			if self.maxSelect == 1:
 				for opt in filter(lambda x: x["selected"], self.all_options):
 					opt["selected"] = False
+			# If this is a parent in a tree, set all its children as well.
 			elif self.all_options[self.selected]["isParent"]:
 				idx = self.selected + 1
 				level = self.all_options[self.selected]["level"]
 				while idx < self.length and self.all_options[idx]["level"] > level:
 					self.all_options[idx]["selected"] = not self.all_options[self.selected]["selected"]
 					idx += 1
+			# Toggle the value.
 			self.all_options[self.selected]["selected"] = \
 				not self.all_options[self.selected]["selected"]
+			
+			# Call the callback.
+			if self.callback is not None:
+				self.callback(*self.callbackArgs, **self.callbackKWArgs)
+			
 		elif c == 10:
 			return
 				
@@ -148,14 +160,16 @@ class Picker:
 		self.selcount = len(temp)
 
 	def onLoseFocus(self):
-		self.tempArrow = self.arrow
-		self.arrow = ""
-		self.redraw()
+		if self.arrow is not "":
+			self.tempArrow = self.arrow
+			self.arrow = ""
+			self.redraw()
 	
 	def onFocus(self):
-		if self.tempArrow is not "":
+		if self.tempArrow is not "" and self.length > 0:
 			self.arrow = self.tempArrow
 			self.tempArrow = ""
+			self.check_cursor_up()
 			self.redraw()
 	
 	def _buildOptionsTree(self, optionList, level = 0):
@@ -180,7 +194,16 @@ class Picker:
 					"isParent": False
 				})
 		return result
+
+	def setCallback(self, callback, *args, **kwargs):
+		self.callback = callback
+		self.callbackArgs = args
+		self.callbackKWArgs = kwargs
 	
+	def setOptions(self, optionsList):
+		self.all_options = self._buildOptionsTree(optionsList)
+		self.length = len(self.all_options)
+		
 	def __init__(
 		self, 
 		parent, 
@@ -207,8 +230,7 @@ class Picker:
 		self.window_width = sizeYX[1]
 		self.maxSelect = maxSelect
 		
-		self.all_options = self._buildOptionsTree(options)
-		self.length = len(self.all_options)
+		self.setOptions(options)
 		
 		# Set up window.
 		self.win = parent.derwin(
