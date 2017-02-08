@@ -66,7 +66,11 @@ class Picker:
 			else:
 				line_label = self.c_empty + " "
 			xPos = 5 + option["level"] * 4
-			self.win.addstr(yPos, xPos, line_label + option["label"])
+			xMaxWidth = self.window_width - 6 - xPos
+			label = line_label + option["label"]
+			if len(label) > xMaxWidth:
+				label = label[:xMaxWidth] + " ..."
+			self.win.addstr(yPos, xPos, label)
 			yPos = yPos + 1
 			
 		# hint for more content above
