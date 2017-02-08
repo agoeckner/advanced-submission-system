@@ -5,6 +5,8 @@
 #=================================
 
 import os
+import sys
+import StudentInterface
 import SubmissionInterface
 import SubmissionManager
 
@@ -17,13 +19,22 @@ class AdvancedSubmissionSystem:
 		# Fix for ncurses over PuTTY.
 		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
 		
-		# Setup
-		self.submissionManager = SubmissionManager.SubmissionManager(self)
-		self.submissionUI = SubmissionInterface.SubmissionInterface(self)
-		try:
-			self.submissionUI.show()
-		except KeyboardInterrupt:
-			print("WARNING: Nothing was submitted!")
+		if len(sys.argv) > 1 and sys.argv[1] == "grades":
+			# Setup
+			self.submissionManager = SubmissionManager.SubmissionManager(self)
+			self.studentGradeUI = StudentInterface.StudentInterface(self)
+			try:
+				self.studentGradeUI.show()
+			except KeyboardInterrupt:
+				print("Goodbye!")
+		else:
+			# Setup
+			self.submissionManager = SubmissionManager.SubmissionManager(self)
+			self.submissionUI = SubmissionInterface.SubmissionInterface(self)
+			try:
+				self.submissionUI.show()
+			except KeyboardInterrupt:
+				print("WARNING: Nothing was submitted!")
 
 # Start the program.
 if __name__ == '__main__':
