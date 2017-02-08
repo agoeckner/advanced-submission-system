@@ -34,6 +34,9 @@ class SubmissionInterface:
 	pickAssignment = None
 	pickFile = None
 	btnSubmit = None
+	
+	# Data
+	currentCourse = ""
 
 	def __init__(self, parent):
 		self.parent = parent
@@ -108,6 +111,7 @@ class SubmissionInterface:
 				c_empty = "( )",
 				c_selected = "(X)")
 			self.pickCourse.redraw()
+			self.pickCourse.setCallback(self.onSelectCourse)
 			self.inputManager.addElement(self.pickCourse)
 			
 			# Assignment picker.
@@ -117,7 +121,7 @@ class SubmissionInterface:
 				sizeYX = (self.screenSize[0] - 6 - pickCourseSizeY,
 					int((self.screenSize[1] - 4) / 3)),
 				title = 'Assignment',
-				options = ["lab1", "lab2"],
+				options = [],
 				footer = "",
 				maxSelect = 1,
 				c_empty = "( )",
@@ -170,7 +174,6 @@ class SubmissionInterface:
 			# Update time panel.
 			self.panelTime.addstr(1, 0, time.strftime("%I:%M:%S %p"))
 			self.panelTime.refresh()
-			
 		except Exception as err:
 			raise err
 	
@@ -181,6 +184,16 @@ class SubmissionInterface:
 			message,
 			textAttr)
 		self.panelMain.refresh()
+	
+	def onSelectCourse(self):
+		selected = self.pickCourse.getSelected()
+		if len(selected) > 0:
+			course = selected[0]
+			if self.currentCourse != course:
+				self.currentCourse = course
+				assignments = self.parent.submissionManager.getAssignmentList(course)
+				self.pickAssignment.setOptions(assignments)
+				self.pickAssignment.redraw()
 	
 	def onBtnSubmit(self):
 		# self.run = False
