@@ -4,18 +4,26 @@
 # Purdue University
 #=================================
 
-import InstructorInterface
+import os
+import sys
+import AddGradesInterface
+import AddGradesManager
 
 class AdvancedSubmissionSystem:
+	addGradesManager = None
+	addGradesUI = None
+
 	# Perform program initialization.
 	def __init__(self):
-		professorUI = InstructorInterface.InstructorInterface()
+		# Fix for ncurses over PuTTY.
+		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
+		# Setup
+		self.addGradesManager = AddGradesManager.AddGradesManager(self)
+		self.addGradesUI = AddGradesInterface.AddGradesInterface(self)
 		try:
-			professorUI.show()
+			self.addGradesUI.show()
 		except KeyboardInterrupt:
-			print("Error")
-
-	# Perform 
+			print("Nothing was saved.")
 
 # Start the program.
 if __name__ == '__main__':
