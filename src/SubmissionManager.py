@@ -51,7 +51,7 @@ class SubmissionManager:
 		for f in files:
 			try:
 				tar.add(f)
-			except RuntimeError:
+			except:
 				print('file ' + f + ' not found')
 
 		print('zipping files to ' + path)
