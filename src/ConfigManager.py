@@ -139,7 +139,7 @@ def removeCourse( globalConfigFile, courseName):
 		return False	
 
 	config = ConfigParser.RawConfigParser()
-	config.read(courseConfigFile)
+	config.read(globalConfigFile)
 
 	config.remove_section(courseName)
 	return True
@@ -153,6 +153,10 @@ def getCourseList(GLOBAL_PATH):
 	config.read(GLOBAL_PATH)
 	
 	return config.sections()
+def getCourseDetails(courseConfigFile):
+	## read course config and return list 
+	## {projName, due, maxSubmissions}
+	return
 
 ''' 
 Begin API for ConfigParser API
