@@ -39,9 +39,9 @@ class SubmissionManager:
 		groups.append(grp.getgrgid(gid).gr_name)
 		
 		#if course isn't in groups, user isn't in the class
-		if course not in groups:
+		if ('course-' + course) not in groups:
 			print('You do not have access to ' + course)
-			#return False
+			return False
 		
 		tar = tarfile.open('submission.tar.gz', 'w:gz')
 
