@@ -2,6 +2,8 @@ import locale
 
 class addAndDelete:
 	parent = None
+	
+	##TODO: check for existing courses or assignments when creating or deleting
 
 	##constructor
 	def __init__(self, parent): #{
@@ -9,9 +11,9 @@ class addAndDelete:
 	#}
 	
 	##creates a new course directory in the instructors folder
-	##courseName is the name for the new directory
 	##path is the path to where the course directory is to be created
-	def addCourse(courseName, path): #{
+	##courseName is the name of the new course
+	def addCourse(path, courseName): #{
 		##Create a new directory for the courseName
 		newCoursePath = path + courseName
 		addFolder(newCoursePath)
@@ -20,24 +22,27 @@ class addAndDelete:
 		
 		##creates the course config file and updates the global config
 		parent.ConfigParser.addCourse(GLOBAL_PATH, courseName, courseConfigFile)
+		
+		return true
 	#}
 
 	##deletes a course directory in the instructor's directory
-	##courseName is the name of the directory to be deleted
 	##path is the path to the course directory
-	def deleteCourse(courseName, path): #{
+	##courseName is the name of the course to be removed
+	def deleteCourse(path, courseName): #{
 		parent.ConfigParser.removeCourse(GLOBAL_PATH, courseName) ##removes the course from the global config file
 		
 		deleteFolder(path) ##deletes the course and all assignments under it
+		
+		return true
 	#}
 
 	##creates a new assignment directory inside the course directory
 	##assignmentName is the name of the new directory
-	##courseName is the directory under which the new directory is to be made
 	##path is the path to the course directory, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
 	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
 	##number of days allowed for late submission
-	def addAssignment(courseName, path, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
+	def addAssignment(path, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
 		addFolder(path) ##creates a new folder for the assignment
 		
 		assignmentConfigFile = path + "assignment.config"
@@ -55,6 +60,7 @@ class addAndDelete:
 			addFolder(newPath)
 		#}
 		'''
+		return true
 	#}
 
 	##deletes the assignment specified by assignmentName
@@ -68,10 +74,21 @@ class addAndDelete:
 		
 		##removes the directory and all subdirectories and files
 		deletFolder(path + assignmentName)
+		
+		return true
 	#}
 
-	def modifyAssignment(): #{
+	##modifes the config file of an existing assignment
+	##assignmentName is the name of the new directory
+	##path is the path to the course directory, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
+	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
+	##number of days allowed for late submission
+	def modifyAssignment(path, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
+		courseConfigFile = path + "course.config"
 		
+		parent.ConfigParser.modifyProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		
+		return true
 	#}
 	
 	
