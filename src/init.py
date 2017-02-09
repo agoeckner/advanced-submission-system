@@ -10,6 +10,8 @@ import StudentInterface
 import SubmissionInterface
 import SubmissionManager
 
+GLOBAL_PATH = "/etc/submission/global.config"
+
 class AdvancedSubmissionSystem:
 	submissionManager = None
 	submissionUI = None

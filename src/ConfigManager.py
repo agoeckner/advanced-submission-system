@@ -136,8 +136,7 @@ def removeCourse( globalConfigFile, courseName):
 	my_file = Path(globalConfigFile)
 	if not my_file.is_file():
 		print("Unable to find "  + globalConfigFile)
-		return False
-	
+		return False	
 
 	config = ConfigParser.RawConfigParser()
 	config.read(courseConfigFile)
@@ -145,22 +144,19 @@ def removeCourse( globalConfigFile, courseName):
 	config.remove_section(courseName)
 	return True
 
+def getCourseList(GLOBAL_PATH): 
+	my_file = Path(GLOBAL_PATH)
+	if not my_file.is_file():
+		print("Unable to find "  + GLOBAL_PATH)
+		return false
+	config = ConfigParser.RawConfigParser()
+	config.read(GLOBAL_PATH)
+	
+	return config.sections()
 
 ''' 
-Begin ConfigParser API 
+Begin API for ConfigParser API
 '''
-
-def get_config(path):
-    """
-    Returns the config object
-    """
-    if not os.path.exists(path):
-        create_config(path) ## not implemented
- 
-	config = ConfigParser.ConfigParser()
-	config.read(path)
-	return config 
- 
 
 def get_setting(path, section, setting):
     """
@@ -171,7 +167,6 @@ def get_setting(path, section, setting):
     print "{section} {setting} is {value}".format(
         section=section, setting=setting, value=value)
     return value
- 
  
 
 def update_setting(path, section, setting, value):
