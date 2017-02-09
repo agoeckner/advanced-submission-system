@@ -51,7 +51,6 @@ class SubmissionManager:
 		for f in files:
 			try:
 				tar.add(f)
-				break
 			except RuntimeError:
 				print('file ' + f + ' not found')
 
