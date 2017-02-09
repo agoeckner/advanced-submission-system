@@ -3,8 +3,14 @@ import locale
 class addAndDelete:
 	parent = None
 	
+	##to get a section for a course
+	get_setting(GLOBAL_PATH, courseName, "course_path")
+	
+	
+	
 	##TODO: check for existing courses or assignments when creating or deleting
-
+	##TODO: check that the config files are being created after calling configmanager
+	
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
@@ -19,11 +25,14 @@ class addAndDelete:
 		addFolder(newCoursePath)
 		
 		courseConfigFile = newCoursePath + "course.config" ##creates the course config file
-		
+		if courseConfigFile == False: #{
+			
+		#}
+			
 		##creates the course config file and updates the global config
 		parent.ConfigParser.addCourse(GLOBAL_PATH, courseName, courseConfigFile)
 		
-		return true
+		return True
 	#}
 
 	##deletes a course directory in the instructor's directory
@@ -34,7 +43,7 @@ class addAndDelete:
 		
 		deleteFolder(path) ##deletes the course and all assignments under it
 		
-		return true
+		return True
 	#}
 
 	##creates a new assignment directory inside the course directory
@@ -60,7 +69,7 @@ class addAndDelete:
 			addFolder(newPath)
 		#}
 		'''
-		return true
+		return True
 	#}
 
 	##deletes the assignment specified by assignmentName
@@ -75,7 +84,7 @@ class addAndDelete:
 		##removes the directory and all subdirectories and files
 		deletFolder(path + assignmentName)
 		
-		return true
+		return True
 	#}
 
 	##modifes the config file of an existing assignment
@@ -88,7 +97,7 @@ class addAndDelete:
 		
 		parent.ConfigParser.modifyProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
 		
-		return true
+		return True
 	#}
 	
 	

@@ -18,5 +18,5 @@ class folder:
 	#}
 
 	def deleteFolder(x) #{
-		os.rmtree(x) #removes the directory and all directories and files inside it
+		os.rmtree(x) ##removes the directory and all directories and files inside it
 	#}
