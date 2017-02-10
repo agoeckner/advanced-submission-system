@@ -7,6 +7,7 @@
 import sys
 sys.path.append('../src/')
 import unittest
+import curses
 import ui.InputManager as InputManager
 
 class TestUIInputManager(unittest.TestCase):
@@ -18,12 +19,6 @@ class TestUIInputManager(unittest.TestCase):
 		self.inputMgr.addElement(self.e1)
 		self.inputMgr.addElement(self.e2)
 		self.inputMgr.addElement(self.e3)
-	
-	def tearDown(self):
-		self.inputMgr = None
-		self.e1 = None
-		self.e2 = None
-		self.e3 = None
 		
 	def test_add_elements(self):
 		self.assertEqual(self.inputMgr.elements, [self.e1, self.e2, self.e3])
@@ -57,6 +52,34 @@ class TestUIInputManager(unittest.TestCase):
 		with self.assertRaises(IndexError):
 			self.inputMgr.setSelectedIndex(-1)
 
+	def test_input_next(self):
+		self.inputMgr.onInput(ord('\t'))
+		self.assertEqual(self.inputMgr.currentElement, self.e2)
+		self.inputMgr.onInput(ord('\t'))
+		self.assertEqual(self.inputMgr.currentElement, self.e3)
+	
+	def test_input_prev(self):
+		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.assertEqual(self.inputMgr.currentElement, self.e3)
+		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.assertEqual(self.inputMgr.currentElement, self.e2)
+	
+	def test_input_next_prev(self):
+		self.inputMgr.onInput(ord('\t'))
+		self.assertEqual(self.inputMgr.currentElement, self.e2)
+		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.assertEqual(self.inputMgr.currentElement, self.e1)
+
+	def test_input_prev_next(self):
+		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.assertEqual(self.inputMgr.currentElement, self.e3)
+		self.inputMgr.onInput(ord('\t'))
+		self.assertEqual(self.inputMgr.currentElement, self.e1)
+
+	def test_input_select_autoadvance(self):
+		self.inputMgr.onInput(ord('a'))
+		self.assertEqual(self.inputMgr.currentElement, self.e2)
+
 class StubElement:
 	def onLoseFocus(self):
 		pass
@@ -65,7 +88,7 @@ class StubElement:
 		pass
 	
 	def onInput(self, inputChar):
-		return None
+		return "TAB_NEXT"
 
 if __name__ == '__main__':
 	unittest.main()
