@@ -1,5 +1,6 @@
 import locale
 import os
+import shutil
 
 class courseManager:
 	#manager = ConfigParser()
@@ -17,23 +18,24 @@ class courseManager:
 	##creates a new course directory in the instructors folder
 	##path is the path to where the course directory is to be created
 	##courseName is the name of the new course
-	def createCourse(path, courseName): #{
+	def createCourse(self, path, courseName): #{
 		##Create a new directory for the courseName
 		newCoursePath = path + courseName
 		
 		try:
-			addFolder(newCoursePath)
-			
-			print("Course folder path: " + newCoursePath)
-			
-			courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
-			print("courseConfigFile folder path: " + courseConfigFile)
-			
-			##create the course config file
-			configFile = open(courseConfigFile, "w")
-			configFile.close()
-		except:
+			self.addFolder(newCoursePath)
+		except OSError: 
 			return False
+		
+		print("Course folder path: " + newCoursePath)
+		
+		courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
+		print("courseConfigFile folder path: " + courseConfigFile)
+		
+		##create the course config file
+		configFile = open(courseConfigFile, "w")
+		configFile.close()
+	
 		
 		##updates the global config
 		#check = addCourse("global.config", courseName, courseConfigFile)
@@ -50,13 +52,13 @@ class courseManager:
 
 	##deletes a course directory in the instructor's directory
 	##courseName is the name of the course to be removed
-	def deleteCourse(courseName): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+	def deleteCourse(self, courseName): #{
+		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 	
-		check = parent.ConfigParser.removeCourse(GLOBAL_PATH, courseName) ##removes the course from the global config file
+		#check = parent.ConfigParser.removeCourse(GLOBAL_PATH, courseName) ##removes the course from the global config file
 		
-		if check == False: #{
-			return False
+		#if check == False: #{
+		#	return False
 		#}
 		
 		deleteFolder(path) ##deletes the course and all assignments under it
@@ -72,15 +74,23 @@ class courseManager:
 	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
 	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
 	##number of days allowed for late submission
-	def addAssignment(courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+	def createAssignment(self, courseName, assignmentName):#, dueDate, team, maxSubmissions, lateDays): #{
+		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 		
-		addFolder(path) ##creates a new folder for the assignment
+		##for testing
+		path = "./courses/" + courseName + "/" + assignmentName
+		
+		try:
+			addFolder(path) ##creates a new folder for the assignment
+		except OSError:
+			return False
 		
 		assignmentConfigFile = path + "assignment.config"
 		
-		##creates the assignment config file
-		parent.ConfigParser.addProject(assignmentConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		##create the assignment config file
+		configFile = open(courseConfigFile, "w")
+		configFile.close()
+		#parent.ConfigParser.addProject(assignmentConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
 		
 		
 		##gets user group
@@ -92,7 +102,7 @@ class courseManager:
 	##deletes the assignment specified by assignmentName
 	##assignmentName is the assignment to be deleted
 	##courseName is the name of the course
-	def deleteAssignment(assignmentName, courseName): #{
+	def deleteAssignment(self, assignmentName, courseName): #{
 		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 		
 		courseConfigFile = path + "course.config"
@@ -111,7 +121,7 @@ class courseManager:
 	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
 	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
 	##number of days allowed for late submission
-	def modifyAssignment(courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
+	def modifyAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
 		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 		
 		courseConfigFile = path + "course.config"
@@ -127,7 +137,9 @@ class courseManager:
 	##courseName is the name of the course
 	##assignmentName is the name of the assignment, studentName is the name of the student being graded
 	##gradeRecieved is the grade recieved for the assignment
-	def enterGrade(courseName, assignmentName, studentName, gradeRecieved): #{
+	def enterGrade(self, courseName, assignmentName, studentName, gradeRecieved): #{
+		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+		
 		gradeFile = path + "grade.txt"
 		
 		grade = open(gradeFile, "w")
@@ -139,31 +151,44 @@ class courseManager:
 	
 	## ----------------------------------- Section of code that is used for creating folders --------------------------------------------------'''	
 	##x is the path including the new directory name
-	def addFolder(x): #{
+	def addFolder(self, x): #{
 		##NOTE!-------------------------------------------------------------------------------------
 		## mkdir has another parameter that sets permissions for the new directory
 		##!-----------------------------------------------------------------------------------------
 		os.mkdir(x); ##a new directory is made
 	#}
 
-	def deleteFolder(x): #{
-		os.rmtree(x) ##removes the directory and all directories and files inside it
+	def deleteFolder(self, x): #{
+		shutil.rmtree(x) ##removes the directory and all directories and files inside it
 	#}
 	
-	##---------------------------------- Code that is used for testing ------------------------------------------------------------------'''
-	##main method
-	def main(): #{
-		print("**************Program Started******************")
-		print("Running test 1:")
+##---------------------------------- Code that is used for testing ------------------------------------------------------------------'''
+##main method
+def main(): #{
+	theMan = courseManager(None)
+	
+	print("**************Program Started******************")
+	
+	print("Running test 1:")
+	print("-----Calling createCourse for cs252")
+	theMan.createCourse("./courses/", "cs252")
+	print("---------Test 1 Completed----------------------")
+	
+	print("Running test 2:")
+	print("--------------Calling deleteCourse----------------")
+	theMan.createCourse("./courses/", "cs408")
+	print("---------Test 2 Completed----------------------")
+	
+	print("Running test 3:")
+	print("--------------Calling deleteCourse----------------")
+	theMan.deleteFolder("./courses/cs252")
+	print("---------Test 3 Completed----------------------")
+	
+	
+#}
 		
-		print("-----Calling createCourse for cs252")
-		createCourse("./courses/", "cs252")
 		
-		print("---------Test 1 Completed----------------------")
-	#}
-		
-		
-	main()
+main()
 	
 	
 	
