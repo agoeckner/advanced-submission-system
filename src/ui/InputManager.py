@@ -14,6 +14,9 @@ class InputManager:
 	currentElement = None
 	def __init__(self, parent):
 		self.parent = parent
+		self.elements = []
+		self.currentIdx = 0
+		self.currentElement = None
 	
 	# Adds a UI element to the manager.
 	def addElement(self, element):
@@ -34,6 +37,8 @@ class InputManager:
 		return self.currentElement
 	
 	def setSelectedIndex(self, idx):
+		if idx < 0 or idx >= len(self.elements):
+			raise IndexError("element index out of range")
 		if self.currentElement is not None:
 			self.currentElement.onLoseFocus()
 		self.currentIdx = idx
@@ -41,7 +46,7 @@ class InputManager:
 		self.currentElement.onFocus()
 	
 	def onInput(self, inputChar):
-		if inputChar == ord('\t') or inputChar == curses.KEY_ENTER:
+		if inputChar == ord('\t'):
 			self.tabNext()
 			return None
 		elif inputChar == curses.KEY_BACKSPACE:

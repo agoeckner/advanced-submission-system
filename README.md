@@ -18,9 +18,17 @@ Documentation
 Project documentation, including design and planning documents, is located in the 'doc' folder.
 
 
+Testing
+-------
+
+To run unit tests, change to the "test" directory and run:
+
+	python3 -m unittest Test*.py
+
+
 Prerequisites
 -------------
 
 The following software must be installed for the Advanced Submission System to function.
 
-	* Python 3
+ * Python 3
