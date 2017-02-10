@@ -112,6 +112,20 @@ class TestUIPicker(unittest.TestCase):
 		selected = self.picker.getSelected()
 		self.assertEqual(self.startingList[0:2], selected)
 
+	def test_cursor_min(self):
+		self.picker.onInput(curses.KEY_UP)
+		self.assertEqual(1, self.picker.cursor)
+		self.picker.onInput(curses.KEY_UP)
+		self.assertEqual(1, self.picker.cursor)
+	
+	def test_cursor_max(self):
+		for opt in self.startingList:
+			self.picker.onInput(curses.KEY_DOWN)
+		self.picker.onInput(curses.KEY_DOWN)
+		self.assertEqual(len(self.startingList), self.picker.cursor)
+		self.picker.onInput(curses.KEY_UP)
+		self.assertEqual(len(self.startingList) - 1, self.picker.cursor)
+
 	def pickerCallback(self, a):
 		self.callbackUpdate = a + "ing"
 		
