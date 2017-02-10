@@ -2,7 +2,7 @@ import locale
 import os
 
 class courseManager:
-	parent = None
+	#manager = ConfigParser()
 	
 	##TODO: check for existing courses or assignments when creating or deleting
 	##TODO: check that the config files are being created after calling configmanager
@@ -10,9 +10,6 @@ class courseManager:
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
-		print("**************Program Started******************")
-		
-		#self.main()
 	#}
 	
 ''' ----------------------------- Section of code that is used for creating and deleting courses -------------------------------------------'''	
@@ -20,23 +17,29 @@ class courseManager:
 	##creates a new course directory in the instructors folder
 	##path is the path to where the course directory is to be created
 	##courseName is the name of the new course
-def addCourse(path, courseName): #{
+def createCourse(path, courseName): #{
 	##Create a new directory for the courseName
 	newCoursePath = path + courseName
 	addFolder(newCoursePath)
 	
-	courseConfigFile = newCoursePath + "course.config" ##creates the course config file
+	print("Course folder path: " + newCoursePath)
+	
+	courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
+	print("courseConfigFile folder path: " + courseConfigFile)
 	
 	##create the course config file
+	configFile = open(courseConfigFile, "w")
+	configFile.close()
 	
+	##updates the global config
+	#check = addCourse("global.config", courseName, courseConfigFile)
 	
 	##if the course config file is not created False is returned to indicate an error
-	if courseConfigFile == False: #{ 
-		return False
+	#if courseConfigFile == False: #{ 
+	#	return False
 	#}
-		
-	##creates the course config file and updates the global config
-	parent.ConfigParser.addCourse(GLOBAL_PATH, courseName, courseConfigFile)
+	
+	
 	
 	return True
 #}
@@ -147,11 +150,16 @@ def addFolder(x): #{
 ##main method
 def main(): #{
 	print("**************Program Started******************")
-	print("******Running test 1:")
+	print("Running test 1:")
+	
+	print("-----Calling createCourse for cs252")
+	createCourse("./courses/", "cs252")
+	
+	print("---------Test 1 Completed----------------------")
 #}
 	
 	
-	
+main()
 	
 	
 	
