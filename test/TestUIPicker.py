@@ -111,6 +111,17 @@ class TestUIPicker(unittest.TestCase):
 		self.picker.onInput(ord(' '))
 		selected = self.picker.getSelected()
 		self.assertEqual(self.startingList[0:2], selected)
+	
+	def test_deselect_max_gt_1(self):
+		self.picker.maxSelect = 2
+		self.picker.onInput(ord(' '))
+		self.picker.onInput(curses.KEY_DOWN)
+		self.picker.onInput(ord(' '))
+		selected = self.picker.getSelected()
+		self.assertEqual(self.startingList[0:2], selected)
+		self.picker.onInput(ord(' '))
+		selected = self.picker.getSelected()
+		self.assertEqual(self.startingList[0:1], selected)
 
 	def test_cursor_min(self):
 		self.picker.onInput(curses.KEY_UP)
