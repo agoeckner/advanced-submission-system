@@ -45,5 +45,5 @@ class Button:
 	
 	def onInput(self, inputChar):
 		if inputChar == ord('\n') or inputChar == curses.KEY_ENTER or inputChar == ord(' '):
-			self.callback(*self.callbackArgs, **self.callbackKWArgs)
+			return self.callback(*self.callbackArgs, **self.callbackKWArgs)
 		return None
