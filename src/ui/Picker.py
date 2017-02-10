@@ -132,7 +132,7 @@ class Picker:
 			if self.maxSelect == 1:
 				for opt in filter(lambda x: x["selected"], self.all_options):
 					opt["selected"] = False
-			elif self.maxSelect > 1 and self.selcount >= self.maxSelect:
+			elif self.maxSelect > 1 and self.selcount >= self.maxSelect and not self.all_options[self.selected]["selected"]:
 				return
 			# If this is a parent in a tree, set all its children as well.
 			elif self.all_options[self.selected]["isParent"]:
