@@ -14,6 +14,9 @@ class InputManager:
 	currentElement = None
 	def __init__(self, parent):
 		self.parent = parent
+		self.elements = []
+		self.currentIdx = 0
+		self.currentElement = None
 	
 	# Adds a UI element to the manager.
 	def addElement(self, element):
