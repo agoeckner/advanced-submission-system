@@ -46,7 +46,7 @@ class InputManager:
 		self.currentElement.onFocus()
 	
 	def onInput(self, inputChar):
-		if inputChar == ord('\t') or inputChar == curses.KEY_ENTER:
+		if inputChar == ord('\t'):
 			self.tabNext()
 			return None
 		elif inputChar == curses.KEY_BACKSPACE:
