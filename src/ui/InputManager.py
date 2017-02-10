@@ -34,6 +34,8 @@ class InputManager:
 		return self.currentElement
 	
 	def setSelectedIndex(self, idx):
+		if idx < 0 or idx >= len(self.elements):
+			raise IndexError("element index out of range")
 		if self.currentElement is not None:
 			self.currentElement.onLoseFocus()
 		self.currentIdx = idx
