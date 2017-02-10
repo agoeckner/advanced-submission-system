@@ -15,6 +15,9 @@ class TestUIInputManager(unittest.TestCase):
 		self.e1 = StubElement()
 		self.e2 = StubElement()
 		self.e3 = StubElement()
+		self.inputMgr.addElement(self.e1)
+		self.inputMgr.addElement(self.e2)
+		self.inputMgr.addElement(self.e3)
 	
 	def tearDown(self):
 		self.inputMgr = None
@@ -23,24 +26,17 @@ class TestUIInputManager(unittest.TestCase):
 		self.e3 = None
 		
 	def test_add_elements(self):
-		self.inputMgr.addElement(self.e1)
-		self.inputMgr.addElement(self.e2)
-		self.inputMgr.addElement(self.e3)
 		self.assertEqual(self.inputMgr.elements, [self.e1, self.e2, self.e3])
 	
 	def test_auto_select_after_add(self):
-		self.inputMgr.addElement(self.e1)
-		self.inputMgr.addElement(self.e2)
-		self.inputMgr.addElement(self.e3)
 		self.assertEqual(self.inputMgr.currentElement, self.e1)
 	
 	def test_tabnext_nowrap(self):
-		# self.inputMgr.addElement(self.e1)
-		# self.inputMgr.addElement(self.e2)
 		self.inputMgr.tabNext()
 		self.assertEqual(self.inputMgr.currentElement, self.e2)
 
 	def test_tabnext_wrap(self):
+		self.inputMgr.tabNext()
 		self.inputMgr.tabNext()
 		self.inputMgr.tabNext()
 		self.assertEqual(self.inputMgr.currentElement, self.e1)
@@ -50,8 +46,8 @@ class TestUIInputManager(unittest.TestCase):
 		self.assertEqual(self.inputMgr.currentElement, self.e3)
 
 	def test_select_valid(self):
-		self.inputMgr.setSelectedIndex(0)
-		self.assertEqual(self.inputMgr.currentElement, self.e1)
+		self.inputMgr.setSelectedIndex(1)
+		self.assertEqual(self.inputMgr.currentElement, self.e2)
 
 	def test_select_invalid_high(self):
 		with self.assertRaises(IndexError):
