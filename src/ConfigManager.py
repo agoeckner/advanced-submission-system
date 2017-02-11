@@ -84,8 +84,8 @@ class ConfigManager:
 	def modifyProject(self, courseConfigFile, projectName, dueDate, team, maxSubmissions, lateDays):
 		## example : modifyProject( "testCourse.config", "lab2", "12-05-2017", True, 100, 0)
 		# print("function to modify an existing course")
-		removeProject(courseConfigFile,  projectName )
-		addProject( courseConfigFile, projectName, dueDate , team, maxSubmissions, lateDays)
+		self.removeProject(courseConfigFile,  projectName )
+		self.addProject( courseConfigFile, projectName, dueDate , team, maxSubmissions, lateDays)
 		##update_setting(path, section, setting, value)
 
 	def getProjects(self, courseConfigFile):
@@ -207,19 +207,28 @@ def main():
 	cm = ConfigManager()
 	
 	print("[+] Adding lab2 to course config file")
-	if cm.addProject( courseConfig, 'lab2', '12-04-2016', True, 15, 5) :
+	if cm.addProject( courseConfig, 'lab2', '12-04-2018', True, 15, 5) :
 		print("[+] project added")
 	print("[+] Adding lab3 to course config file")
-	if cm.addProject( courseConfig, 'lab3', '12-05-2016', True, 25, 0) :
+	if cm.addProject( courseConfig, 'lab3', '12-05-2018', True, 25, 0) :
 		print("[+] project added")
 
 	print("[+] Adding project1 to course config file")
-	if cm.addProject( courseConfig, 'project1', '12-08-2016', False, 5, 5) :
+	if cm.addProject( courseConfig, 'project1', '12-08-2018', False, 5, 5) :
 		print("[+] project added")
 	
 	print("[+] removing lab2")
 	if cm.removeProject(courseConfig, 'lab2') :
 		print("[+] project removed")
+
+	print("Printing courses in " + courseConfig)
+	proj_list = cm.getProjects(courseConfig)
+	print("[")
+	for proj in proj_list:
+		print(proj)
+	print(" ]")
+	print("[+] Changing due date for project1")
+	cm.modifyProject(courseConfig, 'project1', '12-15-2018', False, 5, 5)
 
 	print("Printing courses in " + courseConfig)
 	proj_list = cm.getProjects(courseConfig)
@@ -258,9 +267,6 @@ def main():
 	for course in course_list:
 		print(course)
 	print(" ]")
-	print("Reading courses")
-	
-
 
 if __name__ == '__main__':
     main()
