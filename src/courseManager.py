@@ -5,6 +5,7 @@ import ConfigManager
 
 class CourseManager:
 	manager = None
+	parent = None
 	
 	##TODO: check for existing courses or assignments when creating or deleting
 	##TODO: check that the config files are being created after calling configmanager
@@ -20,7 +21,7 @@ class CourseManager:
 	##creates a new course directory in the instructors folder
 	##path is the path to where the course directory is to be created
 	##courseName is the name of the new course
-	def createCourse(self, path, courseName): #{
+	def createCourse(self, path, courseName, userGroup): #{
 		##Create a new directory for the courseName
 		newCoursePath = path + courseName
 		
@@ -29,10 +30,8 @@ class CourseManager:
 		except OSError: 
 			return False
 		
-		print("Course folder path: " + newCoursePath)
 		
 		courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
-		print("courseConfigFile folder path: " + courseConfigFile)
 		
 		##create the course config file
 		configFile = open(courseConfigFile, "w")
@@ -40,14 +39,12 @@ class CourseManager:
 	
 		
 		##updates the global config
-		#check = addCourse("global.config", courseName, courseConfigFile)
+		check = self.manager.addCourse("./global.config", courseName, courseConfigFile, newCoursePath, userGroup)
 		
 		##if the course config file is not created False is returned to indicate an error
-		if courseConfigFile == False: #{ 
+		if check == False: #{ 
 			return False
 		#}
-		
-		
 		
 		return True
 	#}
@@ -56,11 +53,13 @@ class CourseManager:
 	##courseName is the name of the course to be removed
 	def deleteCourse(self, courseName): #{
 		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
-	
-		#check = parent.ConfigParser.removeCourse(GLOBAL_PATH, courseName) ##removes the course from the global config file
 		
-		#if check == False: #{
-		#	return False
+		path = self.manager.get_setting("global.config", courseName, "course_path")
+		
+		check = self.manager.removeCourse(GLOBAL_PATH, courseName) ##removes the course from the global config file
+		
+		if check == False: #{
+			return False
 		#}
 		
 		deleteFolder(path) ##deletes the course and all assignments under it
@@ -168,6 +167,7 @@ class CourseManager:
 	##main method
 	def start(self): #{
 		theMan = CourseManager(None)
+		check = False
 		
 		##create the course config file
 		configFile = open("global.config", "w")
@@ -176,18 +176,30 @@ class CourseManager:
 		print("**************Program Started******************")
 		
 		print("----------------------Running Test 1------------------------")
-		print("-----Calling createCourse for cs252")
-		theMan.createCourse("./courses/", "cs252")
+		print("Calling createCourse for cs252")
+		
+		check = theMan.createCourse("./courses/", "cs252", "group1")
+		
+		if check == False:
+			print("Test 1 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		print("----------------------Test 1 Completed----------------------")
 		
 		print("----------------------Running Test 2------------------------")
 		print("Calling deleteCourse")
-		theMan.createCourse("./courses/", "cs408")
+		
+		check = theMan.createCourse("./courses/", "cs408", "group2")
+		if check == False:
+			print("Test 2 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			
 		print("----------------------Test 2 Completed----------------------")
 		
 		print("----------------------Running Test 3------------------------")
 		print("Calling deleteCourse")
-		theMan.deleteFolder("./courses/cs252")
+		
+		check = theMan.deleteFolder("./courses/cs252")
+		if check == False:
+			print("Test 3 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		
 		print("----------------------Test 3 Completed----------------------")
 		
 		
