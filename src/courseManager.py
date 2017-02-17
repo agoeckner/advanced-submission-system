@@ -3,7 +3,7 @@ import os
 import shutil
 
 class courseManager:
-	#manager = ConfigParser()
+	manager = None
 	
 	##TODO: check for existing courses or assignments when creating or deleting
 	##TODO: check that the config files are being created after calling configmanager
@@ -11,6 +11,7 @@ class courseManager:
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
+		self.manager =  = ConfigParser()
 	#}
 	
 	##----------------------------- Section of code that is used for creating and deleting courses -------------------------------------------
@@ -41,9 +42,9 @@ class courseManager:
 		#check = addCourse("global.config", courseName, courseConfigFile)
 		
 		##if the course config file is not created False is returned to indicate an error
-		#if courseConfigFile == False: #{ 
-		#	return False
-		#}
+		if courseConfigFile == False: #{ 
+			return False
+		}
 		
 		
 		
