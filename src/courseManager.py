@@ -1,8 +1,9 @@
 import locale
 import os
 import shutil
+import ConfigManager
 
-class courseManager:
+class CourseManager:
 	manager = None
 	
 	##TODO: check for existing courses or assignments when creating or deleting
@@ -11,7 +12,7 @@ class courseManager:
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
-		self.manager =  = ConfigParser()
+		self.manager = ConfigManager.ConfigManager()
 	#}
 	
 	##----------------------------- Section of code that is used for creating and deleting courses -------------------------------------------
@@ -44,7 +45,7 @@ class courseManager:
 		##if the course config file is not created False is returned to indicate an error
 		if courseConfigFile == False: #{ 
 			return False
-		}
+		#}
 		
 		
 		
@@ -163,33 +164,34 @@ class courseManager:
 		shutil.rmtree(x) ##removes the directory and all directories and files inside it
 	#}
 	
-##---------------------------------- Code that is used for testing ------------------------------------------------------------------'''
-##main method
-def main(): #{
-	theMan = courseManager(None)
-	
-	print("**************Program Started******************")
-	
-	print("Running test 1:")
-	print("-----Calling createCourse for cs252")
-	theMan.createCourse("./courses/", "cs252")
-	print("---------Test 1 Completed----------------------")
-	
-	print("Running test 2:")
-	print("--------------Calling deleteCourse----------------")
-	theMan.createCourse("./courses/", "cs408")
-	print("---------Test 2 Completed----------------------")
-	
-	print("Running test 3:")
-	print("--------------Calling deleteCourse----------------")
-	theMan.deleteFolder("./courses/cs252")
-	print("---------Test 3 Completed----------------------")
-	
-	
-#}
+	##---------------------------------- Code that is used for testing ------------------------------------------------------------------'''
+	##main method
+	def start(self): #{
+		theMan = CourseManager(None)
+		
+		##create the course config file
+		configFile = open("global.config", "w")
+		configFile.close()
+		
+		print("**************Program Started******************")
+		
+		print("----------------------Running Test 1------------------------")
+		print("-----Calling createCourse for cs252")
+		theMan.createCourse("./courses/", "cs252")
+		print("----------------------Test 1 Completed----------------------")
+		
+		print("----------------------Running Test 2------------------------")
+		print("Calling deleteCourse")
+		theMan.createCourse("./courses/", "cs408")
+		print("----------------------Test 2 Completed----------------------")
+		
+		print("----------------------Running Test 3------------------------")
+		print("Calling deleteCourse")
+		theMan.deleteFolder("./courses/cs252")
+		print("----------------------Test 3 Completed----------------------")
 		
 		
-main()
+	#}
 
 
 
