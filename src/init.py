@@ -9,13 +9,15 @@ import sys
 import StudentInterface
 import SubmissionInterface
 import SubmissionManager
+import CourseManager
 
 GLOBAL_PATH = "/etc/submission/global.config"
 
 class AdvancedSubmissionSystem:
 	submissionManager = None
 	submissionUI = None
-
+	courseManager = None
+	
 	# Perform program initialization.
 	def __init__(self):
 		# Fix for ncurses over PuTTY.
@@ -29,6 +31,11 @@ class AdvancedSubmissionSystem:
 				self.studentGradeUI.show()
 			except KeyboardInterrupt:
 				print("Goodbye!")
+		elif len(sys.argv) > 1 and sys.argv[1] == "course":
+			#Setup
+			self.courseManager = CourseManager.CourseManager(self)
+			
+			self.courseManager.start()
 		else:
 			# Setup
 			self.submissionManager = SubmissionManager.SubmissionManager(self)
