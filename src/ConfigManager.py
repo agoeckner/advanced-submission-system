@@ -169,12 +169,21 @@ class ConfigManager:
 	''' 
 	Begin API for ConfigParser API
 	'''
+	def get_config(self, path):
+		my_file = Path(path)
+		if not my_file.is_file():
+			print("Unable to find "  + path + " in get_config")
+			return False
+		config = ConfigParser.RawConfigParser()
+		config.read(path)
+		return config
+	    
 
 	def get_setting(self, path, section, setting):
 	    """
 	    Print out a setting
 	    """
-	    config = get_config(path)
+		config = get_config(path)
 	    value = config.get(section, setting)
 	    print "{section} {setting} is {value}".format(
 	        section=section, setting=setting, value=value)
