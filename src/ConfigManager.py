@@ -71,7 +71,7 @@ class ConfigManager:
 		my_file = Path(courseConfigFile)
 		if not my_file.is_file():
 			print("Unable to find "  + courseConfigFile)
-			return false
+			return False
 
 		config = ConfigParser.ConfigParser() # get_config(courseConfigFile)
 		config.read(courseConfigFile)
@@ -160,7 +160,7 @@ class ConfigManager:
 		my_file = Path(globalConfigFile)
 		if not my_file.is_file():
 			print("Unable to find "  + globalConfigFile)
-			return null
+			return None
 		config = ConfigParser.RawConfigParser()
 		config.read(globalConfigFile)		
 		return config.sections()
@@ -180,21 +180,18 @@ class ConfigManager:
 	    
 
 	def get_setting(self, path, section, setting):
-	    """
-	    Print out a setting
-	    """
-		config = get_config(path)
-	    value = config.get(section, setting)
-	    print "{section} {setting} is {value}".format(
+		config = self.get_config(path)
+		value = config.get(section, setting)
+		print "{section} {setting} is {value}".format(
 	        section=section, setting=setting, value=value)
-	    return value
+		return value
 	 
 
 	def update_setting(self, path, section, setting, value):
 		"""
 		Update a setting
 		"""
-		config = get_config(path)
+		config = self.get_config(path)
 		config.set(section, setting, value)
 		with open(path, "wb") as config_file:
 			config.write(config_file)
@@ -204,7 +201,7 @@ class ConfigManager:
 	    """
 	    Delete a setting
 	    """
-	    config = get_config(path)
+	    config = self.get_config(path)
 	    config.remove_option(section, setting)
 	    with open(path, "wb") as config_file:
 	        config.write(config_file)
