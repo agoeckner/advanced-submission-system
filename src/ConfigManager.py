@@ -5,7 +5,7 @@
 #=================================
 import optparse
 import os
-import ConfigParser
+import configparser
 from distutils.util import strtobool
 from pathlib import Path    # needs:  sudo pip install pathlib
 from dateutil.parser import parse # needs: sudo pip install python-dateutil
@@ -184,6 +184,7 @@ class ConfigManager:
 		value = config.get(section, setting)
 		#print "{section} {setting} is {value}".format(
 	    #    section=section, setting=setting, value=value)
+
 		return value
 	 
 
