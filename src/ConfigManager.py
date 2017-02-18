@@ -5,7 +5,7 @@
 #=================================
 import optparse
 import os
-import ConfigParser
+import configparser
 from distutils.util import strtobool
 from pathlib import Path    # needs:  sudo pip install pathlib
 from dateutil.parser import parse # needs: sudo pip install python-dateutil
