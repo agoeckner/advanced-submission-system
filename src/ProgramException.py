@@ -6,3 +6,6 @@
 
 class MissingCallback(Exception):
 	pass
+
+class ComponentSizeInvalid(Exception):
+	pass
