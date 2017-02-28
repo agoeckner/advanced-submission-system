@@ -47,21 +47,21 @@ class ConfigManager:
 			print("ERROR: incorrect format for team specified. Use True/false")
 			return False
 
-		config = ConfigParser.ConfigParser() # get_config(courseConfigFile)
+		config = configparser.ConfigParser() # get_config(courseConfigFile)
 		config.read(courseConfigFile)
 
 		# print ("config : " + repr(config) ) ## checks if config is a null object
 		try:
 			config.add_section(projectName)
-			config.set(projectName, 'team', team)
-			config.set(projectName, 'max_submissions', maxSubmissions)
+			config.set(projectName, 'team', str(team) )
+			config.set(projectName, 'max_submissions', str(maxSubmissions) )
 			config.set(projectName, 'due', str(dueDate) )
-			config.set(projectName, 'late days', lateDays )
-		except ConfigParser.DuplicateSectionError :
+			config.set(projectName, 'late days', str(lateDays)  )
+		except configparser.DuplicateSectionError :
 			print("\t[-] "  + projectName + " already exists")
 			return False
 		
-		with open(courseConfigFile, 'wb') as f:
+		with open(courseConfigFile, 'w') as f:
 			config.write(f)
 		return True
 
@@ -73,11 +73,11 @@ class ConfigManager:
 			print("Unable to find "  + courseConfigFile)
 			return False
 
-		config = ConfigParser.ConfigParser() # get_config(courseConfigFile)
+		config = configparser.ConfigParser() # get_config(courseConfigFile)
 		config.read(courseConfigFile)
 		config.remove_section(projectName)
 
-		with open(courseConfigFile, "wb") as config_file:
+		with open(courseConfigFile, "w") as config_file:
 			config.write(config_file)
 		return True
 
@@ -89,13 +89,13 @@ class ConfigManager:
 		##update_setting(path, section, setting, value)
 
 	def getProjects(self, courseConfigFile):
-		config = ConfigParser.RawConfigParser()
+		config = configparser.RawConfigParser()
 		config.read(courseConfigFile)
 		return config.sections()
 
 
 	def getProjectInfo( self,courseConfigFile, projectName):
-		config = ConfigParser.RawConfigParser()
+		config = configparser.RawConfigParser()
 		config.read(courseConfigFile)
 		conf_sections = config.sections()
 		for proj in conf_sections :
@@ -118,12 +118,12 @@ class ConfigManager:
 			return False
 
 
-		config = ConfigParser.ConfigParser() # get_config(courseConfigFile)
+		config = configparser.ConfigParser() # get_config(courseConfigFile)
 		config.read(globalConfigFile)
 
 		try:
 			config.add_section(courseName)
-		except ConfigParser.DuplicateSectionError :
+		except configparser.DuplicateSectionError :
 			print("\t[-] "  + courseName + " already exists")
 			return False
 		config.set(courseName, 'course_config_file', courseConfigFile)
@@ -131,7 +131,7 @@ class ConfigManager:
 		config.set(courseName, 'user_group', userGroup)
 		## config.set(courseName, 'contact info: ', contactInfo)
 
-		with open(globalConfigFile, 'wb+') as f:
+		with open(globalConfigFile, 'w+') as f:
 			config.write(f)
 		return True
 
@@ -146,12 +146,12 @@ class ConfigManager:
 			print("Unable to find "  + globalConfigFile)
 			return False	
 
-		config = ConfigParser.RawConfigParser()
+		config = configparser.RawConfigParser()
 		config.read(globalConfigFile)
 
 		try:
 			config.remove_section(courseName)
-		except ConfigParser.NoSectionError:
+		except configparser.NoSectionError:
 			print("[-] course not present in globalConfigFile")
 			return False
 		return True
@@ -161,20 +161,20 @@ class ConfigManager:
 		if not my_file.is_file():
 			print("Unable to find "  + globalConfigFile)
 			return None
-		config = ConfigParser.RawConfigParser()
+		config = configparser.RawConfigParser()
 		config.read(globalConfigFile)		
 		return config.sections()
 
 
 	''' 
-	Begin API for ConfigParser API
+	Begin API for configparser API
 	'''
 	def get_config(self, path):
 		my_file = Path(path)
 		if not my_file.is_file():
-			print("Unable to find "  + path + " in get_config")
+			print("[-] Unable to find "  + path + " in get_config")
 			return False
-		config = ConfigParser.RawConfigParser()
+		config = configparser.RawConfigParser()
 		config.read(path)
 		return config
 	    
@@ -194,7 +194,7 @@ class ConfigManager:
 		"""
 		config = self.get_config(path)
 		config.set(section, setting, value)
-		with open(path, "wb") as config_file:
+		with open(path, "w") as config_file:
 			config.write(config_file)
 	 
 	 
@@ -204,13 +204,13 @@ class ConfigManager:
 	    """
 	    config = self.get_config(path)
 	    config.remove_option(section, setting)
-	    with open(path, "wb") as config_file:
+	    with open(path, "w") as config_file:
 	        config.write(config_file)
 
 def main():
 	print("***Testing course config API***")
-	courseConfig = 'testCourse.config'
-	globalConfig = 'testGlobal.config'
+	courseConfig = '../test/testCourse/testCourse.config'
+	globalConfig = '../test/testGlobal.config'
 	cm = ConfigManager()
 	
 	print("[+] Adding lab2 to course config file")
