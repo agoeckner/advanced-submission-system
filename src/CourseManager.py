@@ -25,11 +25,14 @@ class CourseManager:
 		##Create a new directory for the courseName
 		newCoursePath = path + courseName
 		
+		if os.path.exists(newCoursePath):
+			print("Course already exists")
+			return False
+		
 		try:
 			self.addFolder(newCoursePath)
 		except OSError: 
 			return False
-		
 		
 		courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
 		
@@ -55,8 +58,11 @@ class CourseManager:
 		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 		
 		path = self.manager.get_setting("global.config", courseName, "course_path")
+		courseConfigFile = path + "course.config"
 		
-		check = self.manager.removeCourse(GLOBAL_PATH, courseName) ##removes the course from the global config file
+		print(courseConfigFile)
+		
+		check = self.manager.removeCourse(courseConfigFile, "global.config", courseName) ##removes the course from the global config file
 		
 		if check == False: #{
 			return False
@@ -75,7 +81,7 @@ class CourseManager:
 	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
 	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
 	##number of days allowed for late submission
-	def createAssignment(self, courseName, assignmentName):#, dueDate, team, maxSubmissions, lateDays): #{
+	def createAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
 		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 		
 		##for testing
@@ -163,46 +169,10 @@ class CourseManager:
 		shutil.rmtree(x) ##removes the directory and all directories and files inside it
 	#}
 	
-	##---------------------------------- Code that is used for testing ------------------------------------------------------------------'''
-	##main method
-	def start(self): #{
-		theMan = CourseManager(None)
-		check = False
+	def courseNameToPath(self, courseName): #{
+		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 		
-		##create the course config file
-		configFile = open("global.config", "w")
-		configFile.close()
-		
-		print("**************Program Started******************")
-		
-		print("----------------------Running Test 1------------------------")
-		print("Calling createCourse for cs252")
-		
-		check = theMan.createCourse("./courses/", "cs252", "group1")
-		
-		if check == False:
-			print("Test 1 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-		print("----------------------Test 1 Completed----------------------")
-		
-		print("----------------------Running Test 2------------------------")
-		print("Calling deleteCourse")
-		
-		check = theMan.createCourse("./courses/", "cs408", "group2")
-		if check == False:
-			print("Test 2 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			
-		print("----------------------Test 2 Completed----------------------")
-		
-		print("----------------------Running Test 3------------------------")
-		print("Calling deleteCourse")
-		
-		check = theMan.deleteFolder("./courses/cs252")
-		if check == False:
-			print("Test 3 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-		
-		print("----------------------Test 3 Completed----------------------")
-		
-		
+		return path
 	#}
 
 
