@@ -115,14 +115,22 @@ class GradeInterface:
 			
 			if self.mode is MODE_STUDENT:
 				self._drawStudent()
+				self.displayMessage("Running in STUDENT mode.")
 			elif self.mode is MODE_INSTRUCTOR:
 				self._drawInstructor()
+				self.displayMessage("Running in INSTRUCTOR mode.")
 
 			# UI Loop
 			while self.run:
 				self._drawUpdate()
 				# No need to refresh faster than 1 FPS for this example...
 				time.sleep(0.01)
+		except Exception as err:
+			raise err
+
+	def _drawInstructor(self):
+		try:
+			pass
 		except Exception as err:
 			raise err
 
@@ -176,6 +184,11 @@ class GradeInterface:
 			if self.course != course:
 				self.course = course
 				assignments = self.parent.submissionManager.getAssignmentList(course)
+				
+				# Add the "New Assignment" Feature.
+				if self.mode is MODE_INSTRUCTOR:
+					assignments.insert(0, "<---NEW ASSIGNMENT--->")
+				
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
 	
