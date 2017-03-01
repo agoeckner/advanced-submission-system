@@ -79,7 +79,7 @@ class GradeInterface:
 				self.screenSize[1] - 36,
 				"Tip: Use the spacebar to select.",
 				curses.A_DIM)
-			self.panelMain.box()
+			# self.panelMain.box()
 			self.panelMain.refresh()
 			
 			# Course picker.
@@ -130,7 +130,20 @@ class GradeInterface:
 
 	def _drawInstructor(self):
 		try:
-			pass
+			# Student list panel.
+			studentPanelSizeYX = (self.screenSize[0] - 20, 2 * int((self.screenSize[1] - 3) / 3))
+			self.studentPanel = self.panelMain.derwin(
+				studentPanelSizeYX[0], studentPanelSizeYX[1], # size
+				1, int((self.screenSize[1] - 4) / 3) + 1) # position
+			self.studentPanel.bkgd(curses.color_pair(1))
+			centerTip = "Please select a course to view grades."
+			self.studentPanel.addstr(
+				int(studentPanelSizeYX[0] / 2),
+				int(studentPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
+				centerTip,
+				curses.A_DIM)
+			self.studentPanel.box()
+			self.studentPanel.refresh()
 		except Exception as err:
 			raise err
 
@@ -188,6 +201,7 @@ class GradeInterface:
 				# Add the "New Assignment" Feature.
 				if self.mode is MODE_INSTRUCTOR:
 					assignments.insert(0, "<---NEW ASSIGNMENT--->")
+					assignments.insert(0, "<---OVERALL GRADES--->")
 				
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
