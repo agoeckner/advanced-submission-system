@@ -29,7 +29,7 @@ class AdvancedSubmissionSystem:
 		
 		# Grade Interface
 		if len(sys.argv) > 1 and sys.argv[1] == "grades":
-			self.gradeUI = GradeInterface.GradeInterface(self)
+			self.gradeUI = GradeInterface.GradeInterface(self, GradeInterface.MODE_STUDENT)
 			try:
 				self.gradeUI.show()
 			except KeyboardInterrupt:
