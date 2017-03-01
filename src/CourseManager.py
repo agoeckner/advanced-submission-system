@@ -13,12 +13,12 @@ class CourseManager:
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
-		self.manager = ConfigManager.ConfigManager()
+		self.manager = self.partent.configManager
 	#}
 	
 	##----------------------------- Section of code that is used for creating and deleting courses -------------------------------------------
 	
-	##creates a new course directory in the instructors folder
+	##creates a new course directory
 	##path is the path to where the course directory is to be created
 	##courseName is the name of the new course
 	def createCourse(self, path, courseName, userGroup): #{
@@ -37,17 +37,18 @@ class CourseManager:
 		courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
 		
 		##create the course config file
-		configFile = open(courseConfigFile, "w")
-		configFile.close()
-	
+		try:
+			configFile = open(courseConfigFile, "w")
+			configFile.close()
+		except 
+			return False
 		
 		##updates the global config
 		check = self.manager.addCourse("./global.config", courseName, courseConfigFile, newCoursePath, userGroup)
 		
 		##if the course config file is not created False is returned to indicate an error
-		if check == False: #{ 
+		if check == False:
 			return False
-		#}
 		
 		return True
 	#}
@@ -55,7 +56,7 @@ class CourseManager:
 	##deletes a course directory in the instructor's directory
 	##courseName is the name of the course to be removed
 	def deleteCourse(self, courseName): #{
-		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
 		
 		path = self.manager.get_setting("global.config", courseName, "course_path")
 		courseConfigFile = path + "course.config"
