@@ -75,7 +75,7 @@ class GradeInterface:
 			self.panelMain = stdscr.derwin(self.screenSize[0] - 4, self.screenSize[1] - 2, 3, 1)
 			self.panelMain.bkgd(curses.color_pair(1))
 			self.panelMain.addstr(
-				self.screenSize[0] - 6,
+				self.screenSize[0] - 5,
 				self.screenSize[1] - 36,
 				"Tip: Use the spacebar to select.",
 				curses.A_DIM)
@@ -144,6 +144,22 @@ class GradeInterface:
 				curses.A_DIM)
 			self.studentPanel.box()
 			self.studentPanel.refresh()
+			
+			# Assignment edit panel.
+			editPanelSizeYX = (self.screenSize[0] - 23, 2 * int((self.screenSize[1] - 3) / 3))
+			self.editPanel = self.panelMain.derwin(
+				editPanelSizeYX[0], editPanelSizeYX[1], # size
+				studentPanelSizeYX[0] + 1, int((self.screenSize[1] - 4) / 3) + 1) # position
+			self.editPanel.bkgd(curses.color_pair(1))
+			centerTip = "Assignment options are changed here."
+			self.editPanel.addstr(
+				int(editPanelSizeYX[0] / 2),
+				int(editPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
+				centerTip,
+				curses.A_DIM)
+			self.editPanel.box()
+			self.editPanel.refresh()
+			
 		except Exception as err:
 			raise err
 
@@ -184,7 +200,7 @@ class GradeInterface:
 	
 	def displayMessage(self, message, textAttr=curses.A_NORMAL):
 		self.panelMain.addstr(
-			self.screenSize[0] - 7,
+			self.screenSize[0] - 5,
 			int((self.screenSize[1] - 4) / 3) + 2,
 			message,
 			textAttr)
