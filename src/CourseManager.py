@@ -162,7 +162,7 @@ class CourseManager:
 		##NOTE!-------------------------------------------------------------------------------------
 		## mkdir has another parameter that sets permissions for the new directory
 		##!-----------------------------------------------------------------------------------------
-		os.mkdir(x); ##a new directory is made
+		os.mkdir(x) ##a new directory is made
 	#}
 
 	def deleteFolder(self, x): #{
