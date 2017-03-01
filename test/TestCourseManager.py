@@ -28,33 +28,51 @@ class TestCourseManager: #{
 	## Test cases for creating a course
 	##-------------------------------------------------------------------------
 	def test_create_course_1(self): #{
+		check = self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
 		
-		cleanUp()
+		self.assertEqual(check, True)
+		self.self.cleanUp()
 	}
 	
 	def test_create_course_2(self): #{
+		check = self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
 		
-		cleanUp()
+		self.assertEqual(check, True)
+		self.self.cleanUp()
 	}
 	
 	def test_create_course_3(self): #{
+		check = self.courseManager.createCourse("./courses/", "cs252", "cs252Users")
 		
-		cleanUp()
+		self.assertEqual(check, True)
+		self.self.cleanUp()
 	}
 	
 	def test_create_course_already_exists_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs251", "cs251Users")
 		
-		cleanUp()
+		check = self.courseManager.createCourse("./courses/", "cs251", "cs251Users")
+		
+		self.assertEqual(check, False)
+		self.cleanUp()
 	#}
 	
 	def test_create_course_already_exists_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
 		
-		cleanUp()
+		check = self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		
+		self.assertEqual(check, False)
+		self.cleanUp()
 	#}
 	
 	def test_create_course_already_exists_3(self): #{
+		self.courseManager.createCourse("./courses/", "cs354", "cs354Users")
 		
-		cleanUp()
+		check = self.courseManager.createCourse("./courses/", "cs354", "cs354Users")
+		
+		self.assertEqual(check, False)
+		self.cleanUp()
 	#}
 	
 	##-------------------------------------------------------------------------
@@ -62,32 +80,32 @@ class TestCourseManager: #{
 	##-------------------------------------------------------------------------
 	def test_delete_course_1(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_course_2(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_course_3(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_course_does_not_exist_1(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_course_does_not_exist_2(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_course_does_not_exist_3(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	##-------------------------------------------------------------------------
@@ -95,32 +113,32 @@ class TestCourseManager: #{
 	##-------------------------------------------------------------------------
 	def test_create_assignment_1(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_create_assignment_2(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_create_assignment_3(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_create_assignment_already_exists_1(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_create_assignment_already_exists_2(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_create_assignment_already_exists_3(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	##-------------------------------------------------------------------------
@@ -128,32 +146,32 @@ class TestCourseManager: #{
 	##-------------------------------------------------------------------------
 	def test_delete_assignment_1(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_assignment_2(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_assignment_3(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_assignment_does_not_exist_1(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_assignment_does_not_exist_2(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 	
 	def test_delete_assignment_does_not_exist_3(self): #{
 		
-		cleanUp()
+		self.cleanUp()
 	#}
 #}
 
