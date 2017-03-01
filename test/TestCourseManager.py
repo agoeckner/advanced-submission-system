@@ -79,32 +79,50 @@ class TestCourseManager: #{
 	## Test cases for deleting a course
 	##-------------------------------------------------------------------------
 	def test_delete_course_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs354", "cs354Users")
 		
+		check = self.deleteCourse("cs354")
+		
+		assertEqual(check, True)
 		self.cleanUp()
 	#}
 	
 	def test_delete_course_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
 		
+		check = self.deleteCourse("cs240")
+		
+		assertEqual(check, True)
 		self.cleanUp()
 	#}
 	
 	def test_delete_course_3(self): #{
+		self.courseManager.createCourse("./courses/", "cs252", "cs252Users")
 		
+		check = self.deleteCourse("cs252")
+		
+		assertEqual(check, True)
 		self.cleanUp()
 	#}
 	
 	def test_delete_course_does_not_exist_1(self): #{
+		check = self.deleteCourse("cs252")
 		
+		assertEqual(check, False)
 		self.cleanUp()
 	#}
 	
 	def test_delete_course_does_not_exist_2(self): #{
+		check = self.deleteCourse("cs180")
 		
+		assertEqual(check, False)
 		self.cleanUp()
 	#}
 	
 	def test_delete_course_does_not_exist_3(self): #{
+		check = self.deleteCourse("cs240")
 		
+		assertEqual(check, False)
 		self.cleanUp()
 	#}
 	
