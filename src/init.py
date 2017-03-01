@@ -17,11 +17,13 @@ class AdvancedSubmissionSystem:
 	submissionManager = None
 	submissionUI = None
 	courseManager = None
+	configManager = None
 	
 	# Perform program initialization.
 	def __init__(self):
 		# Fix for ncurses over PuTTY.
 		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
+		self.configManager = ConfigManager.ConfigManager()
 		
 		if len(sys.argv) > 1 and sys.argv[1] == "grades":
 			# Setup
