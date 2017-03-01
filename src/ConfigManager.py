@@ -5,7 +5,7 @@
 #=================================
 import optparse
 import os
-import ConfigParser
+import configparser
 from distutils.util import strtobool
 from pathlib import Path    # needs:  sudo pip install pathlib
 from dateutil.parser import parse # needs: sudo pip install python-dateutil
@@ -14,215 +14,266 @@ from datetime import datetime
 
 
 # ConfigManager handles configuration and config files..
-# class ConfigManager:
+class ConfigManager:
 
-# def __init__():
-# 	return	
+	def __init__(self):
+		return	
 
-''' 
-Begin API for managing course config file 
-'''
-def addProject( courseConfigFile, projectName, dueDate, team, maxSubmissions,lateDays):
-	## example : addProject( "testCourse.config", "lab1", "12-05-2017", True, 100, 0)
-	## courseConfigFile = os.getcwd() + '/' courseName + ".config"
-	my_file = Path(courseConfigFile)
-	if not my_file.is_file():
-		print("Unable to find "  + courseConfigFile)
-		return false
+	''' 
+	Begin API for managing course config file 
+	'''
+	def addProject(self, courseConfigFile, projectName, dueDate, team, maxSubmissions,lateDays):
+		## example : addProject( "testCourse.config", "lab1", "12-05-2017", True, 100, 0)
+		## courseConfigFile = os.getcwd() + '/' courseName + ".config"
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return False
 
-	try:
-		dueDate = parse(dueDate)
-	except ValueError:
-		print("ERROR: incorrect format for dueDate specified \n Setting due date to 2099-12-31")
-		dueDate = parse("2099-12-31") ## infinity date in the future
+		try:
+			dueDate = parse(dueDate)
+		except ValueError:
+			print("ERROR: incorrect format for dueDate specified \n Use format mm-dd-yyyy")
+			return False
+			##dueDate = parse("2099-12-31") ## infinity date in the future
+		now = datetime.now()
+		if(now > dueDate):
+			print("[-] Invalid date specified. Set due date to future date")
+			return False
 
-	try:
-		teamProj = bool(team)
-	except:
-		print("ERROR: incorrect format for team specified. Use True/false")
-		teamProj = false
+		try:
+			teamProj = bool(team)
+		except:
+			print("ERROR: incorrect format for team specified. Use True/false")
+			return False
 
-	config = ConfigParser.ConfigParser() # get_config(courseConfigFile)
-	config.read(courseConfigFile)
+		config = configparser.ConfigParser() # get_config(courseConfigFile)
+		config.read(courseConfigFile)
 
-	# print ("config : " + repr(config) )
-	try:
-		config.add_section(projectName)
-		config.set(projectName, 'team', team)
-		config.set(projectName, 'max_submissions', maxSubmissions)
-		config.set(projectName, 'due', str(dueDate) )
-		config.set(projectName, 'late days', lateDays )
-	except ConfigParser.DuplicateSectionError :
-		print("\t[-] "  + projectName + " already exists")
-	
-	with open(courseConfigFile, 'wb') as f:
-		config.write(f)
-	return True
+		# print ("config : " + repr(config) ) ## checks if config is a null object
+		try:
+			config.add_section(projectName)
+			config.set(projectName, 'team', str(team) )
+			config.set(projectName, 'max_submissions', str(maxSubmissions) )
+			config.set(projectName, 'due', str(dueDate) )
+			config.set(projectName, 'late days', str(lateDays)  )
+		except configparser.DuplicateSectionError :
+			print("\t[-] "  + projectName + " already exists")
+			return False
+		
+		with open(courseConfigFile, 'w') as f:
+			config.write(f)
+		return True
 
-def removeProject( courseConfigFile, projectName):
-	## e.g. removeProject("testCourse.config", "lab1" )
-	# print("removing " + projectName + " from " + courseConfigFile)
-	my_file = Path(courseConfigFile)
-	if not my_file.is_file():
-		print("Unable to find "  + courseConfigFile)
-		return false
+	def removeProject( self, courseConfigFile, projectName):
+		## e.g. removeProject("testCourse.config", "lab1" )
+		# print("removing " + projectName + " from " + courseConfigFile)
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return False
 
-	config = ConfigParser.ConfigParser() # get_config(courseConfigFile)
-	config.read(courseConfigFile)
-	config.remove_section(projectName)
+		config = configparser.ConfigParser() # get_config(courseConfigFile)
+		config.read(courseConfigFile)
+		config.remove_section(projectName)
 
-	with open(courseConfigFile, "wb") as config_file:
-		config.write(config_file)
-	return True
+		with open(courseConfigFile, "w") as config_file:
+			config.write(config_file)
+		return True
 
-def modifyProject( courseConfigFile, projectName, dueDate, team, maxSubmissions, lateDays):
-	## example : modifyProject( "testCourse.config", "lab2", "12-05-2017", True, 100, 0)
-	# print("function to modify an existing course")
-	removeProject(courseConfigFile,  projectName )
-	addProject( courseConfigFile, projectName, dueDate , team, maxSubmissions, lateDays)
-	##update_setting(path, section, setting, value)
+	def modifyProject(self, courseConfigFile, projectName, dueDate, team, maxSubmissions, lateDays):
+		## example : modifyProject( "testCourse.config", "lab2", "12-05-2017", True, 100, 0)
+		# print("function to modify an existing course")
+		self.removeProject(courseConfigFile,  projectName )
+		self.addProject( courseConfigFile, projectName, dueDate , team, maxSubmissions, lateDays)
+		##update_setting(path, section, setting, value)
 
-def getProjects( courseConfigFile):
-	config = ConfigParser.RawConfigParser()
-	config.read(courseConfigFile)
-	return config.sections()
-
-
-def getProjectInfo( courseConfigFile, projectName):
-	config = ConfigParser.RawConfigParser()
-	config.read(courseConfigFile)
-	conf_sections = config.sections()
-	for proj in conf_sections :
-		if proj == projectName:
-			return config.options(proj)
+	def getProjects(self, courseConfigFile):
+		config = configparser.RawConfigParser()
+		config.read(courseConfigFile)
+		return config.sections()
 
 
-'''
-Begin API for managing global config file
-'''
-
-def addCourse( globalConfigFile, courseName, courseConfigFile, coursePath):
-	my_file = Path(courseConfigFile)
-	if not my_file.is_file():
-		print("Unable to find "  + courseConfigFile)
-		return false
-	my_file = Path(globalConfigFile)
-	if not my_file.is_file():
-		print("Unable to find "  + globalConfigFile)
-		return false
+	def getProjectInfo( self,courseConfigFile, projectName):
+		config = configparser.RawConfigParser()
+		config.read(courseConfigFile)
+		conf_sections = config.sections()
+		for proj in conf_sections :
+			if proj == projectName:
+				return config.options(proj)
 
 
-	config = ConfigParser.ConfigParser() # get_config(courseConfigFile)
-	config.read(globalConfigFile)
+	'''
+	Begin API for managing global config file
+	'''
 
-	try:
-		config.add_section(courseName)
-	except ConfigParser.DuplicateSectionError :
-		print("\t[-] "  + courseName + " already exists")
-	config.set(courseName, 'course_config_file', courseConfigFile)
-	config.set(courseName, 'course_path', coursePath)
-	## config.set(courseName, 'contact info: ', contactInfo)
+	def addCourse(self, globalConfigFile, courseName, courseConfigFile, coursePath, userGroup):
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return False
+		my_file = Path(globalConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + globalConfigFile)
+			return False
 
-	with open(courseConfigFile, 'wb') as f:
-		config.write(f)
-	return True
 
-def removeCourse( globalConfigFile, courseName):
-	my_file = Path(courseConfigFile)
-	if not my_file.is_file():
-		print("Unable to find "  + courseConfigFile)
-		return False
+		config = configparser.ConfigParser() # get_config(courseConfigFile)
+		config.read(globalConfigFile)
 
-	my_file = Path(globalConfigFile)
-	if not my_file.is_file():
-		print("Unable to find "  + globalConfigFile)
-		return False	
+		try:
+			config.add_section(courseName)
+		except configparser.DuplicateSectionError :
+			print("\t[-] "  + courseName + " already exists")
+			return False
+		config.set(courseName, 'course_config_file', courseConfigFile)
+		config.set(courseName, 'course_path', coursePath)
+		config.set(courseName, 'user_group', userGroup)
+		## config.set(courseName, 'contact info: ', contactInfo)
 
-	config = ConfigParser.RawConfigParser()
-	config.read(globalConfigFile)
+		with open(globalConfigFile, 'w+') as f:
+			config.write(f)
+		return True
 
-	config.remove_section(courseName)
-	return True
+	def removeCourse(self, courseConfigFile, globalConfigFile, courseName):
+		my_file = Path(courseConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return False
 
-def getCourseList(GLOBAL_PATH): 
-	my_file = Path(GLOBAL_PATH)
-	if not my_file.is_file():
-		print("Unable to find "  + GLOBAL_PATH)
-		return false
-	config = ConfigParser.RawConfigParser()
-	config.read(GLOBAL_PATH)
-	
-	return config.sections()
-def getCourseDetails(courseConfigFile):
-	## read course config and return list 
-	## {projName, due, maxSubmissions}
-	return
+		my_file = Path(globalConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + globalConfigFile)
+			return False	
 
-''' 
-Begin API for ConfigParser API
-'''
+		config = configparser.RawConfigParser()
+		config.read(globalConfigFile)
 
-def get_setting(path, section, setting):
-    """
-    Print out a setting
-    """
-    config = get_config(path)
-    value = config.get(section, setting)
-    print "{section} {setting} is {value}".format(
-        section=section, setting=setting, value=value)
-    return value
- 
+		try:
+			config.remove_section(courseName)
+		except configparser.NoSectionError:
+			print("[-] course not present in globalConfigFile")
+			return False
+		return True
 
-def update_setting(path, section, setting, value):
-	"""
-	Update a setting
-	"""
-	config = get_config(path)
-	config.set(section, setting, value)
-	with open(path, "wb") as config_file:
-		config.write(config_file)
- 
- 
-def delete_setting(path, section, setting):
-    """
-    Delete a setting
-    """
-    config = get_config(path)
-    config.remove_option(section, setting)
-    with open(path, "wb") as config_file:
-        config.write(config_file)
+	def getCourseList(self, globalConfigFile): 
+		my_file = Path(globalConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + globalConfigFile)
+			return None
+		config = configparser.RawConfigParser()
+		config.read(globalConfigFile)		
+		return config.sections()
+
+
+	''' 
+	Begin API for configparser API
+	'''
+	def get_config(self, path):
+		my_file = Path(path)
+		if not my_file.is_file():
+			print("[-] Unable to find "  + path + " in get_config")
+			return False
+		config = configparser.RawConfigParser()
+		config.read(path)
+		return config
+	    
+
+	def get_setting(self, path, section, setting):
+		config = self.get_config(path)
+		value = config.get(section, setting)
+		#print "{section} {setting} is {value}".format(
+	    #    section=section, setting=setting, value=value)
+
+		return value
+	 
+
+	def update_setting(self, path, section, setting, value):
+		"""
+		Update a setting
+		"""
+		config = self.get_config(path)
+		config.set(section, setting, value)
+		with open(path, "w") as config_file:
+			config.write(config_file)
+	 
+	 
+	def delete_setting(self, path, section, setting):
+	    """
+	    Delete a setting
+	    """
+	    config = self.get_config(path)
+	    config.remove_option(section, setting)
+	    with open(path, "w") as config_file:
+	        config.write(config_file)
 
 def main():
 	print("***Testing course config API***")
-	courseConfig = 'testCourse.config'
-	globalConfig = 'testGlobal.config'
+	courseConfig = '../test/testCourse/testCourse.config'
+	globalConfig = '../test/testGlobal.config'
+	cm = ConfigManager()
 	
 	print("[+] Adding lab2 to course config file")
-	if addProject( courseConfig, 'lab2', '12-04-2016', True, 15, 5) :
+	if cm.addProject( courseConfig, 'lab2', '12-04-2018', True, 15, 5) :
 		print("[+] project added")
 	print("[+] Adding lab3 to course config file")
-	if addProject( courseConfig, 'lab3', '12-05-2016', True, 25, 0) :
+	if cm.addProject( courseConfig, 'lab3', '12-05-2018', True, 25, 0) :
 		print("[+] project added")
 
 	print("[+] Adding project1 to course config file")
-	if addProject( courseConfig, 'project1', '12-08-2016', False, 5, 5) :
+	if cm.addProject( courseConfig, 'project1', '12-08-2018', False, 5, 5) :
 		print("[+] project added")
 	
 	print("[+] removing lab2")
-	if removeProject(courseConfig, 'lab2') :
+	if cm.removeProject(courseConfig, 'lab2') :
 		print("[+] project removed")
 
 	print("Printing courses in " + courseConfig)
-	course_list = getProjects(courseConfig)
+	proj_list = cm.getProjects(courseConfig)
+	print("[")
+	for proj in proj_list:
+		print(proj)
+	print(" ]")
+	print("[+] Changing due date for project1")
+	cm.modifyProject(courseConfig, 'project1', '12-15-2018', False, 5, 5)
+
+	print("Printing courses in " + courseConfig)
+	proj_list = cm.getProjects(courseConfig)
+	print("[")
+	for proj in proj_list:
+		print(proj)
+	print(" ]")
+
+	print("=======")
+	print("***Testing global config API***")
+
+	print("[+] adding 4 course")
+	if not cm.addCourse( globalConfig, "cs240", courseConfig, "some/path/to/course/dir", "cs240students"):
+		print("[-] unable to add cs240")
+	if not cm.addCourse( globalConfig, "cs241", courseConfig, "some/path/to/course/dir1", "cs241students"):
+		print("[-] unable to add cs241")
+	if not cm.addCourse( globalConfig, "cs242", courseConfig, "some/path/to/course/dir2", "cs242students"):
+		print("[-] unable to add cs242")
+	if not cm.addCourse( globalConfig, "cs243", courseConfig, "some/path/to/course/dir3", "cs243students"):
+		print("[-] unable to add cs243")
+
+	print("[+] Course List: ")
+	course_list = cm.getCourseList(globalConfig)
 	print("[")
 	for course in course_list:
 		print(course)
 	print(" ]")
 
-	print("=======")
-	print("***Testing global config API***")
-	
+	print("[+] removing cs242 from global config file")
+	if not cm.removeCourse( courseConfig, globalConfig, "cs242"):
+		print("[-] Unable to remove cs242 from global config")
 
+	print("[+] Course List: ")
+	course_list = cm.getCourseList(globalConfig)
+	print("[")
+	for course in course_list:
+		print(course)
+	print(" ]")
 
 if __name__ == '__main__':
     main()
