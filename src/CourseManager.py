@@ -186,15 +186,18 @@ class CourseManager:
 	#}
 	
 	def editGrade(self, courseName, assignmentName, studentName, newGrade): #{
-	
+		
+		return False
 	#}
 	
 	def editBonus(self, courseName, assignmentName, studentName, newGrade): #{
-	
+		
+		return False
 	#}
 	
 	def editFeedback(self, courseName, assignmentName, studentName, newGrade): #{
 		
+		return False
 	#}
 	
 	##-------------------------------------------------------------------------------------------------------------------------------------
