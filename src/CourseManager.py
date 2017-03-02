@@ -111,9 +111,15 @@ class CourseManager:
 		if not check:
 			return False
 		
-		##Create all the student directories
+		##Create the student directories
+		try:
+			self.addFolder(assignmentPath + "/smithhe")
+			##----------------------------------------------------------------
+			##TODO:Section for adding all the students in a userGroup
+			##----------------------------------------------------------------
+		except OSError:
+			return False
 		
-
 		return True
 	#}
 
@@ -201,10 +207,9 @@ class CourseManager:
 		
 		try:
 			gradeRecieved = self.parent.gradeManager.getGrade(gradeConfigPath)
+			return gradeRecieved
 		except configparser.NoSectionError:
 			return False
-		
-		return gradeRecieved
 	#}
 	
 	##Returns in string format the amount of bonus points recieved
@@ -296,6 +301,7 @@ class CourseManager:
 	##-------------------------------------------------------------------------------------------------------------------------------------
 	
 	def addFolder(self, x): #{
+		##TODO: Set permissions correctly for new directories
 		##NOTE!-------------------------------------------------------------------------------------
 		## mkdir has another parameter that sets permissions for the new directory
 		##!-----------------------------------------------------------------------------------------
@@ -333,9 +339,7 @@ class CourseManager:
 		return value
 	#}
 	
-	def getCourseList(self): #{
-		
-	#}
+	##def getCourseList(self): #{}
 
 
 
