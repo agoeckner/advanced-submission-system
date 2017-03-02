@@ -11,3 +11,5 @@ Bug List:
 5) try except in CourseManager deleteAssignment
 
 6) try except in CourseManager modifyAssignment (2)
+
+7) False returned by get_config not being caught (3)
