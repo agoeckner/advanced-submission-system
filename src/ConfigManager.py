@@ -183,10 +183,10 @@ class ConfigManager:
 
 	def get_setting(self, path, section, setting):
 		# method will throw exceptions if section doesn't exist
+		config = self.get_config(path)
 		if (not config):
 			print("[-] get_config failed in get_setting")
 			return None
-		config = self.get_config(path)
 		value = config.get(section, setting)
 		#print "{section} {setting} is {value}".format(
 		#    section=section, setting=setting, value=value)
