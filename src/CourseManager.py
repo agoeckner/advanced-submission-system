@@ -27,7 +27,7 @@ class CourseManager:
 		newCoursePath = path + courseName
 		
 		if os.path.exists(newCoursePath):
-			print("Course already exists")
+			#print("Course already exists")
 			return False
 		
 		try:
@@ -61,10 +61,6 @@ class CourseManager:
 			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
 		except configparser.NoSectionError:
 			return False
-		
-		#path = self.manager.get_setting("global.config", courseName, "course_path")
-		
-		#print("Course Path to delete " + path)
 
 		courseConfigFile = path + "/course.config"
 		
@@ -97,7 +93,7 @@ class CourseManager:
 		
 		
 		if os.path.exists(assignmentPath):
-			print("Assignment already exists")
+			#print("Assignment already exists")
 			return False
 		
 		try:
@@ -128,15 +124,24 @@ class CourseManager:
 	##assignmentName is the assignment to be deleted
 	##courseName is the name of the course
 	def deleteAssignment(self, assignmentName, courseName): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		courseConfigFile = path + "course.config"
+		courseConfigFile = path + "/course.config"
 		
 		##removes the assignment from the course config file
-		parent.ConfigParser.removeProject(courseConfigFile, assignmentName)
+		check = self.parent.configManager.removeProject(courseConfigFile, assignmentName)
+		if not check:
+			return False
 		
 		##removes the directory and all subdirectories and files
-		deleteFolder(path + assignmentName)
+		assignmentPath = path + "/" + assignmentName
+		try:
+			self.deleteFolder(assignmentPath)
+		except OSError:
+			return False
 		
 		return True
 	#}
