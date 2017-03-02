@@ -91,6 +91,7 @@ class CourseManager:
 		except configparser.NoSectionError:
 			return False
 		
+		courseConfigFile = path + "/course.config"
 		assignmentPath = path + "/" + assignmentName
 		
 		
@@ -103,17 +104,9 @@ class CourseManager:
 		except OSError:
 			return False
 		
-		assignmentConfigFile = assignmentPath + "/assignment.config"
-		
-		##create the assignment config file
-		try:
-			configFile = open(assignmentConfigFile, "w")
-			configFile.close()
-		except:
-			return False
 		
 		##adds the assignment to the global config file
-		check = self.parent.configManager.addProject(assignmentConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
 		if not check:
 			return False
 		
@@ -148,20 +141,21 @@ class CourseManager:
 		return True
 	#}
 
-	##modifes the config file of an existing assignment
-	##assignmentName is the name of the new directory
-	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
-	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
-	##number of days allowed for late submission
+	##modifes the course config file of an existing assignment
+	##
 	def modifyAssignment(self, courseName, assignmentName, settingName, newValue): #{
 		try:
-			path = self.parent.configManager.get_setting(GLOBAL_PATH, courseName, "course_path")
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
 		except configparser.NoSectionError:
 			return False
 		
 		courseConfigFile = path + "/course.config"
+		#assignmentConfigFile = path + "/" + assignmentName + "/assignment.config"
 		
-		parent.ConfigParser.modifyProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		try:
+			self.parent.configManager.update_setting(courseConfigFile, assignmentName, settingName, newValue)
+		except configparser.NoSectionError:
+			return False
 		
 		return True
 	#}
@@ -214,7 +208,19 @@ class CourseManager:
 			return False
 		return path
 	#}
-
+	
+	##Names of different assignment config settings are: "team", "max_submissions", "due", and "late days"
+	##!!Note!! The name of the setting must be exactly one of the above or False will be returned
+	def getAssignmentSetting(self, courseName, assignmentName, settingName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			courseConfigFile = path + "/course.config"
+			value = self.parent.configManager.get_setting(courseConfigFile, assignmentName, settingName)
+		except configparser.NoSectionError:
+			return False
+		
+		return value
+	#}
 
 
 
