@@ -265,8 +265,80 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	##-------------------------------------------------------------------------
-	## Test cases for grading
+	## Test cases for enterGrade
 	##-------------------------------------------------------------------------
+	def test_enter_grade_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		
+		check = self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 100, 15, "Job well done lad")
+		
+		self.assertEqual(check, True)
+	#}
+	
+	def test_enter_grade_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		
+		check = self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 80, 15, "Not to shabby")
+		
+		self.assertEqual(check, True)
+	#}
+	
+	def test_enter_grade_does_not_exist_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		
+		check = self.courseManager.enterGrade("cs240", "Lab4", "johndoe", 100, 15, "Job well done lad")
+		
+		self.assertEqual(check, False)
+	#}
+	
+	def test_enter_grade_does_not_exist_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		
+		check = self.courseManager.enterGrade("cs240", "Lab4", "janedoe", 50, 5, "Need to work harder on assignments")
+		
+		self.assertEqual(check, False)
+	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for getGrade
+	##-------------------------------------------------------------------------
+	def test_get_grade_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 15, "Not to shabby")
+		
+		grade = self.courseManager.getGrade("cs240", "Lab4", "smithhe")
+		self.assertEqual(grade, "90")
+	#}
+	
+	def test_get_grade_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 95, 15, "Not to shabby")
+		
+		grade = self.courseManager.getGrade("cs240", "Lab4", "smithhe")
+		self.assertEqual(grade, "95")
+	#}
+	
+	def test_get_grade_does_not_exist_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		
+		grade = self.courseManager.getGrade("cs240", "Lab4", "johndoe")
+		self.assertEqual(grade, False)
+	#}
+	
+	def test_get_grade_does_not_exist_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		
+		grade = self.courseManager.getGrade("cs240", "Lab4", "matt95")
+		self.assertEqual(grade, False)
+	#}
 	
 #}
 
