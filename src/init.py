@@ -25,27 +25,12 @@ class AdvancedSubmissionSystem:
 		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
 		self.configManager = ConfigManager.ConfigManager()
 		
-		if len(sys.argv) > 1 and sys.argv[1] == "grades":
-			# Setup
-			self.submissionManager = SubmissionManager.SubmissionManager(self)
-			self.studentGradeUI = StudentInterface.StudentInterface(self)
-			try:
-				self.studentGradeUI.show()
-			except KeyboardInterrupt:
-				print("Goodbye!")
-		elif len(sys.argv) > 1 and sys.argv[1] == "course":
-			#Setup
-			self.courseManager = CourseManager.CourseManager(self)
-			
-			self.courseManager.start()
-		else:
-			# Setup
-			self.submissionManager = SubmissionManager.SubmissionManager(self)
-			self.submissionUI = SubmissionInterface.SubmissionInterface(self)
-			try:
-				self.submissionUI.show()
-			except KeyboardInterrupt:
-				print("WARNING: Nothing was submitted!")
+		self.submissionManager = SubmissionManager.SubmissionManager(self)
+		self.submissionUI = SubmissionInterface.SubmissionInterface(self)
+		try:
+			self.submissionUI.show()
+		except KeyboardInterrupt:
+			print("WARNING: Nothing was submitted!")
 
 # Start the program.
 if __name__ == '__main__':

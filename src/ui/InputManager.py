@@ -49,9 +49,9 @@ class InputManager:
 		if inputChar == ord('\t'):
 			self.tabNext()
 			return None
-		elif inputChar == curses.KEY_BACKSPACE:
-			self.tabPrev()
-			return None
+		# elif inputChar == curses.KEY_BACKSPACE:
+			# self.tabPrev()
+			# return None
 		returnValue =  self.currentElement.onInput(inputChar)
 		if returnValue == "TAB_NEXT":
 			self.tabNext()

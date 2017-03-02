@@ -1,6 +1,10 @@
 # Python stuff
 *.pyc
 
+# Build and distribution folders.
+build/
+dist/
+
 # Object files
 *.o
 *.ko
