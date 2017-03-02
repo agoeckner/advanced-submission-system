@@ -13,7 +13,7 @@ class CourseManager:
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
-		self.manager = self.partent.configManager
+		self.manager = self.parent.configManager
 	#}
 	
 	##----------------------------- Section of code that is used for creating and deleting courses -------------------------------------------
@@ -40,7 +40,7 @@ class CourseManager:
 		try:
 			configFile = open(courseConfigFile, "w")
 			configFile.close()
-		except 
+		except:
 			return False
 		
 		##updates the global config
@@ -56,22 +56,25 @@ class CourseManager:
 	##deletes a course directory in the instructor's directory
 	##courseName is the name of the course to be removed
 	def deleteCourse(self, courseName): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+		path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
 		
 		path = self.manager.get_setting("global.config", courseName, "course_path")
-		courseConfigFile = path + "course.config"
 		
-		print(courseConfigFile)
-		
-		check = self.manager.removeCourse(courseConfigFile, "global.config", courseName) ##removes the course from the global config file
-		
-		if check == False: #{
+		print("Course Path to delete " + path)
+		if os.path.exists(path):
+			courseConfigFile = path + "course.config"
+			
+			check = self.manager.removeCourse(courseConfigFile, "global.config", courseName) ##removes the course from the global config file
+			
+			if not check: #{
+				return False
+			#}
+			
+			deleteFolder(path) ##deletes the course and all assignments under it
+			
+			return True
+		else:
 			return False
-		#}
-		
-		deleteFolder(path) ##deletes the course and all assignments under it
-		
-		return True
 	#}
 	
 	
@@ -171,8 +174,7 @@ class CourseManager:
 	#}
 	
 	def courseNameToPath(self, courseName): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
-		
+		path = parent.configManager.get_setting(GLOBAL_PATH, courseName, "course_path")
 		return path
 	#}
 
