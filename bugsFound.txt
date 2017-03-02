@@ -2,6 +2,10 @@ Bug List:
 
 1) try except in ConfigManager get_setting
 
-2) try except in CourseManager deleteCourse
+2) try except in CourseManager createCourse
 
-3) 
+3) try except in CourseManager deleteCourse
+
+4) try except in CourseManager createAssignment
+
+5) try except in CourseManager deleteAssignment
