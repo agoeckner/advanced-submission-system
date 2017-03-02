@@ -11,13 +11,15 @@ import SubmissionInterface
 import SubmissionManager
 import CourseManager
 
-GLOBAL_PATH = "/etc/submission/global.config"
+
 
 class AdvancedSubmissionSystem:
 	submissionManager = None
 	submissionUI = None
 	courseManager = None
 	configManager = None
+	
+	GLOBAL_PATH = "/etc/submission/global.config"
 	
 	# Perform program initialization.
 	def __init__(self):
