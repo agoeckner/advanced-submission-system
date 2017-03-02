@@ -112,6 +112,7 @@ class CourseManager:
 			return False
 		
 		##Create all the student directories
+		
 
 		return True
 	#}
@@ -165,39 +166,129 @@ class CourseManager:
 	##  Section of code that is used for grading
 	##-------------------------------------------------------------------------------------------------------------------------------------
 	
-	##Gives a grade to the student
-	##courseName is the name of the course
-	##assignmentName is the name of the assignment, studentName is the name of the student being graded
-	##gradeRecieved is the grade recieved for the assignment
+	##Creates the grade config file and enteres in the grade content for the student
 	def enterGrade(self, courseName, assignmentName, studentName, gradeRecieved, bonus, feedback): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		##create the grade config file
+		try:
+			gradeConfigFile = open(gradeConfigPath, "w")
+			gradeConfigFile.close()
+		except:
+			return False
+		
+		try:
+			check = self.parent.gradeManager.addGrade(gradeConfigPath, gradeRecieved, bonus, feedback)
+		except:
+			return False
+		
+		return check
 	#}
 	
+	##Returns in string format the grade recieved
 	def getGrade(self, courseName, assignmentName, studentName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			gradeRecieved = self.parent.gradeManager.getGrade(gradeConfigPath)
+		except configparser.NoSectionError:
+			return False
+		
+		return gradeRecieved
 	#}
 	
+	##Returns in string format the amount of bonus points recieved
 	def getBonus(self, courseName, assignmentName, studentName): #{
-	
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			bonusRecieved = self.parent.gradeManager.getBonus(gradeConfigPath)
+		except configparser.NoSectionError:
+			return False
+		
+		return bonusRecieved
 	#}
 	
+	##Returns the feedback recieved
 	def getFeedback(self, courseName, assignmentName, studentName): #{
-	
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			feedbackRecieved = self.parent.gradeManager.getFeedback(gradeConfigPath)
+		except configparser.NoSectionError:
+			return False
+		
+		return feedbackRecieved
 	#}
 	
+	##Edits the grade for the student, returns false if student's folder doesn't exist or if failure occurs
 	def editGrade(self, courseName, assignmentName, studentName, newGrade): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		return False
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			self.parent.gradeManager.editGrade(gradeConfigPath, newGrade)
+		except configparser.NoSectionError:
+			return False
+		
+		return True
 	#}
 	
-	def editBonus(self, courseName, assignmentName, studentName, newGrade): #{
+	##Edits the bonus points recieved by the student, returns false is student doesn't exist or is failure occurs
+	def editBonus(self, courseName, assignmentName, studentName, newBonus): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		return False
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			self.parent.gradeManager.editBonus(gradeConfigPath, newBonus)
+		except configparser.NoSectionError:
+			return False
+		
+		return True
 	#}
 	
-	def editFeedback(self, courseName, assignmentName, studentName, newGrade): #{
+	def editFeedback(self, courseName, assignmentName, studentName, newFeedback): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		return False
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			self.parent.gradeManager.editFeedback(gradeConfigPath, newFeedback)
+		except configparser.NoSectionError:
+			return False
+		
+		return True
 	#}
 	
 	##-------------------------------------------------------------------------------------------------------------------------------------
@@ -240,6 +331,10 @@ class CourseManager:
 			return False
 		
 		return value
+	#}
+	
+	def getCourseList(self): #{
+		
 	#}
 
 
