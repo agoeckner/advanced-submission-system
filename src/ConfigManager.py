@@ -180,8 +180,11 @@ class ConfigManager:
 	    
 
 	def get_setting(self, path, section, setting):
-		config = self.get_config(path)
-		value = config.get(section, setting)
+		try:
+			config = self.get_config(path)
+			value = config.get(section, setting)
+		except configparser.NoSectionError as error:
+			raise error
 		#print "{section} {setting} is {value}".format(
 	    #    section=section, setting=setting, value=value)
 
