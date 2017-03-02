@@ -35,7 +35,9 @@ class GradeConfigManager:
 		return config	    
 
 	def get_setting(self, path, section, setting):
-		# method will throw excepptions if section doesn't exist
+		# method will throw exceptions if section doesn't exist
+		if (not config):
+			print("[-] get_config failed in get_setting")
 		config = self.get_config(path)
 		value = config.get(section, setting)
 		#print "{section} {setting} is {value}".format(
@@ -46,22 +48,27 @@ class GradeConfigManager:
 		"""
 		Update a setting
 		"""
-		# method will throw excepptions if section doesn't exist
+		# method will throw exceptions if section doesn't exist
 		config = self.get_config(path)
+		if (not config):
+			return False
 		config.set(section, setting, value)
 		with open(path, "w") as config_file:
-			config.write(config_file)	 
+			config.write(config_file)
+		return True	 
 	 
 	def delete_setting(self, path, section, setting):
 		"""
 		Delete a setting
 		"""
-		# method will throw excepptions if section doesn't exist
+		# method will throw exceptions if section doesn't exist
 		config = self.get_config(path)
+		if (not config):
+			return False
 		config.remove_option(section, setting)
 		with open(path, "w") as config_file:
 			config.write(config_file)
-
+		return True	
 	'''
 	Begin grade config management API
 	'''
