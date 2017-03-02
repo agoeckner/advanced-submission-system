@@ -85,17 +85,15 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for deleting a course
 	##-------------------------------------------------------------------------
 	def test_delete_course_1(self): #{
-		check = self.courseManager.createCourse("./courses/", "cs354", "cs354Users")
-		self.assertEqual(check, True)
+		self.courseManager.createCourse("./courses/", "cs354", "cs354Users")
 		
-		check = self.deleteCourse("cs354")
+		check = self.courseManager.deleteCourse("cs354")
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_delete_course_2(self): #{
-		check = self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.assertEqual(check, True)
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
 		
 		check = self.courseManager.deleteCourse("cs240")
 		
@@ -103,8 +101,7 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	def test_delete_course_3(self): #{
-		check = self.courseManager.createCourse("./courses/", "cs252", "cs252Users")
-		self.assertEqual(check, True)
+		self.courseManager.createCourse("./courses/", "cs252", "cs252Users")
 		
 		check = self.courseManager.deleteCourse("cs252")
 		
