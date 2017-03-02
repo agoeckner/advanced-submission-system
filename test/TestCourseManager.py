@@ -21,6 +21,7 @@ class TestCourseManager(unittest.TestCase): #{
 	def setUp(self): #{
 		self.configManager = ConfigManager.ConfigManager()
 		self.courseManager = CourseManager.CourseManager(self)
+		#self.gradeManager = GradeConfigManager.GradeConfigManager()
 		
 		os.mkdir("./courses")
 		configFile = open("./global.config", "w")
@@ -261,6 +262,11 @@ class TestCourseManager(unittest.TestCase): #{
 		check = self.courseManager.getAssignmentSetting("cs240", "Lab4", "team")
 		self.assertEqual(check, "True")
 	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for grading
+	##-------------------------------------------------------------------------
+	
 #}
 
 if __name__ == '__main__':

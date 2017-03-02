@@ -168,16 +168,32 @@ class CourseManager:
 	##courseName is the name of the course
 	##assignmentName is the name of the assignment, studentName is the name of the student being graded
 	##gradeRecieved is the grade recieved for the assignment
-	def enterGrade(self, courseName, assignmentName, studentName, gradeRecieved): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+	def enterGrade(self, courseName, assignmentName, studentName, gradeRecieved, bonus, feedback): #{
 		
-		gradeFile = path + "grade.txt"
+	#}
+	
+	def getGrade(self): #{
 		
-		grade = open(gradeFile, "w")
+	#}
+	
+	def getBonus(self): #{
+	
+	#}
+	
+	def getFeedback(self): #{
+	
+	#}
+	
+	def editGrade(self): #{
+	
+	#}
+	
+	def editBonus(self): #{
+	
+	#}
+	
+	def editFeedback(self): #{
 		
-		grade.write("Grade Recieved: " + gradeRecieved)
-		
-		grade.close()
 	#}
 	
 	##-------------------------------------------------------------------------------------------------------------------------------------
