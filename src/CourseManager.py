@@ -153,10 +153,13 @@ class CourseManager:
 	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
 	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
 	##number of days allowed for late submission
-	def modifyAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+	def modifyAssignment(self, courseName, assignmentName, settingName, newValue): #{
+		try:
+			path = self.parent.configManager.get_setting(GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		courseConfigFile = path + "course.config"
+		courseConfigFile = path + "/course.config"
 		
 		parent.ConfigParser.modifyProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
 		
@@ -187,7 +190,6 @@ class CourseManager:
 	## Section of code that is used for creating folders
 	##-------------------------------------------------------------------------------------------------------------------------------------
 	
-	##x is the path including the new directory name
 	def addFolder(self, x): #{
 		##NOTE!-------------------------------------------------------------------------------------
 		## mkdir has another parameter that sets permissions for the new directory
@@ -203,8 +205,13 @@ class CourseManager:
 	## Section of code for GUI Functionalilty
 	##-------------------------------------------------------------------------------------------------------------------------------------
 	
+	##returns the path to the course directory if it exists
+	##returns false otherwise
 	def courseNameToPath(self, courseName): #{
-		path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		return path
 	#}
 
