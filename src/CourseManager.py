@@ -8,8 +8,6 @@ class CourseManager:
 	manager = None
 	parent = None
 	
-	##TODO: check for existing courses or assignments when creating or deleting
-	##TODO: check that the config files are being created after calling configmanager
 	
 	##constructor
 	def __init__(self, parent): #{
@@ -17,7 +15,9 @@ class CourseManager:
 		self.manager = self.parent.configManager
 	#}
 	
-	##----------------------------- Section of code that is used for creating and deleting courses -------------------------------------------
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code that is used for creating and deleting courses
+	##-------------------------------------------------------------------------------------------------------------------------------------
 	
 	##creates a new course directory
 	##path is the path to where the course directory is to be created
@@ -70,14 +70,16 @@ class CourseManager:
 			return False
 		#}
 		
-		shutil.rmtree(path) ##deletes the course and all assignments under it
+		self.deleteFolder(path) ##deletes the course and all assignments under it
 		
 		return True
 	#}
 	
 	
-	## ----------------------------- Section of code that is used for creating and deleting assignments --------------------------------------'''	
-
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code that is used for creating and deleting assignments 
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
 	##creates a new assignment directory inside the course directory
 	##assignmentName is the name of the new directory
 	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
@@ -161,8 +163,10 @@ class CourseManager:
 		return True
 	#}
 	
-	## ----------------------------------- Section of code that is used for grading -------------------------------------------------------'''	
-
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	##  Section of code that is used for grading
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
 	##Gives a grade to the student
 	##courseName is the name of the course
 	##assignmentName is the name of the assignment, studentName is the name of the student being graded
@@ -179,7 +183,10 @@ class CourseManager:
 		grade.close()
 	#}
 	
-	## ----------------------------------- Section of code that is used for creating folders --------------------------------------------------'''	
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code that is used for creating folders
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
 	##x is the path including the new directory name
 	def addFolder(self, x): #{
 		##NOTE!-------------------------------------------------------------------------------------
@@ -192,8 +199,12 @@ class CourseManager:
 		shutil.rmtree(x) ##removes the directory and all directories and files inside it
 	#}
 	
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code for GUI Functionalilty
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
 	def courseNameToPath(self, courseName): #{
-		path = parent.configManager.get_setting(GLOBAL_PATH, courseName, "course_path")
+		path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
 		return path
 	#}
 
