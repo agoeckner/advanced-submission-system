@@ -5,8 +5,6 @@
 #=================================
 
 import curses
-import os
-import os.path
 import time
 import ui.Button as Button
 import ui.InputManager as InputManager
@@ -14,33 +12,20 @@ import ui.Picker as Picker
 
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
 PROGRAM_SUBTITLE = "Purdue Computer Science"
-INTERFACE_TITLE = "PROFESSOR PORTAL"
-SUBMISSION_FOLDER = os.getcwd()
+INTERFACE_TITLE = "GRADES"
 
-# AddGradesInterface is used to add grades for assignments.
-class AddGradesInterface:
+MODE_STUDENT = 0
+MODE_INSTRUCTOR = 1
 
-	parent = None
-	inputManager = None
-	run = True
-
-	# UI elements.
-	screenMain = None
-	screenSize = (0, 0)
-	panelTop = None
-	panelInfo = None
-	panelTime = None
-	pickCourse = None
-	pickAssignment = None
-	pickFile = None
-	btnSubmit = None
-	
-	# Data
-	currentCourse = ""
-
-	def __init__(self, parent):
+# GradeInterface is used to submit assignments.
+class GradeInterface:
+	def __init__(self, parent, mode):
 		self.parent = parent
+		self.mode = mode
 		self.inputManager = InputManager.InputManager(self)
+		self.run = True
+		self.course = ""
+		self.assignment = ""
 	
 	def show(self):
 		try:
@@ -66,7 +51,6 @@ class AddGradesInterface:
 			self.screenSize = stdscr.getmaxyx()
 			curses.curs_set(0)
 			stdscr.bkgd(curses.color_pair(0))
-			# stdscr.hline(2, 0, curses.ACS_HLINE, self.screenSize[1])
 			stdscr.nodelay(1)
 			stdscr.refresh()
 			
@@ -91,11 +75,11 @@ class AddGradesInterface:
 			self.panelMain = stdscr.derwin(self.screenSize[0] - 4, self.screenSize[1] - 2, 3, 1)
 			self.panelMain.bkgd(curses.color_pair(1))
 			self.panelMain.addstr(
-				self.screenSize[0] - 6,
+				self.screenSize[0] - 5,
 				self.screenSize[1] - 36,
 				"Tip: Use the spacebar to select.",
 				curses.A_DIM)
-			self.panelMain.box()
+			# self.panelMain.box()
 			self.panelMain.refresh()
 			
 			# Course picker.
@@ -105,7 +89,7 @@ class AddGradesInterface:
 				positionYX = (1, 1),
 				sizeYX = (pickCourseSizeY, int((self.screenSize[1] - 4) / 3)),
 				title = 'Course',
-				options = self.parent.addGradesManager.getCourseList(),
+				options = self.parent.submissionManager.getCourseList(),
 				footer = "",
 				maxSelect = 1,
 				c_empty = "( )",
@@ -129,31 +113,12 @@ class AddGradesInterface:
 			self.pickAssignment.redraw()
 			self.inputManager.addElement(self.pickAssignment)
 			
-			# File picker.
-			self.pickFiles = Picker.Picker(
-				parent = self.panelMain,
-				positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
-				sizeYX = (self.screenSize[0] - 9,
-					2 * int((self.screenSize[1] - 3) / 3)),
-				title = 'Students',
-				#actually need to get students here
-				options = ["ANTHONY GOECKNER", "SAURAV KHANNA", "MAX MOLNAR", "KRUTARTH RAO", "HAROLD SMITH"],
-				footer = "",
-				maxSelect = 1,
-				c_empty = "( )",
-				c_selected = "(X)")
-			self.pickFiles.redraw()
-			self.inputManager.addElement(self.pickFiles)
-
-			# Add Grades button.
-			self.btnSubmit = Button.Button(
-				parent = self.panelMain,
-				positionYX = (self.screenSize[0] - 8,
-					2 * int((self.screenSize[1] - 4) / 3) - 4),
-				label = "Add Grades")
-			self.btnSubmit.setCallback(exit, 0)
-			self.btnSubmit.redraw()
-			self.inputManager.addElement(self.btnSubmit)
+			if self.mode is MODE_STUDENT:
+				self._drawStudent()
+				self.displayMessage("Running in STUDENT mode.")
+			elif self.mode is MODE_INSTRUCTOR:
+				self._drawInstructor()
+				self.displayMessage("Running in INSTRUCTOR mode.")
 
 			# UI Loop
 			while self.run:
@@ -163,6 +128,61 @@ class AddGradesInterface:
 		except Exception as err:
 			raise err
 
+	def _drawInstructor(self):
+		try:
+			# Student list panel.
+			studentPanelSizeYX = (self.screenSize[0] - 20, 2 * int((self.screenSize[1] - 3) / 3))
+			self.studentPanel = self.panelMain.derwin(
+				studentPanelSizeYX[0], studentPanelSizeYX[1], # size
+				1, int((self.screenSize[1] - 4) / 3) + 1) # position
+			self.studentPanel.bkgd(curses.color_pair(1))
+			centerTip = "Please select a course to view grades."
+			self.studentPanel.addstr(
+				int(studentPanelSizeYX[0] / 2),
+				int(studentPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
+				centerTip,
+				curses.A_DIM)
+			self.studentPanel.box()
+			self.studentPanel.refresh()
+			
+			# Assignment edit panel.
+			editPanelSizeYX = (self.screenSize[0] - 23, 2 * int((self.screenSize[1] - 3) / 3))
+			self.editPanel = self.panelMain.derwin(
+				editPanelSizeYX[0], editPanelSizeYX[1], # size
+				studentPanelSizeYX[0] + 1, int((self.screenSize[1] - 4) / 3) + 1) # position
+			self.editPanel.bkgd(curses.color_pair(1))
+			centerTip = "Assignment options are changed here."
+			self.editPanel.addstr(
+				int(editPanelSizeYX[0] / 2),
+				int(editPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
+				centerTip,
+				curses.A_DIM)
+			self.editPanel.box()
+			self.editPanel.refresh()
+			
+		except Exception as err:
+			raise err
+
+	def _drawStudent(self):
+		try:
+			pass
+			# # File picker.
+			# self.pickFiles = Picker.Picker(
+				# parent = self.panelMain,
+				# positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
+				# sizeYX = (self.screenSize[0] - 9,
+					# 2 * int((self.screenSize[1] - 3) / 3)),
+				# title = 'Files',
+				# options = [self._getFileList(SUBMISSION_FOLDER)],
+				# footer = "",
+				# maxSelect = -1,
+				# c_empty = "[ ]",
+				# c_selected = "[X]")
+			# self.pickFiles.redraw()
+			# self.inputManager.addElement(self.pickFiles)
+		except Exception as err:
+			raise err
+	
 	def _drawUpdate(self):
 		try:
 			# Get user input and handle interaction.
@@ -180,7 +200,7 @@ class AddGradesInterface:
 	
 	def displayMessage(self, message, textAttr=curses.A_NORMAL):
 		self.panelMain.addstr(
-			self.screenSize[0] - 7,
+			self.screenSize[0] - 5,
 			int((self.screenSize[1] - 4) / 3) + 2,
 			message,
 			textAttr)
@@ -188,47 +208,23 @@ class AddGradesInterface:
 	
 	def onSelectCourse(self):
 		selected = self.pickCourse.getSelected()
-		if len(selected) > 0:
+		if len(selected) == 1:
 			course = selected[0]
-			if self.currentCourse != course:
-				self.currentCourse = course
-				assignments = self.parent.addGradesManager.getAssignmentList(course)
+			if self.course != course:
+				self.course = course
+				assignments = self.parent.submissionManager.getAssignmentList(course)
+				
+				# Add the "New Assignment" Feature.
+				if self.mode is MODE_INSTRUCTOR:
+					assignments.insert(0, "<---NEW ASSIGNMENT--->")
+					assignments.insert(0, "<---OVERALL GRADES--->")
+				
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
 	
-	def onBtnSubmit(self):
-		# self.run = False
-		course = self.pickCourse.getSelected()
-		assignment = self.pickAssignment.getSelected()
-		files = self.pickFiles.getSelected()
-		if len(course) != 1:
-			self.displayMessage("Please select a course.", curses.A_STANDOUT)
-			return
-		elif len(assignment) != 1:
-			self.displayMessage("Please select an assignment.", curses.A_STANDOUT)
-			return
-		elif len(files) < 1:
-			self.displayMessage("Please select at least one file.", curses.A_STANDOUT)
-			return
-		self.displayMessage("                                ") # clear message
-		
-		# Submit the assignment.
-		course = course[0]
-		assignment = assignment[0]
-		if self.parent.addGradesManager.submitAssignment(course, assignment, files):
-			# Execution done.
-			self.run = False
-		else:
-			self.displayMessage("ERROR: Submission failed.", curses.A_STANDOUT)
-	
-	def _getFileList(self, directory):
-		dirName = directory
-		dirList = []
-		
-		for entry in sorted(os.listdir(directory), key = str.lower):
-			if os.path.isdir(entry):
-				dirList.append(self._getFileList(entry))
-			else:
-				dirList.append(entry)
-		
-		return (dirName, dirList)
+	def onSelectAssignment(self):
+		selected = self.pickAssignment.getSelected()
+		if len(selected) == 1:
+			assignment = selected[0]
+			if self.assignment != assignment:
+				self.assignment = assignment
