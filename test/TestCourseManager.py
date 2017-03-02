@@ -129,70 +129,76 @@ class TestCourseManager(unittest.TestCase): #{
 	##-------------------------------------------------------------------------
 	## Test cases for creating an assignment
 	##-------------------------------------------------------------------------
-	# def test_create_assignment_1(self): #{
-		# #self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		# #check = self.courseManager.createAssignment("cs240", "Lab1", "03/21/2017", False, 3, 3)
+	def test_create_assignment_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		check = self.courseManager.createAssignment("cs240", "Lab1", "03/21/2017", False, 3, 3)
 		
-		# #self.assertEqual(check, True)
-		# self.cleanUp()
-	# #}
+		self.assertEqual(check, True)
+	#}
 	
-	# def test_create_assignment_2(self): #{
+	def test_create_assignment_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs180", "cs240Users")
+		check = self.courseManager.createAssignment("cs180", "Lab4", "04/22/2017", False, 3, 3)
 		
-		# self.cleanUp()
-	# #}
+		self.assertEqual(check, True)
+	#}
 	
-	# def test_create_assignment_3(self): #{
+	def test_create_assignment_3(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		check = self.courseManager.createAssignment("cs240", "Homework1", "05/02/2017", False, 3, 3)
 		
-		# self.cleanUp()
-	# #}
+		self.assertEqual(check, True)
+	#}
 	
-	# def test_create_assignment_already_exists_1(self): #{
+	def test_create_assignment_already_exists_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Homework1", "05/02/2017", False, 3, 3)
 		
-		# self.cleanUp()
-	# #}
+		check = self.courseManager.createAssignment("cs240", "Homework1", "05/02/2017", False, 3, 3)
+		self.assertEqual(check, False)
+	#}
 	
-	# def test_create_assignment_already_exists_2(self): #{
+	def test_create_assignment_already_exists_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab3", "03/02/2017", False, 3, 3)
 		
-		# self.cleanUp()
-	# #}
+		check = self.courseManager.createAssignment("cs240", "Lab3", "03/02/2017", False, 3, 3)
+		self.assertEqual(check, False)
+	#}
 	
-	# def test_create_assignment_already_exists_3(self): #{
+	def test_create_assignment_already_exists_3(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Project3", "03/25/2017", False, 3, 3)
 		
-		# self.cleanUp()
-	# #}
+		check = self.courseManager.createAssignment("cs240", "Project3", "03/25/2017", False, 3, 3)
+		self.assertEqual(check, False)
+	#}
 	
 	# ##-------------------------------------------------------------------------
 	# ## Test cases for deleting an assignment
 	# ##-------------------------------------------------------------------------
 	# def test_delete_assignment_1(self): #{
 		
-		# self.cleanUp()
 	# #}
 	
 	# def test_delete_assignment_2(self): #{
 		
-		# self.cleanUp()
 	# #}
 	
 	# def test_delete_assignment_3(self): #{
 		
-		# self.cleanUp()
 	# #}
 	
 	# def test_delete_assignment_does_not_exist_1(self): #{
 		
-		# self.cleanUp()
 	# #}
 	
 	# def test_delete_assignment_does_not_exist_2(self): #{
 		
-		# self.cleanUp()
 	# #}
 	
 	# def test_delete_assignment_does_not_exist_3(self): #{
 		
-		# self.cleanUp()
 	# #}
 #}
 

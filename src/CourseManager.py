@@ -88,26 +88,38 @@ class CourseManager:
 	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
 	##number of days allowed for late submission
 	def createAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
-		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		##for testing
-		path = "./courses/" + courseName + "/" + assignmentName
+		assignmentPath = path + "/" + assignmentName
+		
+		
+		if os.path.exists(assignmentPath):
+			print("Assignment already exists")
+			return False
 		
 		try:
-			addFolder(path) ##creates a new folder for the assignment
+			self.addFolder(assignmentPath) ##creates a new folder for the assignment
 		except OSError:
 			return False
 		
-		assignmentConfigFile = path + "assignment.config"
+		assignmentConfigFile = assignmentPath + "/assignment.config"
 		
 		##create the assignment config file
-		configFile = open(courseConfigFile, "w")
-		configFile.close()
-		#parent.ConfigParser.addProject(assignmentConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		try:
+			configFile = open(assignmentConfigFile, "w")
+			configFile.close()
+		except:
+			return False
 		
+		##adds the assignment to the global config file
+		check = self.parent.configManager.addProject(assignmentConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		if not check:
+			return False
 		
-		##gets user group
-		#userGroup =
+		##Create all the student directories
 
 		return True
 	#}
