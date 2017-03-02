@@ -1,4 +1,7 @@
 import sys
+import optparse
+import os
+import configparser
 sys.path.append('../src/')
 
 import ConfigManager
@@ -11,8 +14,8 @@ class TestConfigManager(unittest.TestCase):
 
 	def setUp(self):
 		self.cm = ConfigManager.ConfigManager()
-		self.validCourseConfig = "../src/testCourse.config"
-		self.validGlobalConfig = "../src/testGlobal.config"
+		self.validCourseConfig = os.environ['HOME'] + "/cs408/advanced-submission-system/test/testCourse/testCourse.config"
+		self.validGlobalConfig = os.environ['HOME'] + "/cs408/advanced-submission-system/test/testGlobal.config"
 
 	def test_invalidDate(self):
 		invalidDate = '1254698'

@@ -87,13 +87,13 @@ class GradeConfigManager:
 		return True
 
 	def getGrade(self, grade_config_path):
-		self.get_setting(grade_config_path, "gradeInfo", "Grade")
+		return self.get_setting(grade_config_path, "gradeInfo", "Grade")
 
 	def getBonus(self, grade_config_path):
-		self.get_setting(grade_config_path, "gradeInfo", "Bonus")
+		return self.get_setting(grade_config_path, "gradeInfo", "Bonus")
 
 	def getFeedback(self, grade_config_path):
-		self.get_setting(grade_config_path, "gradeInfo", "Comments")
+		return self.get_setting(grade_config_path, "gradeInfo", "Comments")
 
 
 	def editGrade(self, grade_config_path, new_grade):
@@ -105,14 +105,29 @@ class GradeConfigManager:
 	def editFeedback(self, grade_config_path, new_feedback):
 		self.update_setting(grade_config_path, "gradeInfo", "Comments", new_feedback)
 
+	def getCourseGrades(self, project_path):
+		rootdir = project_path #"~/cs408/advanced-submission-system/test/testCourse/testProject"
+		gradesDict = {}
+		if not os.path.isdir(project_path):
+			print("[-] invalid path passed in getCourseGrades (path passed: " + project_path + ")")
+			return None
+
+		for subdir, dirs, files in os.walk(rootdir):
+			for studentDir in dirs:
+				gradeConfigFile = os.path.join(subdir, studentDir)
+				gradeConfigFile += "/Grade.config"
+				my_file = Path(gradeConfigFile)
+				if not my_file.is_file():
+					print("\t[-] Unable to find grade config file for student : " + studentDir)
+					return None
+				total_points = "Score: " + str(self.getGrade(gradeConfigFile) ) + " Bonus: " + str( self.getBonus(gradeConfigFile) )
+				gradesDict[studentDir] = total_points
+		return gradesDict
 
 def main():
 	gcm = GradeConfigManager()
-	print('*** Testing Grade Config API ***')
-	test_file = "../test/testCourse/testProject/student1/Grade.config"
 	
-	print("[+] adding grade to student 1 config file\n")
-	gcm.addGrade(test_file, 85, 6, "incomplete section 2 & poor report")
+
 
 if __name__ == '__main__':
 	main()
