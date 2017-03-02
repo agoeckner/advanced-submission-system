@@ -2,6 +2,7 @@ import locale
 import os
 import shutil
 import ConfigManager
+import configparser
 
 class CourseManager:
 	manager = None
@@ -56,25 +57,26 @@ class CourseManager:
 	##deletes a course directory in the instructor's directory
 	##courseName is the name of the course to be removed
 	def deleteCourse(self, courseName): #{
-		path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
-		
-		path = self.manager.get_setting("global.config", courseName, "course_path")
-		
-		print("Course Path to delete " + path)
-		if os.path.exists(path):
-			courseConfigFile = path + "course.config"
-			
-			check = self.manager.removeCourse(courseConfigFile, "global.config", courseName) ##removes the course from the global config file
-			
-			if not check: #{
-				return False
-			#}
-			
-			deleteFolder(path) ##deletes the course and all assignments under it
-			
-			return True
-		else:
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
 			return False
+		
+		#path = self.manager.get_setting("global.config", courseName, "course_path")
+		
+		#print("Course Path to delete " + path)
+
+		courseConfigFile = path + "/course.config"
+		
+		check = self.manager.removeCourse(courseConfigFile, "global.config", courseName) ##removes the course from the global config file
+		
+		if not check: #{
+			return False
+		#}
+		
+		shutil.rmtree(path) ##deletes the course and all assignments under it
+		
+		return True
 	#}
 	
 	
@@ -122,7 +124,7 @@ class CourseManager:
 		parent.ConfigParser.removeProject(courseConfigFile, assignmentName)
 		
 		##removes the directory and all subdirectories and files
-		deletFolder(path + assignmentName)
+		deleteFolder(path + assignmentName)
 		
 		return True
 	#}
