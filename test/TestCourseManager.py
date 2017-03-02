@@ -10,6 +10,7 @@ import unittest
 import curses
 import ConfigManager
 import CourseManager
+import GradeConfigManager
 import os
 import shutil
 
@@ -21,7 +22,7 @@ class TestCourseManager(unittest.TestCase): #{
 	def setUp(self): #{
 		self.configManager = ConfigManager.ConfigManager()
 		self.courseManager = CourseManager.CourseManager(self)
-		#self.gradeManager = GradeConfigManager.GradeConfigManager()
+		self.gradeManager = GradeConfigManager.GradeConfigManager()
 		
 		os.mkdir("./courses")
 		configFile = open("./global.config", "w")

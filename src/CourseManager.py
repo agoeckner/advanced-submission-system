@@ -3,6 +3,7 @@ import os
 import shutil
 import ConfigManager
 import configparser
+import GradeConfigManager
 
 class CourseManager:
 	manager = None
@@ -12,7 +13,7 @@ class CourseManager:
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
-		self.manager = self.parent.configManager
+		self.manager = self.parent.configManager	
 	#}
 	
 	##-------------------------------------------------------------------------------------------------------------------------------------
@@ -172,27 +173,27 @@ class CourseManager:
 		
 	#}
 	
-	def getGrade(self): #{
+	def getGrade(self, courseName, assignmentName, studentName): #{
 		
 	#}
 	
-	def getBonus(self): #{
+	def getBonus(self, courseName, assignmentName, studentName): #{
 	
 	#}
 	
-	def getFeedback(self): #{
+	def getFeedback(self, courseName, assignmentName, studentName): #{
 	
 	#}
 	
-	def editGrade(self): #{
+	def editGrade(self, courseName, assignmentName, studentName, newGrade): #{
 	
 	#}
 	
-	def editBonus(self): #{
+	def editBonus(self, courseName, assignmentName, studentName, newGrade): #{
 	
 	#}
 	
-	def editFeedback(self): #{
+	def editFeedback(self, courseName, assignmentName, studentName, newGrade): #{
 		
 	#}
 	
