@@ -1,0 +1,7 @@
+Bug List:
+
+1) try except in ConfigManager get_setting
+
+2) try except in CourseManager deleteCourse
+
+3) 
