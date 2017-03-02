@@ -18,6 +18,7 @@ class AdvancedSubmissionSystem:
 	submissionUI = None
 	courseManager = None
 	configManager = None
+	gradeManager = None
 	
 	GLOBAL_PATH = "/etc/submission/global.config"
 	
