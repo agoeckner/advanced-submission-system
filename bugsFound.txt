@@ -9,3 +9,5 @@ Bug List:
 4) try except in CourseManager createAssignment
 
 5) try except in CourseManager deleteAssignment
+
+6) try except in CourseManager modifyAssignment (2)
