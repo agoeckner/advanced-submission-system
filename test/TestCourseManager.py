@@ -329,7 +329,7 @@ class TestCourseManager(unittest.TestCase): #{
 		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
 		
 		grade = self.courseManager.getGrade("cs240", "Lab4", "johndoe")
-		self.assertEqual(grade, None)
+		self.assertEqual(grade, False)
 	#}
 	
 	def test_get_grade_does_not_exist_2(self): #{
@@ -337,7 +337,7 @@ class TestCourseManager(unittest.TestCase): #{
 		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
 		
 		grade = self.courseManager.getGrade("cs240", "Lab4", "matt95")
-		self.assertEqual(grade, None)
+		self.assertEqual(grade, False)
 	#}
 	
 #}
