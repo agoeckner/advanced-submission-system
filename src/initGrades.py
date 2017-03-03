@@ -33,7 +33,7 @@ class AdvancedSubmissionSystem:
 		try:
 			self.gradeUI.show()
 		except KeyboardInterrupt:
-			print("WARNING: Nothing was submitted!")
+			print("Exited")
 
 # Start the program.
 if __name__ == '__main__':
