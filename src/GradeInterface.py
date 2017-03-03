@@ -213,21 +213,26 @@ class GradeInterface:
 			#options = self.parent.submissionManager.getCourseList(),
 			#TODO: actually need to get the grade here
 			#studentScore = self.parent.GradeConfigManager.getGrade(self, "test")
-			studentScore = 100
-			bonus = 5
-			total = studentScore + bonus
-			feedback = "Good job."
-			mean = 100
-			median = 100
-			sd = 0
+			test_file = "../test/testCourse/testProject/student1/Grade.config"
+			f = open(test_file)
+			lines=f.readlines()
+			studentScore = lines[1][8:]
+			bonus = lines[2][8:]
+			total = int(studentScore) + int(bonus)
+			feedback = lines[3][11:]
+			#mean = 100
+			#median = 100
+			#sd = 0
+			
 			self.pickFiles = Picker.Picker(
 				parent = self.panelMain,
 				positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
 				sizeYX = (self.screenSize[0] - 9,
 					2 * int((self.screenSize[1] - 3) / 3)),
 				title = 'Grade and Statistics',
-				arrow="",
-				options = ["Your score: "+str(studentScore), "Bonus: "+str(bonus), "Total: "+str(total), "Feedback: "+feedback, "", "Statistics", "", "Mean: "+str(mean), "Median: "+str(median), "Standard Deviation: "+str(sd)],
+				#arrow="",
+				options = ["Your score: "+str(studentScore), "Bonus: "+str(bonus), "Total: "+str(total), "Feedback: "+feedback#, "", "Statistics", "", "Mean: "+str(mean), "Median: "+str(median), "Standard Deviation: "+str(sd)
+				],
 				footer = "",
 				maxSelect = 1,
 				c_empty = "",
@@ -244,7 +249,7 @@ class GradeInterface:
 			self.btnExit.setCallback(exit, 0)
 			self.btnExit.redraw()
 			self.inputManager.addElement(self.btnExit)
-
+			
 			# # File picker.
 			# self.pickFiles = Picker.Picker(
 				# parent = self.panelMain,
