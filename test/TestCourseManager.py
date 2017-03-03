@@ -325,17 +325,11 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	def test_get_grade_does_not_exist_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		
 		grade = self.courseManager.getGrade("cs240", "Lab4", "johndoe")
 		self.assertEqual(grade, False)
 	#}
 	
 	def test_get_grade_does_not_exist_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		
 		grade = self.courseManager.getGrade("cs240", "Lab4", "matt95")
 		self.assertEqual(grade, False)
 	#}
@@ -362,17 +356,11 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	def test_get_bonus_does_not_exist_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		
 		bonus = self.courseManager.getBonus("cs240", "Lab4", "gjohn")
 		self.assertEqual(bonus, False)
 	#}
 	
 	def test_get_bonus_does_not_exist_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		
 		bonus = self.courseManager.getBonus("cs240", "Lab4", "lyndonj")
 		self.assertEqual(bonus, False)
 	#}
@@ -399,7 +387,7 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	def test_get_feedback_does_not_exist_1(self): #{
-		
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
 	#}
 #}
 
