@@ -488,6 +488,11 @@ class TestCourseManager(unittest.TestCase): #{
 		check = self.courseManager.editFeedback("cs240", "Lab4", "donahuemp", "Worthy of a software knight")
 		self.assertEqual(check, False)
 	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for courseNameToPath
+	##-------------------------------------------------------------------------
+	
 #}
 
 if __name__ == '__main__':

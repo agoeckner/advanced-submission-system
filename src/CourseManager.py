@@ -150,7 +150,6 @@ class CourseManager:
 	#}
 
 	##modifes the course config file of an existing assignment
-	##
 	def modifyAssignment(self, courseName, assignmentName, settingName, newValue): #{
 		try:
 			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
@@ -321,9 +320,9 @@ class CourseManager:
 	def courseNameToPath(self, courseName): #{
 		try:
 			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			return path
 		except configparser.NoSectionError:
 			return False
-		return path
 	#}
 	
 	##Names of different assignment config settings are: "team", "max_submissions", "due", and "late days"
