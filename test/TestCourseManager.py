@@ -397,7 +397,38 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	##-------------------------------------------------------------------------
-	## Test cases for getFeedback
+	## Test cases for editGrade
+	##-------------------------------------------------------------------------
+	def test_edit_grade_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 80, 5, "Needs some improvement")
+		
+		check = self.courseManager.editGrade("cs240", "Lab4", "smithhe", 95)
+		self.assertEqual(check, True)
+	#}
+	
+	def test_edit_grade_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 5, "Needs some improvement")
+		
+		check = self.courseManager.editGrade("cs240", "Lab4", "smithhe", 100)
+		self.assertEqual(check, True)
+	#}
+	
+	def test_edit_grade_does_not_exist_1(self): #{
+		check = self.courseManager.editGrade("cs240", "Lab4", "mehargng", 100)
+		self.assertEqual(check, False)
+	#}
+	
+	def test_edit_grade_does_not_exist_2(self): #{
+		check = self.courseManager.editGrade("cs240", "Lab4", "donahuemp", 100)
+		self.assertEqual(check, False)
+	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for editGrade
 	##-------------------------------------------------------------------------
 	
 #}
