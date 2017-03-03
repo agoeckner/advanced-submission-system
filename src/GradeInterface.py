@@ -29,6 +29,7 @@ class GradeInterface:
 		self.run = True
 		self.course = ""
 		self.assignment = ""
+		self.student = ""
 	
 	def show(self):
 		try:
@@ -51,7 +52,7 @@ class GradeInterface:
 			curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 			curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_CYAN)
 			curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-			self.screenSize = stdscr.getmaxyx()
+			self.screenSize = (24, 80) #TODO: stdscr.getmaxyx()
 			# Check if size below 24x80.
 			if self.screenSize[0] < TERMINAL_MIN_Y or self.screenSize[1] < TERMINAL_MIN_X:
 				raise Exception("Terminal too small! Minimum size 24x80.")
@@ -117,7 +118,8 @@ class GradeInterface:
 				c_empty = "( )",
 				c_selected = "(X)")
 			self.pickAssignment.redraw()
-			self.inputManager.addElement(self.pickAssignment)
+			self.pickAssignment.setCallback(self.onSelectAssignment)
+			self.pickAssignmentVisible = False
 			
 			if self.mode is MODE_STUDENT:
 				self._drawStudent()
@@ -152,7 +154,11 @@ class GradeInterface:
 			self.editPanel.box()
 			self.editPanel.refresh()
 			
-			# Student list panel.
+			# Create edit panels, which are hidden for now.
+			self._createAssignmentNewPanel(editPanelSizeYX, editPanelPosYX)
+			self._createGradeEditPanel(editPanelSizeYX, editPanelPosYX)
+			
+			# Student intro. panel.
 			studentPanelPosYX = (1, int((self.screenSize[1] - 4) / 3) + 1)
 			studentPanelSizeYX = (self.screenSize[0] - 6 - editPanelSizeYX[0], 2 * int((self.screenSize[1] - 3) / 3))
 			self.studentPanel = self.panelMain.derwin(
@@ -168,8 +174,38 @@ class GradeInterface:
 			self.studentPanel.box()
 			self.studentPanel.refresh()
 			
+			# Student list panel.
+			self.pickStudent = Picker.Picker(
+				parent = self.panelMain,
+				positionYX = studentPanelPosYX,
+				sizeYX = studentPanelSizeYX,
+				title = 'Students',
+				options = ["Anthony", "Blah"],
+				footer = "",
+				maxSelect = 1,
+				c_empty = "",
+				c_selected = "")
+			self.pickStudent.setCallback(self.onSelectStudent)
+			self.pickStudentVisible = False
+			
 		except Exception as err:
 			raise err
+
+	def _createAssignmentNewPanel(self, size, pos):
+		pass
+	
+	def _createGradeEditPanel(self, size, pos):
+		pass
+	
+	def _drawAssignmentEditPanel(self):
+		self.editPanel.clear()
+		self.editPanel.refresh()
+		pass
+	
+	def _drawGradeEditPanel(self):
+		self.editPanel.clear()
+		self.editPanel.refresh()
+		pass
 
 	def _drawStudent(self):
 		try:
@@ -208,8 +244,7 @@ class GradeInterface:
 	
 	def displayMessage(self, message, textAttr=curses.A_NORMAL):
 		self.panelMain.addstr(
-			self.screenSize[0] - 5,
-			int((self.screenSize[1] - 4) / 3) + 2,
+			self.screenSize[0] - 5, 2,
 			message,
 			textAttr)
 		self.panelMain.refresh()
@@ -229,6 +264,10 @@ class GradeInterface:
 				
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
+				
+				if not self.pickAssignmentVisible:
+					self.pickAssignmentVisible = True
+					self.inputManager.addElement(self.pickAssignment)
 	
 	def onSelectAssignment(self):
 		selected = self.pickAssignment.getSelected()
@@ -236,3 +275,19 @@ class GradeInterface:
 			assignment = selected[0]
 			if self.assignment != assignment:
 				self.assignment = assignment
+				if self.mode is MODE_INSTRUCTOR and not self.pickStudentVisible:
+					self.pickStudentVisible = True
+					self.pickStudent.redraw()
+					self.inputManager.addElement(self.pickStudent)
+	
+	def onSelectStudent(self):
+		selected = self.pickStudent.getSelected()
+		if len(selected) == 1:
+			student = selected[0]
+			if self.student != student:
+				self.student = student
+				self.displayAssignmentInfo(self.course, self.assignment, self.student)
+	
+	def displayAssignmentInfo(self, course, assignment, student):
+		self.displayMessage("Learning about " + student)
+		self._drawGradeEditPanel()
