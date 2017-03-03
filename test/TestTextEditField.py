@@ -28,6 +28,27 @@ class TestUITextEditField(unittest.TestCase):
 		result = text.getValue()
 		self.assertEqual(result, "test")
 	
+	def test_size_invalid(self):
+		with self.assertRaises(ProgramException.ComponentSizeInvalid):
+			text = TextEditField.TextEditField(
+				self.stdscr,
+				sizeYX = (1, 2))
+	
+	def test_max_length_invalid(self):
+		with self.assertRaises(ProgramException.ComponentSizeInvalid):
+			text = TextEditField.TextEditField(
+				self.stdscr,
+				maxLength = 8,
+				sizeYX = (1, 10))
+	
+	def test_input_min_size(self):
+		text = TextEditField.TextEditField(
+			self.stdscr,
+			sizeYX = (1, 3))
+		self.text.onInput(ord('a'))
+		result = text.getValue()
+		self.assertEqual(result, "a")
+	
 	def test_input_none(self):
 		result = self.text.getValue()
 		self.assertEqual(result, "")
