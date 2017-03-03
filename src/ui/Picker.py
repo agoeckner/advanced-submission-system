@@ -97,7 +97,8 @@ class Picker:
 				0, self.window_width - 8,
 				" " + str(self.selcount) + "/" + str(self.length) + " "
 			)
-		self.win.addstr(self.cursor,1, self.arrow)
+		if len(self.all_options) > 0:
+			self.win.addstr(self.cursor,1, self.arrow)
 		self.win.refresh()
 	
 	def cursorDown(self):
