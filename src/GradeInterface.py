@@ -209,7 +209,42 @@ class GradeInterface:
 
 	def _drawStudent(self):
 		try:
-			pass
+			#pass
+			#options = self.parent.submissionManager.getCourseList(),
+			#TODO: actually need to get the grade here
+			#studentScore = self.parent.GradeConfigManager.getGrade(self, "test")
+			studentScore = 100
+			bonus = 5
+			total = studentScore + bonus
+			feedback = "Good job."
+			mean = 100
+			median = 100
+			sd = 0
+			self.pickFiles = Picker.Picker(
+				parent = self.panelMain,
+				positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
+				sizeYX = (self.screenSize[0] - 9,
+					2 * int((self.screenSize[1] - 3) / 3)),
+				title = 'Grade and Statistics',
+				arrow="",
+				options = ["Your score: "+str(studentScore), "Bonus: "+str(bonus), "Total: "+str(total), "Feedback: "+feedback, "", "Statistics", "", "Mean: "+str(mean), "Median: "+str(median), "Standard Deviation: "+str(sd)],
+				footer = "",
+				maxSelect = 1,
+				c_empty = "",
+				c_selected = "")
+			self.pickFiles.redraw()
+			self.inputManager.addElement(self.pickFiles)
+
+			# Add Grades button.
+			self.btnExit = Button.Button(
+				parent = self.panelMain,
+				positionYX = (self.screenSize[0] - 8,
+					2 * int((self.screenSize[1] - 4) / 3) - 4),
+				label = "Exit")
+			self.btnExit.setCallback(exit, 0)
+			self.btnExit.redraw()
+			self.inputManager.addElement(self.btnExit)
+
 			# # File picker.
 			# self.pickFiles = Picker.Picker(
 				# parent = self.panelMain,
