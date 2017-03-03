@@ -32,7 +32,7 @@ class TestUITextEditField(unittest.TestCase):
 		with self.assertRaises(ProgramException.ComponentSizeInvalid):
 			text = TextEditField.TextEditField(
 				self.stdscr,
-				sizeYX = (1, 2))
+				sizeYX = (1, 3))
 	
 	def test_max_length_invalid(self):
 		with self.assertRaises(ProgramException.ComponentSizeInvalid):
@@ -44,7 +44,7 @@ class TestUITextEditField(unittest.TestCase):
 	def test_input_min_size(self):
 		text = TextEditField.TextEditField(
 			self.stdscr,
-			sizeYX = (1, 3))
+			sizeYX = (1, 4))
 		self.text.onInput(ord('a'))
 		result = text.getValue()
 		self.assertEqual(result, "a")
