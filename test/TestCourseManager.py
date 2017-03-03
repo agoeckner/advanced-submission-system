@@ -387,8 +387,19 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	def test_get_feedback_does_not_exist_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		feedback = self.courseManager.getFeedback("cs240", "Lab4", "mehargng")
+		self.assertEqual(feedback, False)
 	#}
+	
+	def test_get_feedback_does_not_exist_2(self): #{
+		feedback = self.courseManager.getFeedback("cs240", "Lab4", "donahuemp")
+		self.assertEqual(feedback, False)
+	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for getFeedback
+	##-------------------------------------------------------------------------
+	
 #}
 
 if __name__ == '__main__':
