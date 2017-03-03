@@ -457,6 +457,37 @@ class TestCourseManager(unittest.TestCase): #{
 		check = self.courseManager.editBonus("cs240", "Lab4", "donahuemp", 15)
 		self.assertEqual(check, False)
 	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for editFeedback
+	##-------------------------------------------------------------------------
+	def test_edit_feedback_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 10, "Job well done lad")
+		
+		check = self.courseManager.editFeedback("cs240", "Lab4", "smithhe", "Oustanding Work!")
+		self.assertEqual(check, True)
+	#}
+	
+	def test_edit_feedback_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 10, "Job well done lad")
+		
+		check = self.courseManager.editFeedback("cs240", "Lab4", "smithhe", "Worthy of a software knight")
+		self.assertEqual(check, True)
+	#}
+	
+	def test_edit_feedback_does_not_exist_1(self): #{
+		check = self.courseManager.editFeedback("cs240", "Lab4", "mehargng", "Worthy of a software knight")
+		self.assertEqual(check, False)
+	#}
+	
+	def test_edit_feedback_does_not_exist_2(self): #{
+		check = self.courseManager.editFeedback("cs240", "Lab4", "donahuemp", "Worthy of a software knight")
+		self.assertEqual(check, False)
+	#}
 #}
 
 if __name__ == '__main__':
