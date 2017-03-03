@@ -155,14 +155,6 @@ class SubmissionInterface:
 			self.btnSubmit.redraw()
 			self.inputManager.addElement(self.btnSubmit)
 			
-			# Testing...
-			self.inputTest = TextEditField.TextEditField(self.panelMain,
-				positionYX=(self.screenSize[0] - 7,
-					2 * int((self.screenSize[1] - 4) / 3) - 4))
-			self.inputTest.setCallback(self.testInput)
-			self.inputTest.redraw()
-			self.inputManager.addElement(self.inputTest)
-
 			# UI Loop
 			while self.run:
 				self._drawUpdate()
@@ -170,9 +162,6 @@ class SubmissionInterface:
 				time.sleep(0.01)
 		except Exception as err:
 			raise err
-
-	def testInput(self):
-		self.displayMessage("GOT TEXT: " + self.inputTest.getValue())
 	
 	def _drawUpdate(self):
 		try:
