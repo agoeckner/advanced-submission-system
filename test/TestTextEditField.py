@@ -19,10 +19,6 @@ class TestUITextEditField(unittest.TestCase):
 			self.stdscr,
 			maxLength = 8,
 			sizeYX = (1, 15))
-	
-	def tearDown(self):
-		self.text = None
-		print("KILLED IT")
 		
 	def test_default_value(self):
 		text = TextEditField.TextEditField(

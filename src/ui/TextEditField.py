@@ -46,7 +46,11 @@ class TextEditField:
 		self.callbackKWArgs = kwargs
 	
 	def getValue(self):
-		return self.textBox.gather()
+		value = self.textBox.gather()
+		# Fix curses bug that causes trailing spaces.
+		if len(value) > 1 and value[-1] == ' ':
+			value = value[0:-1]
+		return value
 	
 	def getMaxLength(self):
 		return self.maxLength
