@@ -106,13 +106,13 @@ class GradeConfigManager:
 
 
 	def editGrade(self, grade_config_path, new_grade):
-		self.update_setting(grade_config_path, "gradeInfo", "Grade", new_grade)
+		return self.update_setting(grade_config_path, "gradeInfo", "Grade", new_grade)
 
 	def editBonus(self, grade_config_path, new_grade):
-		self.update_setting(grade_config_path, "gradeInfo", "Bonus", new_grade)
+		return self.update_setting(grade_config_path, "gradeInfo", "Bonus", new_grade)
 
 	def editFeedback(self, grade_config_path, new_feedback):
-		self.update_setting(grade_config_path, "gradeInfo", "Comments", new_feedback)
+		return self.update_setting(grade_config_path, "gradeInfo", "Comments", new_feedback)
 
 	def getCourseGrades(self, project_path):
 		rootdir = project_path #"~/cs408/advanced-submission-system/test/testCourse/testProject"
