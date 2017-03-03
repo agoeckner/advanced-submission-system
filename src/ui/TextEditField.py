@@ -39,6 +39,9 @@ class TextEditField:
 		)
 		self.textBox = TextBox(self.textArea)
 		self.textBox.do_command(curses.ascii.VT) #clear the stupid thing
+		
+		for char in defaultValue:
+			self.onInput(char)
 	
 	def setCallback(self, callback, *args, **kwargs):
 		self.callback = callback
