@@ -378,9 +378,29 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	##-------------------------------------------------------------------------
-	## Test cases for getBonus
+	## Test cases for getFeedback
 	##-------------------------------------------------------------------------
+	def test_get_feedback_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 100, 5, "Job well done lad")
+		
+		feedback = self.courseManager.getFeedback("cs240", "Lab4", "smithhe")
+		self.assertEqual(feedback, "Job well done lad")
+	#}
 	
+	def test_get_feedback_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 80, 5, "Needs some improvement")
+		
+		feedback = self.courseManager.getFeedback("cs240", "Lab4", "smithhe")
+		self.assertEqual(feedback, "Needs some improvement")
+	#}
+	
+	def test_get_feedback_does_not_exist_1(self): #{
+		
+	#}
 #}
 
 if __name__ == '__main__':
