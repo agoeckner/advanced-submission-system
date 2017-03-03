@@ -48,7 +48,8 @@ class GradeInterface:
 			curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 			curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_CYAN)
 			curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-			self.screenSize = stdscr.getmaxyx()
+			self.screenSize = (24, 80) #TODO: stdscr.getmaxyx()
+			#TODO: Check if size below 24x80.
 			curses.curs_set(0)
 			stdscr.bkgd(curses.color_pair(0))
 			stdscr.nodelay(1)
@@ -130,26 +131,12 @@ class GradeInterface:
 
 	def _drawInstructor(self):
 		try:
-			# Student list panel.
-			studentPanelSizeYX = (self.screenSize[0] - 20, 2 * int((self.screenSize[1] - 3) / 3))
-			self.studentPanel = self.panelMain.derwin(
-				studentPanelSizeYX[0], studentPanelSizeYX[1], # size
-				1, int((self.screenSize[1] - 4) / 3) + 1) # position
-			self.studentPanel.bkgd(curses.color_pair(1))
-			centerTip = "Please select a course to view grades."
-			self.studentPanel.addstr(
-				int(studentPanelSizeYX[0] / 2),
-				int(studentPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
-				centerTip,
-				curses.A_DIM)
-			self.studentPanel.box()
-			self.studentPanel.refresh()
-			
 			# Assignment edit panel.
-			editPanelSizeYX = (self.screenSize[0] - 23, 2 * int((self.screenSize[1] - 3) / 3))
+			editPanelPosYX = (self.screenSize[0] - 12, int((self.screenSize[1] - 4) / 3) + 1)
+			editPanelSizeYX = (7, 2 * int((self.screenSize[1] - 3) / 3))
 			self.editPanel = self.panelMain.derwin(
 				editPanelSizeYX[0], editPanelSizeYX[1], # size
-				studentPanelSizeYX[0] + 1, int((self.screenSize[1] - 4) / 3) + 1) # position
+				editPanelPosYX[0], editPanelPosYX[1]) # position
 			self.editPanel.bkgd(curses.color_pair(1))
 			centerTip = "Assignment options are changed here."
 			self.editPanel.addstr(
@@ -159,6 +146,22 @@ class GradeInterface:
 				curses.A_DIM)
 			self.editPanel.box()
 			self.editPanel.refresh()
+			
+			# Student list panel.
+			studentPanelPosYX = (1, int((self.screenSize[1] - 4) / 3) + 1)
+			studentPanelSizeYX = (self.screenSize[0] - 6 - editPanelSizeYX[0], 2 * int((self.screenSize[1] - 3) / 3))
+			self.studentPanel = self.panelMain.derwin(
+				studentPanelSizeYX[0], studentPanelSizeYX[1], # size
+				studentPanelPosYX[0], studentPanelPosYX[1]) # position
+			self.studentPanel.bkgd(curses.color_pair(1))
+			centerTip = "Please select a course to view grades."
+			self.studentPanel.addstr(
+				int(studentPanelSizeYX[0] / 2),
+				int(studentPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
+				centerTip,
+				curses.A_DIM)
+			self.studentPanel.box()
+			self.studentPanel.refresh()
 			
 		except Exception as err:
 			raise err
