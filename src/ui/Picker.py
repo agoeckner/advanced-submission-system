@@ -205,6 +205,10 @@ class Picker:
 		self.callbackKWArgs = kwargs
 	
 	def setOptions(self, optionsList):
+		self.cursor = 1
+		self.offset = 0
+		self.selected = 0
+		self.selcount = 0
 		self.all_options = self._buildOptionsTree(optionsList)
 		self.length = len(self.all_options)
 		
