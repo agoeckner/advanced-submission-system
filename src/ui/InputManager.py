@@ -46,12 +46,12 @@ class InputManager:
 		self.currentElement.onFocus()
 	
 	def onInput(self, inputChar):
-		if inputChar == ord('\t'):
+		if inputChar == ord('\t') or inputChar == curses.KEY_RIGHT:
 			self.tabNext()
 			return None
-		# elif inputChar == curses.KEY_BACKSPACE:
-			# self.tabPrev()
-			# return None
+		elif inputChar == curses.KEY_LEFT:
+			self.tabPrev()
+			return None
 		returnValue =  self.currentElement.onInput(inputChar)
 		if returnValue == "TAB_NEXT":
 			self.tabNext()
