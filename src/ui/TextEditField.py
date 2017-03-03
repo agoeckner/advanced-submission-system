@@ -33,7 +33,7 @@ class TextEditField:
 		)
 		self.textArea = self.win.derwin(
 			sizeYX[0],
-			sizeYX[1] - 2,
+			self.maxLength + 1,
 			0,
 			1
 		)
