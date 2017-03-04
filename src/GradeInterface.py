@@ -9,6 +9,7 @@ import time
 import ui.Button as Button
 import ui.InputManager as InputManager
 import ui.Picker as Picker
+import ui.TextEditField as TextEditField
 
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
 PROGRAM_SUBTITLE = "Purdue Computer Science"
@@ -195,7 +196,34 @@ class GradeInterface:
 		pass
 	
 	def _createGradeEditPanel(self, size, pos):
-		pass
+		self.editGradeVisible = False
+		# Edit grade
+		self.gradeLabel = "Score:"
+		self.gradePos = (1, 2)
+		self.editGrade = TextEditField.TextEditField(
+			self.editPanel,
+			maxLength = 6,
+			sizeYX = (1, 9),
+			positionYX = (self.gradePos[0], self.gradePos[1] + len(self.gradeLabel) + 1))
+		self.editGrade.setCallback(self.onTextEnter)
+		
+		# Edit comment
+		self.commentLabel = "Comments:"
+		self.commentPos = (2, 2)
+		self.editComment = TextEditField.TextEditField(
+			self.editPanel,
+			maxLength = 42,
+			sizeYX = (1, 45),
+			positionYX = (self.commentPos[0] + 1, self.commentPos[1] + 1))
+		self.editComment.setCallback(self.onTextEnter)
+		
+		# Save button.
+		self.savePos = (5, 2)
+		self.saveBtn = Button.Button(
+			parent = self.editPanel,
+			positionYX = self.savePos,
+			label = "Save Changes")
+		self.saveBtn.setCallback(self.onBtnSaveGrade)
 	
 	def _drawAssignmentEditPanel(self):
 		self.editPanel.clear()
@@ -204,6 +232,26 @@ class GradeInterface:
 	
 	def _drawGradeEditPanel(self):
 		self.editPanel.clear()
+		
+		# Edit grade
+		self.editPanel.addstr(self.gradePos[0], self.gradePos[1], self.gradeLabel)
+		self.editGrade.redraw()
+		
+		# Edit comment
+		self.editPanel.addstr(self.commentPos[0], self.commentPos[1], self.commentLabel)
+		self.editComment.redraw()
+
+		# Save button
+		self.saveBtn.redraw()
+		
+		# Set up input manager
+		if not self.editGradeVisible:
+			self.inputManager.addElement(self.editGrade)
+			self.inputManager.addElement(self.editComment)
+			self.inputManager.addElement(self.saveBtn)
+			self.editGradeVisible = True
+		
+		self.editPanel.box()
 		self.editPanel.refresh()
 		pass
 
@@ -331,3 +379,9 @@ class GradeInterface:
 	def displayAssignmentInfo(self, course, assignment, student):
 		self.displayMessage("Learning about " + student)
 		self._drawGradeEditPanel()
+	
+	def onTextEnter(self):
+		return "TAB_NEXT"
+	
+	def onBtnSaveGrade(self):
+		pass
