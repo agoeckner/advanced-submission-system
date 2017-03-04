@@ -7,15 +7,15 @@
 import os
 import sys
 import GradeInterface
-import SubmissionManager
 import CourseManager
+import ConfigManager
 
 GLOBAL_PATH = "/etc/submission/global.config"
 
 class AdvancedSubmissionSystem:
-	submissionManager = None
 	gradeUI = None
 	courseManager = None
+	configManager = None
 	
 	# Perform program initialization.
 	def __init__(self):
@@ -28,7 +28,8 @@ class AdvancedSubmissionSystem:
 		if len(sys.argv) > 1 and sys.argv[1] == "edit":
 			mode = GradeInterface.MODE_INSTRUCTOR
 		
-		self.submissionManager = SubmissionManager.SubmissionManager(self)
+		self.configManager = ConfigManager.ConfigManager()
+		self.courseManager = CourseManager.CourseManager(self)
 		self.gradeUI = GradeInterface.GradeInterface(self, mode)
 		try:
 			self.gradeUI.show()
