@@ -46,7 +46,7 @@ class CourseManager:
 			return False
 		
 		##updates the global config
-		check = self.manager.addCourse("./global.config", courseName, courseConfigFile, newCoursePath, userGroup)
+		check = self.manager.addCourse(self.parent.GLOBAL_PATH, courseName, courseConfigFile, newCoursePath, userGroup)
 		
 		##if the course config file is not created False is returned to indicate an error
 		if check == False:
@@ -338,9 +338,21 @@ class CourseManager:
 		return value
 	#}
 	
-	##def getCourseList(self): #{}
+	##returns an array of courses
+	def getCourseList(self): #{
+		return self.parent.configManager.getCourseList(self.parent.GLOBAL_PATH) 
+	#}
 
-
+	##returns an array of assignments for a course
+	def getAssignmentList(self, courseName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			courseConfigFile = path + "/course.config"
+		except configparser.NoSectionError:
+			return False
+			
+		return self.parent.configManager.getProjects(courseConfigFile)
+	#}
 
 
 
