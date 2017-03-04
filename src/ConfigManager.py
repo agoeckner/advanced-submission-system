@@ -172,40 +172,51 @@ class ConfigManager:
 	def get_config(self, path):
 		my_file = Path(path)
 		if not my_file.is_file():
-			print("[-] Unable to find "  + path + " in get_config")
+			print("\t[-] Unable to find "  + path + " in get_config")
 			return False
 		config = configparser.RawConfigParser()
 		config.read(path)
-		return config
-	    
+		if not config:
+			print("\t[-] Unable to create config object in get_config")
+			return False
+		return config	    
 
 	def get_setting(self, path, section, setting):
+	# method will throw exceptions if section doesn't exist
 		config = self.get_config(path)
+		if (not config):
+			print("[-] get_config failed in get_setting")
+			return False
 		value = config.get(section, setting)
 		#print "{section} {setting} is {value}".format(
-	    #    section=section, setting=setting, value=value)
-
-		return value
-	 
+		#    section=section, setting=setting, value=value)
+		return value	 
 
 	def update_setting(self, path, section, setting, value):
 		"""
 		Update a setting
 		"""
+		# method will throw exceptions if section doesn't exist
 		config = self.get_config(path)
+		if (not config):
+			return False
 		config.set(section, setting, value)
 		with open(path, "w") as config_file:
 			config.write(config_file)
-	 
+		return True	 
 	 
 	def delete_setting(self, path, section, setting):
-	    """
-	    Delete a setting
-	    """
-	    config = self.get_config(path)
-	    config.remove_option(section, setting)
-	    with open(path, "w") as config_file:
-	        config.write(config_file)
+		"""
+		Delete a setting
+		"""
+		# method will throw exceptions if section doesn't exist
+		config = self.get_config(path)
+		if (not config):
+			return False
+		config.remove_option(section, setting)
+		with open(path, "w") as config_file:
+			config.write(config_file)
+		return True	
 
 def main():
 	print("***Testing course config API***")
