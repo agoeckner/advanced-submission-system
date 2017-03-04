@@ -100,7 +100,7 @@ class ConfigManager:
 		conf_sections = config.sections()
 		for proj in conf_sections :
 			if proj == projectName:
-				return config.options(proj)
+				return config.items(proj)
 
 
 	'''
@@ -186,7 +186,7 @@ class ConfigManager:
 		config = self.get_config(path)
 		if (not config):
 			print("[-] get_config failed in get_setting")
-			return None
+			return False
 		value = config.get(section, setting)
 		#print "{section} {setting} is {value}".format(
 		#    section=section, setting=setting, value=value)
