@@ -100,7 +100,7 @@ class ConfigManager:
 		conf_sections = config.sections()
 		for proj in conf_sections :
 			if proj == projectName:
-				return config.options(proj)
+				return config.items(proj)
 
 
 	'''

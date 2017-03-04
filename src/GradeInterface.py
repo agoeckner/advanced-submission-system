@@ -1,6 +1,6 @@
 #=================================
 # Advanced Submission System
-# CS 40800 - Software Engineering
+# CS 40800 - Software EngineerGing
 # Purdue University
 #=================================
 
