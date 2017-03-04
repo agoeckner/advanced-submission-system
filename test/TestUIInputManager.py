@@ -59,19 +59,19 @@ class TestUIInputManager(unittest.TestCase):
 		self.assertEqual(self.inputMgr.currentElement, self.e3)
 	
 	def test_input_prev(self):
-		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.inputMgr.onInput(curses.KEY_LEFT)
 		self.assertEqual(self.inputMgr.currentElement, self.e3)
-		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.inputMgr.onInput(curses.KEY_LEFT)
 		self.assertEqual(self.inputMgr.currentElement, self.e2)
 	
 	def test_input_next_prev(self):
 		self.inputMgr.onInput(ord('\t'))
 		self.assertEqual(self.inputMgr.currentElement, self.e2)
-		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.inputMgr.onInput(curses.KEY_LEFT)
 		self.assertEqual(self.inputMgr.currentElement, self.e1)
 
 	def test_input_prev_next(self):
-		self.inputMgr.onInput(curses.KEY_BACKSPACE)
+		self.inputMgr.onInput(curses.KEY_LEFT)
 		self.assertEqual(self.inputMgr.currentElement, self.e3)
 		self.inputMgr.onInput(ord('\t'))
 		self.assertEqual(self.inputMgr.currentElement, self.e1)

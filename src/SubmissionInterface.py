@@ -11,6 +11,7 @@ import time
 import ui.Button as Button
 import ui.InputManager as InputManager
 import ui.Picker as Picker
+import ui.TextEditField as TextEditField
 
 PROGRAM_TITLE = "ADVANCED SUBMISSION SYSTEM"
 PROGRAM_SUBTITLE = "Purdue Computer Science"
@@ -153,7 +154,7 @@ class SubmissionInterface:
 			self.btnSubmit.setCallback(self.onBtnSubmit)
 			self.btnSubmit.redraw()
 			self.inputManager.addElement(self.btnSubmit)
-
+			
 			# UI Loop
 			while self.run:
 				self._drawUpdate()
@@ -161,7 +162,7 @@ class SubmissionInterface:
 				time.sleep(0.01)
 		except Exception as err:
 			raise err
-
+	
 	def _drawUpdate(self):
 		try:
 			# Get user input and handle interaction.

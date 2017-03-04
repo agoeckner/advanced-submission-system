@@ -5,6 +5,7 @@
 #=================================
 
 import curses
+from ProgramException import *
 
 # Button class for Curses.
 class Button:
@@ -50,6 +51,3 @@ class Button:
 			else:
 				return self.callback(*self.callbackArgs, **self.callbackKWArgs)
 		return None
-
-class MissingCallback(Exception):
-	pass
