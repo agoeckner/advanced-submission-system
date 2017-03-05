@@ -517,9 +517,33 @@ class TestCourseManager(unittest.TestCase): #{
 	#}
 	
 	##-------------------------------------------------------------------------
-	## Test cases for courseNameToPath
+	## Test cases for getCourseList
 	##-------------------------------------------------------------------------
+	def test_get_course_list_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs252", "cs252Users")
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		courses = ["cs252", "cs240"]
+		
+		courseList = self.courseManager.getCourseList()
+		self.assertEqual(courseList, courses)
+	#}
 	
+	def test_get_course_list_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs252", "cs252Users")
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		courses = ["cs252", "cs240", "cs180"]
+		
+		courseList = self.courseManager.getCourseList()
+		self.assertEqual(courseList, courses)
+	#}
+	
+	def test_get_course_list_3(self): #{	
+		courses = []
+		
+		courseList = self.courseManager.getCourseList()
+		self.assertEqual(courseList, courses)
+	#}
 #}
 
 if __name__ == '__main__':
