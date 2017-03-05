@@ -492,6 +492,33 @@ class TestCourseManager(unittest.TestCase): #{
 	##-------------------------------------------------------------------------
 	## Test cases for courseNameToPath
 	##-------------------------------------------------------------------------
+	def test_course_name_to_path_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+		
+		path = self.courseManager.courseNameToPath("cs240")
+		
+		self.assertEqual(path, "./courses/cs240")
+	#}
+	
+	def test_course_name_to_path_2(self): #{
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		
+		path = self.courseManager.courseNameToPath("cs180")
+		
+		self.assertEqual(path, "./courses/cs180")
+	#}
+	
+	def test_course_name_to_path_3(self): #{
+		self.courseManager.createCourse("./courses/", "cs252", "cs252Users")
+		
+		path = self.courseManager.courseNameToPath("cs252")
+		
+		self.assertEqual(path, "./courses/cs252")
+	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for courseNameToPath
+	##-------------------------------------------------------------------------
 	
 #}
 
