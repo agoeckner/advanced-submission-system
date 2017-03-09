@@ -2,49 +2,55 @@ import locale
 import os
 import shutil
 import ConfigManager
+import configparser
+import GradeConfigManager
 
 class CourseManager:
 	manager = None
 	parent = None
 	
-	##TODO: check for existing courses or assignments when creating or deleting
-	##TODO: check that the config files are being created after calling configmanager
 	
 	##constructor
 	def __init__(self, parent): #{
 		self.parent = parent
-		self.manager = ConfigManager.ConfigManager()
+		self.manager = self.parent.configManager	
 	#}
 	
-	##----------------------------- Section of code that is used for creating and deleting courses -------------------------------------------
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code that is used for creating and deleting courses
+	##-------------------------------------------------------------------------------------------------------------------------------------
 	
-	##creates a new course directory in the instructors folder
+	##creates a new course directory
 	##path is the path to where the course directory is to be created
 	##courseName is the name of the new course
 	def createCourse(self, path, courseName, userGroup): #{
 		##Create a new directory for the courseName
 		newCoursePath = path + courseName
 		
+		if os.path.exists(newCoursePath):
+			#print("Course already exists")
+			return False
+		
 		try:
 			self.addFolder(newCoursePath)
 		except OSError: 
 			return False
 		
-		
 		courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
 		
 		##create the course config file
-		configFile = open(courseConfigFile, "w")
-		configFile.close()
-	
+		try:
+			configFile = open(courseConfigFile, "w")
+			configFile.close()
+		except:
+			return False
 		
 		##updates the global config
-		check = self.manager.addCourse("./global.config", courseName, courseConfigFile, newCoursePath, userGroup)
+		check = self.manager.addCourse(self.parent.GLOBAL_PATH, courseName, courseConfigFile, newCoursePath, userGroup)
 		
 		##if the course config file is not created False is returned to indicate an error
-		if check == False: #{ 
+		if check == False:
 			return False
-		#}
 		
 		return True
 	#}
@@ -52,51 +58,68 @@ class CourseManager:
 	##deletes a course directory in the instructor's directory
 	##courseName is the name of the course to be removed
 	def deleteCourse(self, courseName): #{
-		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+
+		courseConfigFile = path + "/course.config"
 		
-		path = self.manager.get_setting("global.config", courseName, "course_path")
+		check = self.manager.removeCourse(courseConfigFile, "global.config", courseName) ##removes the course from the global config file
 		
-		check = self.manager.removeCourse(GLOBAL_PATH, courseName) ##removes the course from the global config file
-		
-		if check == False: #{
+		if not check: #{
 			return False
 		#}
 		
-		deleteFolder(path) ##deletes the course and all assignments under it
+		self.deleteFolder(path) ##deletes the course and all assignments under it
 		
 		return True
 	#}
 	
 	
-	## ----------------------------- Section of code that is used for creating and deleting assignments --------------------------------------'''	
-
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code that is used for creating and deleting assignments 
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
 	##creates a new assignment directory inside the course directory
 	##assignmentName is the name of the new directory
 	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
 	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
 	##number of days allowed for late submission
-	def createAssignment(self, courseName, assignmentName):#, dueDate, team, maxSubmissions, lateDays): #{
-		#path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+	def createAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		##for testing
-		path = "./courses/" + courseName + "/" + assignmentName
+		courseConfigFile = path + "/course.config"
+		assignmentPath = path + "/" + assignmentName
+		
+		
+		if os.path.exists(assignmentPath):
+			#print("Assignment already exists")
+			return False
 		
 		try:
-			addFolder(path) ##creates a new folder for the assignment
+			self.addFolder(assignmentPath) ##creates a new folder for the assignment
 		except OSError:
 			return False
 		
-		assignmentConfigFile = path + "assignment.config"
 		
-		##create the assignment config file
-		configFile = open(courseConfigFile, "w")
-		configFile.close()
-		#parent.ConfigParser.addProject(assignmentConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		##adds the assignment to the global config file
+		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		if not check:
+			return False
 		
+		##Create the student directories
+		try:
+			self.addFolder(assignmentPath + "/smithhe")
+			##----------------------------------------------------------------
+			##TODO:Section for adding all the students in a userGroup
+			##----------------------------------------------------------------
+		except OSError:
+			return False
 		
-		##gets user group
-		#userGroup =
-
 		return True
 	#}
 
@@ -104,109 +127,233 @@ class CourseManager:
 	##assignmentName is the assignment to be deleted
 	##courseName is the name of the course
 	def deleteAssignment(self, assignmentName, courseName): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		courseConfigFile = path + "course.config"
+		courseConfigFile = path + "/course.config"
 		
 		##removes the assignment from the course config file
-		parent.ConfigParser.removeProject(courseConfigFile, assignmentName)
+		check = self.parent.configManager.removeProject(courseConfigFile, assignmentName)
+		if not check:
+			return False
 		
 		##removes the directory and all subdirectories and files
-		deletFolder(path + assignmentName)
+		assignmentPath = path + "/" + assignmentName
+		try:
+			self.deleteFolder(assignmentPath)
+		except OSError:
+			return False
 		
 		return True
 	#}
 
-	##modifes the config file of an existing assignment
-	##assignmentName is the name of the new directory
-	##courseName is the name of the course, assignmentName is the name of the assignment, dueDate is the day the assignment is dueDate
-	##team identifies if the assignment is a team assignment, maxSubmissions are the total number of submissions allowed, lateDays are the 
-	##number of days allowed for late submission
-	def modifyAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+	##modifes the course config file of an existing assignment
+	def modifyAssignment(self, courseName, assignmentName, settingName, newValue): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		courseConfigFile = path + "course.config"
+		courseConfigFile = path + "/course.config"
+		#assignmentConfigFile = path + "/" + assignmentName + "/assignment.config"
 		
-		parent.ConfigParser.modifyProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		try:
+			self.parent.configManager.update_setting(courseConfigFile, assignmentName, settingName, newValue)
+		except configparser.NoSectionError:
+			return False
 		
 		return True
 	#}
 	
-	## ----------------------------------- Section of code that is used for grading -------------------------------------------------------'''	
-
-	##Gives a grade to the student
-	##courseName is the name of the course
-	##assignmentName is the name of the assignment, studentName is the name of the student being graded
-	##gradeRecieved is the grade recieved for the assignment
-	def enterGrade(self, courseName, assignmentName, studentName, gradeRecieved): #{
-		path = parent.ConfigParser.get_setting(GLOBAL_PATH, courseName, "course_path")
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	##  Section of code that is used for grading
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
+	##Creates the grade config file and enteres in the grade content for the student
+	def enterGrade(self, courseName, assignmentName, studentName, gradeRecieved, bonus, feedback): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 		
-		gradeFile = path + "grade.txt"
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
 		
-		grade = open(gradeFile, "w")
+		##create the grade config file
+		try:
+			gradeConfigFile = open(gradeConfigPath, "w")
+			gradeConfigFile.close()
+		except:
+			return False
 		
-		grade.write("Grade Recieved: " + gradeRecieved)
+		try:
+			check = self.parent.gradeManager.addGrade(gradeConfigPath, gradeRecieved, bonus, feedback)
+		except:
+			return False
 		
-		grade.close()
+		return check
 	#}
 	
-	## ----------------------------------- Section of code that is used for creating folders --------------------------------------------------'''	
-	##x is the path including the new directory name
+	##Returns in string format the grade recieved
+	def getGrade(self, courseName, assignmentName, studentName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			gradeRecieved = self.parent.gradeManager.getGrade(gradeConfigPath)
+			return gradeRecieved
+		except configparser.NoSectionError:
+			return False
+	#}
+	
+	##Returns in string format the amount of bonus points recieved
+	def getBonus(self, courseName, assignmentName, studentName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			bonusRecieved = self.parent.gradeManager.getBonus(gradeConfigPath)
+		except configparser.NoSectionError:
+			return False
+		
+		return bonusRecieved
+	#}
+	
+	##Returns the feedback recieved
+	def getFeedback(self, courseName, assignmentName, studentName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			feedbackRecieved = self.parent.gradeManager.getFeedback(gradeConfigPath)
+		except configparser.NoSectionError:
+			return False
+		
+		return feedbackRecieved
+	#}
+	
+	##Edits the grade for the student, returns false if student's folder doesn't exist or if failure occurs
+	def editGrade(self, courseName, assignmentName, studentName, newGrade): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			self.parent.gradeManager.editGrade(gradeConfigPath, newGrade)
+		except configparser.NoSectionError:
+			return False
+		
+		return True
+	#}
+	
+	##Edits the bonus points recieved by the student, returns false is student doesn't exist or is failure occurs
+	def editBonus(self, courseName, assignmentName, studentName, newBonus): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			self.parent.gradeManager.editBonus(gradeConfigPath, newBonus)
+		except configparser.NoSectionError:
+			return False
+		
+		return True
+	#}
+	
+	def editFeedback(self, courseName, assignmentName, studentName, newFeedback): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
+		
+		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		
+		try:
+			self.parent.gradeManager.editFeedback(gradeConfigPath, newFeedback)
+		except configparser.NoSectionError:
+			return False
+		
+		return True
+	#}
+	
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code that is used for creating folders
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
 	def addFolder(self, x): #{
+		##TODO: Set permissions correctly for new directories
 		##NOTE!-------------------------------------------------------------------------------------
 		## mkdir has another parameter that sets permissions for the new directory
 		##!-----------------------------------------------------------------------------------------
-		os.mkdir(x); ##a new directory is made
+		os.mkdir(x) ##a new directory is made
 	#}
 
 	def deleteFolder(self, x): #{
 		shutil.rmtree(x) ##removes the directory and all directories and files inside it
 	#}
 	
-	##---------------------------------- Code that is used for testing ------------------------------------------------------------------'''
-	##main method
-	def start(self): #{
-		theMan = CourseManager(None)
-		check = False
-		
-		##create the course config file
-		configFile = open("global.config", "w")
-		configFile.close()
-		
-		print("**************Program Started******************")
-		
-		print("----------------------Running Test 1------------------------")
-		print("Calling createCourse for cs252")
-		
-		check = theMan.createCourse("./courses/", "cs252", "group1")
-		
-		if check == False:
-			print("Test 1 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-		print("----------------------Test 1 Completed----------------------")
-		
-		print("----------------------Running Test 2------------------------")
-		print("Calling deleteCourse")
-		
-		check = theMan.createCourse("./courses/", "cs408", "group2")
-		if check == False:
-			print("Test 2 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	## Section of code for GUI Functionalilty
+	##-------------------------------------------------------------------------------------------------------------------------------------
+	
+	##returns the path to the course directory if it exists
+	##returns false otherwise
+	def courseNameToPath(self, courseName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		except configparser.NoSectionError:
+			return False
 			
-		print("----------------------Test 2 Completed----------------------")
+		return path
+	#}
+	
+	##Names of different assignment config settings are: "team", "max_submissions", "due", and "late days"
+	##!!Note!! The name of the setting must be exactly one of the above or False will be returned
+	def getAssignmentSetting(self, courseName, assignmentName, settingName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			courseConfigFile = path + "/course.config"
+			value = self.parent.configManager.get_setting(courseConfigFile, assignmentName, settingName)
+		except configparser.NoSectionError:
+			return False
 		
-		print("----------------------Running Test 3------------------------")
-		print("Calling deleteCourse")
-		
-		check = theMan.deleteFolder("./courses/cs252")
-		if check == False:
-			print("Test 3 Failed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-		
-		print("----------------------Test 3 Completed----------------------")
-		
-		
+		return value
+	#}
+	
+	##returns an array of courses
+	def getCourseList(self): #{
+		return self.parent.configManager.getCourseList(self.parent.GLOBAL_PATH) 
 	#}
 
-
-
+	##returns an array of assignments for a course
+	def getAssignmentList(self, courseName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			courseConfigFile = path + "/course.config"
+		except configparser.NoSectionError:
+			return False
+			
+		return self.parent.configManager.getProjects(courseConfigFile)
+	#}
 
 
 
