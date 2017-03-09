@@ -5,18 +5,25 @@
 #=================================
 
 import curses
-import curses.textpad as textpad
+import curses.textpad
 from ProgramException import *
 
 # TextEditField class for Curses.
 class TextEditField:
-	def __init__(self, parent, defaultValue="", sizeYX=(1,10), positionYX=(0,0)):
+	def __init__(self, parent, maxLength=0, defaultValue="", sizeYX=(1,15), positionYX=(0,0)):
 		self.callback = None
 		self.parent = parent
 		self.defaultValue = defaultValue
 		self.textStyle = curses.A_NORMAL
-		if sizeYX[0] < 1 or sizeYX[1] < 3:
-			raise ComponentSizeInvalid("TextEditField must have minimum size (1, 3)")
+		if sizeYX[0] < 1 or sizeYX[1] < 4:
+			raise ComponentSizeInvalid("TextEditField must have minimum size (1, 4)")
+		if maxLength > 0 and maxLength + 3 > sizeYX[1]:
+			raise ComponentSizeInvalid("TextEditField size X must be 3 greater "
+				"than maximum text length.")
+		elif maxLength <= 0:
+			self.maxLength = sizeYX[1] - 3;
+		else:
+			self.maxLength = maxLength
 		self.sizeYX = sizeYX
 		self.win = parent.derwin(
 			sizeYX[0],
@@ -26,11 +33,15 @@ class TextEditField:
 		)
 		self.textArea = self.win.derwin(
 			sizeYX[0],
-			sizeYX[1] - 2,
+			self.maxLength + 1,
 			0,
 			1
 		)
-		self.textBox = textpad.Textbox(self.textArea)
+		self.textBox = TextBox(self.textArea)
+		self.textBox.do_command(curses.ascii.VT) #clear the stupid thing
+		
+		for char in defaultValue:
+			self.onInput(char)
 	
 	def setCallback(self, callback, *args, **kwargs):
 		self.callback = callback
@@ -38,7 +49,14 @@ class TextEditField:
 		self.callbackKWArgs = kwargs
 	
 	def getValue(self):
-		return self.textBox.gather()
+		value = self.textBox.gather()
+		# Fix curses bug that causes trailing spaces.
+		if len(value) > 1 and value[-1] == ' ':
+			value = value[0:-1]
+		return value
+	
+	def getMaxLength(self):
+		return self.maxLength
 	
 	def onFocus(self):
 		self.textStyle = curses.A_REVERSE
@@ -67,3 +85,6 @@ class TextEditField:
 		else:
 			self.textBox.do_command(inputChar)
 		return None
+
+class TextBox(curses.textpad.Textbox):
+	pass

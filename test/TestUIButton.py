@@ -8,6 +8,7 @@ import sys
 sys.path.append('../src/')
 import unittest
 import curses
+import ProgramException
 import ui.Button as Button
 
 class TestUIButton(unittest.TestCase):
@@ -23,7 +24,7 @@ class TestUIButton(unittest.TestCase):
 		self.assertEqual(result, None)
 	
 	def test_select_no_callback(self):
-		with self.assertRaises(Button.MissingCallback):
+		with self.assertRaises(ProgramException.MissingCallback):
 			result = self.button.onInput(ord(' '))
 	
 	def test_select_callback(self):

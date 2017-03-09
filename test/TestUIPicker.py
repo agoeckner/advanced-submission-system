@@ -41,6 +41,20 @@ class TestUIPicker(unittest.TestCase):
 			{"label": "c", "level": 0, "selected": False, "isParent": False}]
 		result = self.picker.all_options
 		self.assertEqual(expected, result)
+
+	def test_set_options_select(self):
+		picker = Picker.Picker(self.stdscr, 
+			(0, 0), 
+			(10, 20),
+			[],
+			footer="")
+		opts = ["1", "2", "3"]
+		picker.onLoseFocus()
+		picker.setOptions(opts)
+		picker.onFocus()
+		picker.onInput(ord(' '))
+		selected = picker.getSelected()
+		self.assertEqual(selected, opts[0:1])
 	
 	def test_select_no_callback(self):
 		self.callbackUpdate = ""
