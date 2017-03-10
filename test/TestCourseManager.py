@@ -597,6 +597,8 @@ class TestCourseManager(unittest.TestCase): #{
 		studentPath = "./courses/cs180/Homework1/larry"
 		self.assertEqual(os.path.exists(studentPath), True)
 	#}
+	
+	
 #}
 
 if __name__ == '__main__':

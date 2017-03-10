@@ -5,6 +5,8 @@ import ConfigManager
 import configparser
 import GradeConfigManager
 import grp
+import pwd
+import stat
 
 class CourseManager:
 	manager = None
@@ -120,7 +122,7 @@ class CourseManager:
 			for user in group.gr_mem:
 				#self.addFolder(assignmentPath + "/smithhe")
 				studentFolder = assignmentPath + "/" + user
-				self.addFolder(studentFolder)
+				self.addStudentFolder(studentFolder, user)
 				studentConfig = studentFolder + "/grade.config"
 				##create the course config file
 				
@@ -312,15 +314,21 @@ class CourseManager:
 	##-------------------------------------------------------------------------------------------------------------------------------------
 	
 	def addFolder(self, x): #{
-		##TODO: Set permissions correctly for new directories
-		##NOTE!-------------------------------------------------------------------------------------
-		## mkdir has another parameter that sets permissions for the new directory
-		##!-----------------------------------------------------------------------------------------
 		os.mkdir(x) ##a new directory is made
 	#}
+	
+	def addStudentFolder(self, x, student): #{
+		collection = pwd.getpwnam(student)
+		studentID = collection.pw_uid
+		instructorGroup = ()
+		os.mkdir(x)
+		os.chown(x, studentID, instructorGroup)
+		os.chmod(x, stat.S_IRWXG | stat.S_IRWXU)
+	#}
 
+	##removes the directory and all directories and files inside it
 	def deleteFolder(self, x): #{
-		shutil.rmtree(x) ##removes the directory and all directories and files inside it
+		shutil.rmtree(x) 
 	#}
 	
 	##-------------------------------------------------------------------------------------------------------------------------------------
