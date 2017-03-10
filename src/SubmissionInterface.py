@@ -78,7 +78,7 @@ class SubmissionInterface:
 			# Information panel on the left of the top panel.
 			self.panelInfo = self.panelTop.derwin(2, self.screenSize[1] - 12, 0, 0)
 			self.panelInfo.addstr(0, 0, PROGRAM_TITLE, curses.A_STANDOUT)
-			self.panelInfo.addstr(1, 3, PROGRAM_SUBTITLE, curses.A_DIM)
+			self.panelInfo.addstr(1, 3, PROGRAM_SUBTITLE, curses.A_NORMAL)
 			titlePosX = int((self.screenSize[1] - len(PROGRAM_TITLE) - 12 -
 				len(INTERFACE_TITLE)) / 2) + len(PROGRAM_TITLE)
 			self.panelInfo.addstr(1, titlePosX, INTERFACE_TITLE, curses.A_NORMAL)
