@@ -4,6 +4,7 @@ import shutil
 import ConfigManager
 import configparser
 import GradeConfigManager
+import grp
 
 class CourseManager:
 	manager = None
@@ -89,6 +90,7 @@ class CourseManager:
 	def createAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
 		try:
 			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			userGroup = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName,'user_group')
 		except configparser.NoSectionError:
 			return False
 		
@@ -108,16 +110,26 @@ class CourseManager:
 		
 		##adds the assignment to the global config file
 		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		
 		if not check:
 			return False
 		
 		##Create the student directories
 		try:
-			self.addFolder(assignmentPath + "/smithhe")
-			##----------------------------------------------------------------
-			##TODO:Section for adding all the students in a userGroup
-			##----------------------------------------------------------------
-		except OSError:
+			group = grp.getgrnam(userGroup)
+			for user in group.gr_mem:
+				#self.addFolder(assignmentPath + "/smithhe")
+				studentFolder = assignmentPath + "/" + user
+				self.addFolder(studentFolder)
+				studentConfig = studentFolder + "/grade.config"
+				##create the course config file
+				
+				try:
+					configFile = open(studentConfig, "w")
+					configFile.close()
+				except:
+					return False
+		except KeyError:
 			return False
 		
 		return True
