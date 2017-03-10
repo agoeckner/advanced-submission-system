@@ -31,6 +31,7 @@ class GradeInterface:
 		self.course = ""
 		self.assignment = ""
 		self.student = ""
+		self.lastMsgLen = 0
 	
 	def show(self):
 		try:
@@ -225,6 +226,10 @@ class GradeInterface:
 			label = "Save Changes")
 		self.saveBtn.setCallback(self.onBtnSaveGrade)
 	
+	def _clearAssignmentPanel(self):
+		self.editPanel.clear()
+		self.editPanel.refresh()
+	
 	def _drawAssignmentEditPanel(self):
 		self.editPanel.clear()
 		self.editPanel.refresh()
@@ -331,6 +336,14 @@ class GradeInterface:
 			raise err
 	
 	def displayMessage(self, message, textAttr=curses.A_NORMAL):
+		blank = ""
+		for i in range(0, self.lastMsgLen):
+			blank += " "
+		self.panelMain.addstr(
+			self.screenSize[0] - 5, 2,
+			blank,
+			curses.A_NORMAL)
+		self.lastMsgLen = len(message)
 		self.panelMain.addstr(
 			self.screenSize[0] - 5, 2,
 			message,
@@ -384,4 +397,18 @@ class GradeInterface:
 		return "TAB_NEXT"
 	
 	def onBtnSaveGrade(self):
-		pass
+		try:
+			grade = float(self.editGrade.getValue())
+		except ValueError:
+			self.displayMessage("Please enter a score as a real number.")
+			return
+		result = self.parent.courseManager.editGrade(
+			self.course,
+			self.assignment,
+			self.student,
+			grade)
+		if result:
+			self._clearAssignmentPanel()
+			self.displayMessage("Grade updated!")
+		else:
+			self.displayMessage("ERROR: Could not save grade.")
