@@ -146,10 +146,11 @@ class GradeInterface:
 			self.studentPanel.refresh()
 			
 			# Assignment edit panel.
-			editPanelSizeYX = (self.screenSize[0] - 23, 2 * int((self.screenSize[1] - 3) / 3))
+			editPanelSizeYX = (self.screenSize[0] - 30, 2 * int((self.screenSize[1] - 3) / 3))
 			self.editPanel = self.panelMain.derwin(
-				editPanelSizeYX[0], editPanelSizeYX[1], # size
-				studentPanelSizeYX[0] + 1, int((self.screenSize[1] - 4) / 3) + 1) # position
+				editPanelSizeYX[0], editPanelSizeYX[1], ##size 
+				studentPanelSizeYX[0] + 1, int((self.screenSize[1] - 4) / 3) + 1) ##position 
+			
 			self.editPanel.bkgd(curses.color_pair(1))
 			centerTip = "Assignment options are changed here."
 			self.editPanel.addstr(
@@ -212,7 +213,8 @@ class GradeInterface:
 			course = selected[0]
 			if self.course != course:
 				self.course = course
-				assignments = self.parent.submissionManager.getAssignmentList(course)
+				#assignments = self.parent.submissionManager.getAssignmentList(course)
+				assignments = self.parent.courseManager.getAssignmentList(course)
 				
 				# Add the "New Assignment" Feature.
 				if self.mode is MODE_INSTRUCTOR:

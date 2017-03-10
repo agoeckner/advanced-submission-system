@@ -318,12 +318,12 @@ class CourseManager:
 	#}
 	
 	def addStudentFolder(self, x, student): #{
-		collection = pwd.getpwnam(student)
-		studentID = collection.pw_uid
-		instructorGroup = ()
+		#collection = pwd.getpwnam(student)
+		#studentID = collection.pw_uid
+		#instructorGroup = ()
 		os.mkdir(x)
-		os.chown(x, studentID, instructorGroup)
-		os.chmod(x, stat.S_IRWXG | stat.S_IRWXU)
+		#os.chown(x, studentID, instructorGroup)
+		#os.chmod(x, stat.S_IRWXG | stat.S_IRWXU)
 	#}
 
 	##removes the directory and all directories and files inside it
