@@ -10,9 +10,9 @@ import GradeInterface
 import CourseManager
 import ConfigManager
 
-GLOBAL_PATH = "/etc/submission/global.config"
 
 class AdvancedSubmissionSystem:
+	GLOBAL_PATH = "/etc/submission/global.config"
 	gradeUI = None
 	courseManager = None
 	configManager = None
