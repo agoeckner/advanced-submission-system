@@ -53,6 +53,10 @@ class TestConfigManager(unittest.TestCase):
 	def test_removeCourseInvalid(self):
 		self.assertFalse(self.cm.removeCourse( "invalidFile.config", "invalidGlobal.config", "proj1"))
 
+	def test_courseList(self):
+		res = self.cm.getCourseList(self.validGlobalConfig)
+		self.assertTrue("cs242" in res)
+
 if __name__ == '__main__':
 	suite = unittest.TestLoader().loadTestsFromTestCase(TestConfigManager)
 	unittest.TextTestRunner(verbosity=2).run(suite)

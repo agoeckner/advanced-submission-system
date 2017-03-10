@@ -160,7 +160,7 @@ class ConfigManager:
 		my_file = Path(globalConfigFile)
 		if not my_file.is_file():
 			print("Unable to find "  + globalConfigFile)
-			return None
+			return {}
 		config = configparser.RawConfigParser()
 		config.read(globalConfigFile)		
 		return config.sections()
