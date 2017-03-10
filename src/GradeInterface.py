@@ -69,7 +69,7 @@ class GradeInterface:
 			# Information panel on the left of the top panel.
 			self.panelInfo = self.panelTop.derwin(2, self.screenSize[1] - 12, 0, 0)
 			self.panelInfo.addstr(0, 0, PROGRAM_TITLE, curses.A_STANDOUT)
-			self.panelInfo.addstr(1, 3, PROGRAM_SUBTITLE, curses.A_DIM)
+			self.panelInfo.addstr(1, 3, PROGRAM_SUBTITLE, curses.A_NORMAL)
 			titlePosX = int((self.screenSize[1] - len(PROGRAM_TITLE) - 12 -
 				len(INTERFACE_TITLE)) / 2) + len(PROGRAM_TITLE)
 			self.panelInfo.addstr(1, titlePosX, INTERFACE_TITLE, curses.A_NORMAL)
@@ -97,7 +97,7 @@ class GradeInterface:
 				positionYX = (1, 1),
 				sizeYX = (pickCourseSizeY, int((self.screenSize[1] - 4) / 3)),
 				title = 'Course',
-				options = self.parent.submissionManager.getCourseList(),
+				options = self.parent.courseManager.getCourseList(),
 				footer = "",
 				maxSelect = 1,
 				c_empty = "( )",
@@ -343,7 +343,7 @@ class GradeInterface:
 			course = selected[0]
 			if self.course != course:
 				self.course = course
-				assignments = self.parent.submissionManager.getAssignmentList(course)
+				assignments = self.parent.courseManager.getAssignmentList(course)
 				
 				# Add the "New Assignment" Feature.
 				if self.mode is MODE_INSTRUCTOR:
