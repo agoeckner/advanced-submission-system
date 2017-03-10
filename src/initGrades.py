@@ -9,7 +9,8 @@ import sys
 import GradeInterface
 import CourseManager
 import ConfigManager
-
+import GradeConfigManager
+import SubmissionManager
 
 class AdvancedSubmissionSystem:
 	GLOBAL_PATH = "/etc/submission/global.config"
@@ -23,11 +24,11 @@ class AdvancedSubmissionSystem:
 		# Fix for ncurses over PuTTY.
 		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
 		
-		#mode = GradeInterface.MODE_STUDENT
+		mode = GradeInterface.MODE_STUDENT
 		# TODO: This is temporary, for testing.
 		# TODO: Replace with a user group check to see if professor or student.
-		#if len(sys.argv) > 1 and sys.argv[1] == "edit":
-		mode = GradeInterface.MODE_INSTRUCTOR
+		if len(sys.argv) > 1 and sys.argv[1] == "edit":
+			mode = GradeInterface.MODE_INSTRUCTOR
 		
 		self.configManager = ConfigManager.ConfigManager()
 		self.gradeManager = GradeConfigManager.GradeConfigManager()
@@ -37,7 +38,7 @@ class AdvancedSubmissionSystem:
 		self.courseManager = CourseManager.CourseManager(self)
 		self.gradeUI = GradeInterface.GradeInterface(self, mode)
 		
-		
+		self.createTestCourses()
 		try:
 			self.gradeUI.show()
 		except KeyboardInterrupt:
@@ -46,6 +47,7 @@ class AdvancedSubmissionSystem:
 	
 	def createTestCourses(self): #{
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
 	#}
 # Start the program.
 if __name__ == '__main__':
