@@ -155,6 +155,26 @@ class ConfigManager:
 			print("[-] course not present in globalConfigFile")
 			return False
 		return True
+	def addInstructor(self, globalConfigFile, groupName):
+		my_file = Path(globalConfigFile)
+		if not my_file.is_file():
+			print("Unable to find "  + courseConfigFile)
+			return False
+		config = configparser.ConfigParser() # get_config(courseConfigFile)
+		config.read(globalConfigFile)
+		try:
+			config.add_section('Instructors')
+		except configparser.DuplicateSectionError :
+			print("\t[-] Instructor section already exists. Use update_setting")
+			return False
+		config.set('Instructors', 'user_group', groupName)
+		
+		with open(globalConfigFile, 'w+') as f:
+			config.write(f)
+		return True
+		
+	def getInstructorGroup(self, globalConfigFile):
+		return self.get_setting(globalConfigFile, 'Instructors', 'user_group')
 
 	def getCourseList(self, globalConfigFile): 
 		my_file = Path(globalConfigFile)
@@ -162,8 +182,13 @@ class ConfigManager:
 			print("Unable to find "  + globalConfigFile)
 			return {}
 		config = configparser.RawConfigParser()
-		config.read(globalConfigFile)		
-		return config.sections()
+		config.read(globalConfigFile)
+		courses = config.sections()
+		try:
+			courses.remove('Instructors');
+		except ValueError:
+			print("[-] Instructors section not in global config file")
+		return courses
 
 
 	''' 

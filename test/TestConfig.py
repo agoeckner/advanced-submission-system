@@ -44,7 +44,7 @@ class TestConfigManager(unittest.TestCase):
 
 	def test_getCourseListInvalid(self):
 		invalidFile = "doesntExist.conf"
-		self.assertEqual(self.cm.getCourseList(invalidFile), None)
+		self.assertEqual(self.cm.getCourseList(invalidFile), {} )
 
 	def test_getSettingValid(self):
 		returnedVal = self.cm.get_setting(self.validCourseConfig, "project1", "max_submissions")
@@ -56,6 +56,13 @@ class TestConfigManager(unittest.TestCase):
 	def test_courseList(self):
 		res = self.cm.getCourseList(self.validGlobalConfig)
 		self.assertTrue("cs242" in res)
+		self.assertTrue("cs240" in res)
+		self.assertTrue("cs243" in res)
+		self.assertTrue("cs241" in res)
+	def test_addInstructor(self):
+		self.cm.addInstructor(self.validGlobalConfig, 'instructors_spring17')
+		res = self.cm.getInstructorGroup(self.validGlobalConfig)
+		self.assertTrue('instructors_spring17' in res);
 
 if __name__ == '__main__':
 	suite = unittest.TestLoader().loadTestsFromTestCase(TestConfigManager)
