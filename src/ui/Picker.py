@@ -67,14 +67,16 @@ class Picker:
 		for option in range:
 			if option["selected"] == True:
 				line_label = self.c_selected + " "
+				style = curses.A_REVERSE
 			else:
 				line_label = self.c_empty + " "
+				style = curses.A_NORMAL
 			xPos = 5 + option["level"] * 4
 			xMaxWidth = self.window_width - 6 - xPos
 			label = line_label + option["label"]
 			if len(label) > xMaxWidth:
 				label = label[:xMaxWidth] + " ..."
-			self.win.addstr(yPos, xPos, label)
+			self.win.addstr(yPos, xPos, label, style)
 			yPos = yPos + 1
 			
 		# hint for more content above
@@ -97,7 +99,8 @@ class Picker:
 				0, self.window_width - 8,
 				" " + str(self.selcount) + "/" + str(self.length) + " "
 			)
-		self.win.addstr(self.cursor,1, self.arrow)
+		if len(self.all_options) > 0:
+			self.win.addstr(self.cursor,1, self.arrow)
 		self.win.refresh()
 	
 	def cursorDown(self):

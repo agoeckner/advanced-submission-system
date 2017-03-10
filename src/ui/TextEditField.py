@@ -17,7 +17,7 @@ class TextEditField:
 		self.textStyle = curses.A_NORMAL
 		if sizeYX[0] < 1 or sizeYX[1] < 4:
 			raise ComponentSizeInvalid("TextEditField must have minimum size (1, 4)")
-		if maxLength > 0 and maxLength + 3 > sizeYX[1]:
+		if maxLength > 0 and maxLength > sizeYX[0] * (sizeYX[1] - 3):
 			raise ComponentSizeInvalid("TextEditField size X must be 3 greater "
 				"than maximum text length.")
 		elif maxLength <= 0:

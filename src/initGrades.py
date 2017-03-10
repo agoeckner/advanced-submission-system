@@ -7,14 +7,12 @@
 import os
 import sys
 import GradeInterface
-import SubmissionManager
 import CourseManager
 import ConfigManager
 
-GLOBAL_PATH = "/etc/submission/global.config"
 
 class AdvancedSubmissionSystem:
-	submissionManager = None
+	GLOBAL_PATH = "/etc/submission/global.config"
 	gradeUI = None
 	courseManager = None
 	configManager = None
@@ -36,13 +34,14 @@ class AdvancedSubmissionSystem:
 		courseManager = CourseManager.CourseManager(self)
 		
 		self.submissionManager = SubmissionManager.SubmissionManager(self)
+		self.courseManager = CourseManager.CourseManager(self)
 		self.gradeUI = GradeInterface.GradeInterface(self, mode)
 		
 		
 		try:
 			self.gradeUI.show()
 		except KeyboardInterrupt:
-			print("WARNING: Nothing was submitted!")
+			print("Exited")
 	
 	
 	def createTestCourses(self): #{
