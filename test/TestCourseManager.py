@@ -14,7 +14,9 @@ import GradeConfigManager
 import os
 import shutil
 
-
+##--------------------------------------------------------------------------------------------
+##All automated test cases must be run on a specific computer to pass
+##--------------------------------------------------------------------------------------------
 
 class TestCourseManager(unittest.TestCase): #{
 	GLOBAL_PATH = "./global.config"
