@@ -19,18 +19,36 @@ class TestIntegration(unittest.TestCase):
 	def test_singleSubmission(self):
 		'''
 		Some assumptions required. User should be logged in as the
-		correct test student
+		correct test student and the number of iteration of the for loops
+		below should match the actual courses, proeccts and files the tester is already aware of
 		'''
-		# go to the course with left arrow
+		# go to the intended course with left arrow
 		for i in range(3):
 			self.inputMgr.onInput(curses.KEY_DOWN)
 		# select the course with enter
 		self.inputMgr.onInput(ord('\n'))
 
-		self.inputMgr.onInput(ord('\t'))
-		self.assertEqual(self.inputMgr.currentElement, self.e2)
-		self.inputMgr.onInput(ord('\t'))
-		self.assertEqual(self.inputMgr.currentElement, self.e3)	
+		# go to the intended project with left arrow
+		for i in range(3):
+			self.inputMgr.onInput(curses.KEY_DOWN)
+		# select the project with enter
+		self.inputMgr.onInput(ord('\n'))
+
+		# select a single file
+		for i in range():
+			self.inputMgr.onInput(curses.KEY_DOWN)
+		# select the file with enter
+		self.inputMgr.onInput(ord('\n'))
+
+		# select submit
+		self.inputMgr.onInput(ord('\n'))
+
+		# now we can check if the file was actually submitted
+		dest = 'path/to/the/submission/dir/<already known filename>'
+		my_file = Path(dest)
+		# verify the file is submitted 
+		self.assertTrue( my_file.is_file() )
+		
 
 
 class StubElement:
