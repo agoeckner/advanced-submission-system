@@ -164,15 +164,15 @@ class GradeInterface:
 			
 			# Student intro. panel.
 			studentPanelPosYX = (1, int((self.screenSize[1] - 4) / 3) + 1)
-			studentPanelSizeYX = (self.screenSize[0] - 6 - editPanelSizeYX[0], 2 * int((self.screenSize[1] - 3) / 3))
+			self.studentPanelSizeYX = (self.screenSize[0] - 6 - editPanelSizeYX[0], 2 * int((self.screenSize[1] - 3) / 3))
 			self.studentPanel = self.panelMain.derwin(
-				studentPanelSizeYX[0], studentPanelSizeYX[1], # size
+				self.studentPanelSizeYX[0], self.studentPanelSizeYX[1], # size
 				studentPanelPosYX[0], studentPanelPosYX[1]) # position
 			self.studentPanel.bkgd(curses.color_pair(1))
 			centerTip = "Please select a course to view grades."
 			self.studentPanel.addstr(
-				int(studentPanelSizeYX[0] / 2),
-				int(studentPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
+				int(self.studentPanelSizeYX[0] / 2),
+				int(self.studentPanelSizeYX[1] / 2) - int(len(centerTip) / 2),
 				centerTip,
 				curses.A_DIM)
 			self.studentPanel.box()
@@ -182,7 +182,7 @@ class GradeInterface:
 			self.pickStudent = Picker.Picker(
 				parent = self.panelMain,
 				positionYX = studentPanelPosYX,
-				sizeYX = studentPanelSizeYX,
+				sizeYX = self.studentPanelSizeYX,
 				title = 'Students    ...    Grade',
 				options = [],
 				footer = "",
@@ -405,7 +405,7 @@ class GradeInterface:
 			grade = self.parent.courseManager.getGrade(self.course, self.assignment, self.student)
 			line = user
 			blank = ""
-			for i in range(studentPanelSizeYX[1] - 10):
+			for i in range(self.studentPanelSizeYX[1] - 10):
 				blank += " "
 			if grade != False:
 				line += blank + str(grade)
