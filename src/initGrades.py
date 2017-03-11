@@ -6,16 +6,20 @@
 
 import os
 import sys
+import shutil
 import GradeInterface
-import SubmissionManager
 import CourseManager
-
-GLOBAL_PATH = "/etc/submission/global.config"
+import ConfigManager
+import GradeConfigManager
+import SubmissionManager
 
 class AdvancedSubmissionSystem:
-	submissionManager = None
+	#GLOBAL_PATH = "/etc/submission/global.config"
+	GLOBAL_PATH = "./global.config"
 	gradeUI = None
 	courseManager = None
+	configManager = None
+	gradeManager = None
 	
 	# Perform program initialization.
 	def __init__(self):
@@ -28,13 +32,37 @@ class AdvancedSubmissionSystem:
 		if len(sys.argv) > 1 and sys.argv[1] == "edit":
 			mode = GradeInterface.MODE_INSTRUCTOR
 		
+		self.configManager = ConfigManager.ConfigManager()
+		self.gradeManager = GradeConfigManager.GradeConfigManager()
+		courseManager = CourseManager.CourseManager(self)
+		
 		self.submissionManager = SubmissionManager.SubmissionManager(self)
+		self.courseManager = CourseManager.CourseManager(self)
 		self.gradeUI = GradeInterface.GradeInterface(self, mode)
+		
+		##self.setUp()
 		try:
 			self.gradeUI.show()
 		except KeyboardInterrupt:
-			print("WARNING: Nothing was submitted!")
-
+			print("Exited")
+	
+		##self.takeDown()
+	
+	# def setUp(self): #{
+		# os.mkdir("./courses")
+		# configFile = open("./global.config", "w")
+		# configFile.close()
+		
+		# self.configManager.addInstructor(self.GLOBAL_PATH, "Instructors")
+		# self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		# self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+	# #}
+	
+	# def takeDown(self): #{
+		# shutil.rmtree("./courses")
+		# os.remove("./global.config")
+	# #}
+	
 # Start the program.
 if __name__ == '__main__':
 	AdvancedSubmissionSystem()
