@@ -7,6 +7,7 @@
 import curses
 import grp
 import time
+import ProgramException
 import ui.Button as Button
 import ui.InputManager as InputManager
 import ui.Picker as Picker
@@ -367,6 +368,9 @@ class GradeInterface:
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
 				
+				self.pickStudent.setOptions(self._getStudentList(course))
+				self.pickStudent.redraw()
+				
 				if not self.pickAssignmentVisible:
 					self.pickAssignmentVisible = True
 					self.inputManager.addElement(self.pickAssignment)
@@ -391,8 +395,11 @@ class GradeInterface:
 				self.displayAssignmentInfo(self.course, self.assignment, self.student)
 	
 	def _getStudentList(self, course):
-		groupName = self.parent.courseManager.getCourseUserGroup(course)
-		group = gr.getgrname(groupName)
+		try:
+			groupName = self.parent.courseManager.getCourseUserGroup(course)
+			group = grp.getgrnam(groupName)
+		except KeyError:
+			raise ProgramException.ConfigurationInvalid("Group does not exist for " + course)
 		return group.gr_mem
 	
 	def displayAssignmentInfo(self, course, assignment, student):
