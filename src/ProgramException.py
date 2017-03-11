@@ -9,3 +9,6 @@ class MissingCallback(Exception):
 
 class ComponentSizeInvalid(Exception):
 	pass
+
+class ConfigurationInvalid(Exception):
+	pass

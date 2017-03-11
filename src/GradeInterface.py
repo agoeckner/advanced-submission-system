@@ -1,11 +1,13 @@
 #=================================
 # Advanced Submission System
-# CS 40800 - Software Engineering
+# CS 40800 - Software EngineerGing
 # Purdue University
 #=================================
 
 import curses
+import grp
 import time
+import ProgramException
 import ui.Button as Button
 import ui.InputManager as InputManager
 import ui.Picker as Picker
@@ -31,6 +33,7 @@ class GradeInterface:
 		self.course = ""
 		self.assignment = ""
 		self.student = ""
+		self.lastMsgLen = 0
 	
 	def show(self):
 		try:
@@ -53,7 +56,7 @@ class GradeInterface:
 			curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 			curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_CYAN)
 			curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-			self.screenSize = (24, 80) #TODO: stdscr.getmaxyx()
+			self.screenSize = stdscr.getmaxyx()
 			# Check if size below 24x80.
 			if self.screenSize[0] < TERMINAL_MIN_Y or self.screenSize[1] < TERMINAL_MIN_X:
 				raise Exception("Terminal too small! Minimum size 24x80.")
@@ -181,7 +184,7 @@ class GradeInterface:
 				positionYX = studentPanelPosYX,
 				sizeYX = studentPanelSizeYX,
 				title = 'Students',
-				options = ["Anthony", "Blah"],
+				options = [],
 				footer = "",
 				maxSelect = 1,
 				c_empty = "",
@@ -273,6 +276,10 @@ class GradeInterface:
 			positionYX = self.savePos,
 			label = "Save Changes")
 		self.saveBtn.setCallback(self.onBtnSaveAssignment)
+	
+	def _clearAssignmentPanel(self):
+		self.editPanel.clear()
+		self.editPanel.refresh()
 	
 	def _drawAssignmentEditPanel(self):
 		self.editPanel.clear()
@@ -410,6 +417,14 @@ class GradeInterface:
 			raise err
 	
 	def displayMessage(self, message, textAttr=curses.A_NORMAL):
+		blank = ""
+		for i in range(0, self.lastMsgLen):
+			blank += " "
+		self.panelMain.addstr(
+			self.screenSize[0] - 5, 2,
+			blank,
+			curses.A_NORMAL)
+		self.lastMsgLen = len(message)
 		self.panelMain.addstr(
 			self.screenSize[0] - 5, 2,
 			message,
@@ -431,6 +446,9 @@ class GradeInterface:
 				
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
+				
+				self.pickStudent.setOptions(self._getStudentList(course))
+				self.pickStudent.redraw()
 				
 				if not self.pickAssignmentVisible:
 					self.pickAssignmentVisible = True
@@ -462,7 +480,17 @@ class GradeInterface:
 				self.student = student
 				self.displayAssignmentInfo(self.course, self.assignment, self.student)
 	
-	
+	def _getStudentList(self, course):
+		try:
+			groupName = self.parent.courseManager.getCourseUserGroup(course)
+			group = grp.getgrnam(groupName)
+		except KeyError:
+			raise ProgramException.ConfigurationInvalid("Group does not exist for " + course)
+		result = []
+		for user in group:
+			grade = self.parent.courseManager.getGrade(self.course, self.assignment, self.student)
+			result.append(user + " | Grade: " + str(grade))
+		return result
 	
 	def displayAssignmentInfo(self, course, assignment, student):
 		self.displayMessage("Learning about " + student)
@@ -472,8 +500,26 @@ class GradeInterface:
 		return "TAB_NEXT"
 	
 	def onBtnSaveGrade(self):
-		pass
-	
+		try:
+			grade = float(self.editGrade.getValue())
+		except ValueError:
+			self.displayMessage("Please enter a score as a real number.")
+			return
+		result = self.parent.courseManager.editGrade(
+			self.course,
+			self.assignment,
+			self.student,
+			grade)
+		if result:
+			self.parent.courseManager.editFeedback(
+				self.course,
+				self.assignment,
+				self.student,
+				self.editComment.getValue())
+			self._clearAssignmentPanel()
+			self.displayMessage("Grade updated!")
+		else:
+
 	def onBtnSaveAssignment(self): #{
 		## editAssignmentName editDate editLate
 		try:
@@ -493,20 +539,3 @@ class GradeInterface:
 			self.displayMessage("Assignment not created")
 		pass
 	#}	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

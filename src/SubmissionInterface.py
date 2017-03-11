@@ -192,7 +192,7 @@ class SubmissionInterface:
 			course = selected[0]
 			if self.currentCourse != course:
 				self.currentCourse = course
-				assignments = self.parent.submissionManager.getAssignmentList(course)
+				assignments = self.parent.courseManager.getAssignmentList(course)
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
 	
