@@ -375,7 +375,16 @@ class CourseManager:
 		return self.parent.configManager.getProjects(courseConfigFile)
 	#}
 
-
+	##returns the name of the user group for a course
+	def getCourseUserGroup(self, courseName): #{
+		try:
+			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			courseConfigFile = path + "/course.config"
+		except configparser.NoSectionError:
+			return False
+			
+		return self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "user_group")
+	#}
 
 
 
