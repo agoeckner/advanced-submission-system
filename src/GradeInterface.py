@@ -183,7 +183,7 @@ class GradeInterface:
 				parent = self.panelMain,
 				positionYX = studentPanelPosYX,
 				sizeYX = studentPanelSizeYX,
-				title = 'Students',
+				title = 'Students    ...    Grade',
 				options = [],
 				footer = "",
 				maxSelect = 1,
@@ -397,13 +397,19 @@ class GradeInterface:
 	def _getStudentList(self, course):
 		try:
 			groupName = self.parent.courseManager.getCourseUserGroup(course)
-			group = grp.getgrnam(groupName)
+			group = grp.getgrnam(groupName).gr_mem
 		except KeyError:
 			raise ProgramException.ConfigurationInvalid("Group does not exist for " + course)
 		result = []
 		for user in group:
 			grade = self.parent.courseManager.getGrade(self.course, self.assignment, self.student)
-			result.append(user + " | Grade: " + str(grade))
+			line = user
+			blank = ""
+			for i in range(studentPanelSizeYX[1] - 10):
+				blank += " "
+			if grade != False:
+				line += blank + str(grade)
+			result.append(line)
 		return result
 	
 	def displayAssignmentInfo(self, course, assignment, student):
