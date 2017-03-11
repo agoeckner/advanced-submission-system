@@ -31,12 +31,13 @@ class CourseManager:
 		newCoursePath = path + courseName
 		
 		if os.path.exists(newCoursePath):
-			#print("Course already exists")
+			print("Course already exists")
 			return False
 		
 		try:
 			self.addFolder(newCoursePath)
 		except OSError: 
+			print("OSError")
 			return False
 		
 		courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
@@ -46,6 +47,7 @@ class CourseManager:
 			configFile = open(courseConfigFile, "w")
 			configFile.close()
 		except:
+			print("Config creation error")
 			return False
 		
 		##updates the global config
@@ -53,6 +55,7 @@ class CourseManager:
 		
 		##if the course config file is not created False is returned to indicate an error
 		if check == False:
+			print("ConfigManager failure")
 			return False
 		
 		return True

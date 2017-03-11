@@ -6,6 +6,7 @@
 
 import os
 import sys
+import shutil
 import GradeInterface
 import CourseManager
 import ConfigManager
@@ -13,7 +14,8 @@ import GradeConfigManager
 import SubmissionManager
 
 class AdvancedSubmissionSystem:
-	GLOBAL_PATH = "/etc/submission/global.config"
+	#GLOBAL_PATH = "/etc/submission/global.config"
+	GLOBAL_PATH = "./global.config"
 	gradeUI = None
 	courseManager = None
 	configManager = None
@@ -38,17 +40,27 @@ class AdvancedSubmissionSystem:
 		self.courseManager = CourseManager.CourseManager(self)
 		self.gradeUI = GradeInterface.GradeInterface(self, mode)
 		
-		self.createTestCourses()
+		self.setUp()
 		try:
 			self.gradeUI.show()
 		except KeyboardInterrupt:
 			print("Exited")
 	
-	
-	def createTestCourses(self): #{
+		self.takeDown()
+	def setUp(self): #{
+		os.mkdir("./courses")
+		configFile = open("./global.config", "w")
+		configFile.close()
+		
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
 		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
 	#}
+	
+	def takeDown(self): #{
+		shutil.rmtree("./courses")
+		os.remove("./global.config")
+	#}
+	
 # Start the program.
 if __name__ == '__main__':
 	AdvancedSubmissionSystem()
