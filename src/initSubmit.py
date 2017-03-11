@@ -9,12 +9,14 @@ import sys
 import SubmissionInterface
 import SubmissionManager
 import CourseManager
+import ConfigManager
 
-GLOBAL_PATH = "/etc/submission/global.config"
 
 class AdvancedSubmissionSystem:
+	GLOBAL_PATH = "/etc/submission/global.config"
 	submissionManager = None
 	submissionUI = None
+	configManager = None
 	courseManager = None
 	
 	# Perform program initialization.
@@ -23,6 +25,8 @@ class AdvancedSubmissionSystem:
 		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
 		
 		self.submissionManager = SubmissionManager.SubmissionManager(self)
+		self.configManager = ConfigManager.ConfigManager()
+		self.courseManager = CourseManager.CourseManager(self)
 		self.submissionUI = SubmissionInterface.SubmissionInterface(self)
 		try:
 			self.submissionUI.show()
