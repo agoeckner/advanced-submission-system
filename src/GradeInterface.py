@@ -1,6 +1,6 @@
 #=================================
 # Advanced Submission System
-# CS 40800 - Software Engineering
+# CS 40800 - Software EngineerGing
 # Purdue University
 #=================================
 
@@ -433,4 +433,3 @@ class GradeInterface:
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
-			self.displayMessage("ERROR: Could not save grade.")
