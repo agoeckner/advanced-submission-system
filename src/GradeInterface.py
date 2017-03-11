@@ -433,3 +433,4 @@ class GradeInterface:
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
+			self.displayMessage("ERROR: Grade not saved.")
