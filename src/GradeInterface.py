@@ -5,6 +5,7 @@
 #=================================
 
 import curses
+import grp
 import time
 import ui.Button as Button
 import ui.InputManager as InputManager
@@ -182,7 +183,7 @@ class GradeInterface:
 				positionYX = studentPanelPosYX,
 				sizeYX = studentPanelSizeYX,
 				title = 'Students',
-				options = ["Anthony", "Blah"],
+				options = [],
 				footer = "",
 				maxSelect = 1,
 				c_empty = "",
@@ -388,6 +389,11 @@ class GradeInterface:
 			if self.student != student:
 				self.student = student
 				self.displayAssignmentInfo(self.course, self.assignment, self.student)
+	
+	def _getStudentList(self, course):
+		groupName = self.parent.courseManager.getCourseUserGroup(course)
+		group = gr.getgrname(groupName)
+		return group.gr_mem
 	
 	def displayAssignmentInfo(self, course, assignment, student):
 		self.displayMessage("Learning about " + student)
