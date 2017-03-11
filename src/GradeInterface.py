@@ -56,7 +56,7 @@ class GradeInterface:
 			curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 			curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_CYAN)
 			curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-			self.screenSize = (24, 80) #TODO: stdscr.getmaxyx()
+			self.screenSize = stdscr.getmaxyx()
 			# Check if size below 24x80.
 			if self.screenSize[0] < TERMINAL_MIN_Y or self.screenSize[1] < TERMINAL_MIN_X:
 				raise Exception("Terminal too small! Minimum size 24x80.")
@@ -433,3 +433,4 @@ class GradeInterface:
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
+			self.displayMessage("ERROR: Grade not saved.")
