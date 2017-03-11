@@ -48,7 +48,8 @@ class SubmissionManager:
 		#Compare Submission date to due date
 
 		today = datetime.now()
-		projectInfo = self.manager.getProjectInfo( self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment) 
+		courseName = self.parent.courseManager.courseNameToPath(course) + "/";
+		projectInfo = self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment) 
 		dueDateString = projectInfo[1][1]
 		print(dueDateString, today)
 		dueDate = datetime.strptime(dueDateString, "%Y-%m-%d %H:%M:%S")
