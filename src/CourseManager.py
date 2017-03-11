@@ -321,12 +321,14 @@ class CourseManager:
 	#}
 	
 	def addStudentFolder(self, x, student): #{
-		#collection = pwd.getpwnam(student)
-		#studentID = collection.pw_uid
-		#instructorGroup = ()
+		collection = pwd.getpwnam(student)
+		studentID = collection.pw_uid
+		instructorGroup = self.parent.configManager.getInstructorGroup(self.parent.GLOBAL_PATH)
+		groupInfo = grp.getgrnam(instructorGroup)
+		instructorID = groupInfo.gr_gid
 		os.mkdir(x)
-		#os.chown(x, studentID, instructorGroup)
-		#os.chmod(x, stat.S_IRWXG | stat.S_IRWXU)
+		os.chown(x, studentID, instructorID)
+		os.chmod(x, stat.S_IRWXG | stat.S_IRWXU)
 	#}
 
 	##removes the directory and all directories and files inside it
@@ -388,8 +390,6 @@ class CourseManager:
 			
 		return self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "user_group")
 	#}
-
-
 
 
 

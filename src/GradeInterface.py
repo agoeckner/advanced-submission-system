@@ -462,7 +462,7 @@ class GradeInterface:
 			if self.assignment != assignment:
 			##	self.displayMessage("Got an assignment")
 				self.assignment = assignment
-				##self.displayMessage("The assignment is " + assignment)
+				self.displayMessage("The assignment is " + assignment)
 				if self.mode is MODE_INSTRUCTOR and assignment == "<---NEW ASSIGNMENT--->":
 					##self.displayMessage("Made it into the right if statement")
 					self._drawAssignmentEditPanel()
@@ -489,7 +489,7 @@ class GradeInterface:
 		result = []
 		for user in group:
 			grade = self.parent.courseManager.getGrade(self.course, self.assignment, self.student)
-			result.append(user + " | Grade: " + str(grade))
+			result.append(str(user) + " | Grade: " + str(grade))
 		return result
 	
 	def displayAssignmentInfo(self, course, assignment, student):
@@ -519,7 +519,8 @@ class GradeInterface:
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
-
+			pass
+		
 	def onBtnSaveAssignment(self): #{
 		## editAssignmentName editDate editLate
 		try:
@@ -535,6 +536,7 @@ class GradeInterface:
 		
 		if check:
 			self.displayMessage("Assignment created")
+			self._clearAssignmentPanel()
 		else:
 			self.displayMessage("Assignment not created")
 		pass

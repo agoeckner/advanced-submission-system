@@ -40,26 +40,28 @@ class AdvancedSubmissionSystem:
 		self.courseManager = CourseManager.CourseManager(self)
 		self.gradeUI = GradeInterface.GradeInterface(self, mode)
 		
-		self.setUp()
+		##self.setUp()
 		try:
 			self.gradeUI.show()
 		except KeyboardInterrupt:
 			print("Exited")
 	
-		self.takeDown()
-	def setUp(self): #{
-		os.mkdir("./courses")
-		configFile = open("./global.config", "w")
-		configFile.close()
-		
-		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-	#}
+		##self.takeDown()
 	
-	def takeDown(self): #{
-		shutil.rmtree("./courses")
-		os.remove("./global.config")
-	#}
+	# def setUp(self): #{
+		# os.mkdir("./courses")
+		# configFile = open("./global.config", "w")
+		# configFile.close()
+		
+		# self.configManager.addInstructor(self.GLOBAL_PATH, "Instructors")
+		# self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		# self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
+	# #}
+	
+	# def takeDown(self): #{
+		# shutil.rmtree("./courses")
+		# os.remove("./global.config")
+	# #}
 	
 # Start the program.
 if __name__ == '__main__':
