@@ -11,13 +11,14 @@ import pwd
 import GradeInterface
 import CourseManager
 import ConfigManager
-
+import GradeConfigManager
 
 class AdvancedSubmissionSystem:
 	GLOBAL_PATH = "/etc/submission/global.config"
 	gradeUI = None
 	courseManager = None
 	configManager = None
+	gradeManager = None
 	
 	# Perform program initialization.
 	def __init__(self):
@@ -25,6 +26,7 @@ class AdvancedSubmissionSystem:
 		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
 		
 		self.configManager = ConfigManager.ConfigManager()
+		self.gradeManager = GradeConfigManager.GradeConfigManager()
 		self.courseManager = CourseManager.CourseManager(self)
 		
 		user = pwd.getpwuid(os.getuid()).pw_name
