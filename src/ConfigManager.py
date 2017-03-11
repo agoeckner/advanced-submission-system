@@ -101,6 +101,7 @@ class ConfigManager:
 		for proj in conf_sections :
 			if proj == projectName:
 				return config.items(proj)
+		raise Exception("Project not found!")
 
 
 	'''

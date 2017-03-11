@@ -6,6 +6,8 @@
 
 import os
 import sys
+import grp
+import pwd
 import shutil
 import GradeInterface
 import CourseManager
@@ -26,12 +28,17 @@ class AdvancedSubmissionSystem:
 		# Fix for ncurses over PuTTY.
 		os.environ["NCURSES_NO_UTF8_ACS"] = "1"
 		
-		mode = GradeInterface.MODE_STUDENT
-		# TODO: This is temporary, for testing.
-		# TODO: Replace with a user group check to see if professor or student.
-		if len(sys.argv) > 1 and sys.argv[1] == "edit":
-			mode = GradeInterface.MODE_INSTRUCTOR
+		self.configManager = ConfigManager.ConfigManager()
+		self.gradeManager = GradeConfigManager.GradeConfigManager()
+		self.courseManager = CourseManager.CourseManager(self)
 		
+		user = pwd.getpwuid(os.getuid()).pw_name
+		groups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
+
+		mode = GradeInterface.MODE_STUDENT
+		if self.configManager.getInstructorGroup(self.GLOBAL_PATH) in groups:
+			mode = GradeInterface.MODE_INSTRUCTOR
+
 		self.configManager = ConfigManager.ConfigManager()
 		self.gradeManager = GradeConfigManager.GradeConfigManager()
 		courseManager = CourseManager.CourseManager(self)
