@@ -11,8 +11,6 @@ import locale
 import time
 from datetime import datetime
 
-GLOBAL_PATH = "../test/testGlobal.config"
-
 # SubmissionManager handles the actual submission of assignments.
 class SubmissionManager:
 	parent = None
@@ -22,11 +20,11 @@ class SubmissionManager:
 	
 	# Returns a list of available courses.
 	def getCourseList(self):
-		return self.manager.getCourseList(GLOBAL_PATH)
+		return self.manager.getCourseList(self.parent.GLOBAL_PATH)
 	
 	# Returns a list of available projects in a course.
 	def getAssignmentList(self, course):
-		return self.manager.getProjects(self.manager.get_setting(GLOBAL_PATH, course, "course_config_file"))
+		return self.manager.getProjects(self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"))
 	
 	# Submits an assignment.
 	# course, assignment are strings
@@ -42,7 +40,7 @@ class SubmissionManager:
 		groups.append(grp.getgrgid(gid).gr_name)
 		
 		#if course isn't in groups, user isn't in the class
-		courseGroup = self.manager.get_setting(GLOBAL_PATH, course, "user_group")
+		courseGroup = self.manager.get_setting(self.parent.GLOBAL_PATH, course, "user_group")
 		if (courseGroup) not in groups:
 			print('You do not have access to that course')
 			return False
@@ -50,7 +48,7 @@ class SubmissionManager:
 		#Compare Submission date to due date
 
 		today = datetime.now()
-		projectInfo = self.manager.getProjectInfo( self.manager.get_setting(GLOBAL_PATH, course, "course_config_file"), assignment) 
+		projectInfo = self.manager.getProjectInfo( self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment) 
 		dueDateString = projectInfo[1][1]
 		print(dueDateString, today)
 		dueDate = datetime.strptime(dueDateString, "%Y-%m-%d %H:%M:%S")
@@ -60,7 +58,7 @@ class SubmissionManager:
 		
 
 		#file path to submit files
-		path = self.manager.get_setting(GLOBAL_PATH, course, "course_path") + assignment + '/Submissions/' + user + '/'
+		path = self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_path") + assignment + '/Submissions/' + user + '/'
 
 		#Check for earlier submissions
 
