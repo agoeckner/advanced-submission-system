@@ -400,7 +400,11 @@ class GradeInterface:
 			group = grp.getgrnam(groupName)
 		except KeyError:
 			raise ProgramException.ConfigurationInvalid("Group does not exist for " + course)
-		return group.gr_mem
+		result = []
+		for user in group:
+			grade = self.parent.courseManager.getGrade(self.course, self.assignment, self.student)
+			result.append(user + " | Grade: " + str(grade))
+		return result
 	
 	def displayAssignmentInfo(self, course, assignment, student):
 		self.displayMessage("Learning about " + student)
@@ -421,6 +425,11 @@ class GradeInterface:
 			self.student,
 			grade)
 		if result:
+			self.parent.courseManager.editFeedback(
+				self.course,
+				self.assignment,
+				self.student,
+				self.editComment.getValue())
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
