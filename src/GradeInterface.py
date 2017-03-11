@@ -196,7 +196,56 @@ class GradeInterface:
 			raise err
 
 	def _createAssignmentNewPanel(self, size, pos):
+		self.editAssignmentVisible = False
+		##Edit assignment name
+		self.assignmentNameLabel = "Assignment name:"
+		self.assignmentNamePos = (1, 2)
+		self.editAssignmentName = TextEditField.TextEditField(
+			self.editPanel,
+			maxLength = 23,
+			sizeYX = (1, 29),
+			positionYX = (self.assignmentNamePos[0], self.assignmentNamePos[1] + len(self.assignmentNameLabel) + 1))
+		self.editAssignmentName.setCallback(self.onTextEnter)
+		
+		##Edit due date
+		self.dateLabel = "Due date:"
+		self.datePos = (2, 2)
+		self.editDate = TextEditField.TextEditField(
+			self.editPanel,
+			maxLength = 20,
+			sizeYX = (1, 23),
+			positionYX = (self.datePos[0], self.datePos[1] + len(self.dateLabel) + 1))
+		self.editDate.setCallback(self.onTextEnter)
+		
+		##Edit number of late
+		self.lateLabel = "Number of allowed late days:"
+		self.latePos = (3, 2)
+		self.editLate = TextEditField.TextEditField(
+			self.editPanel,
+			maxLength = 3,
+			sizeYX = (1, 6),
+			positionYX = (self.latePos[0], self.latePos[1] + len(self.lateLabel) + 1))
+		self.editLate.setCallback(self.onTextEnter)
+		
+		##Edit max number of submissions
+		self.maxSubmissionsLabel = "Number of allowed submissions"
+		self.maxSubmissionsPos = (4, 2)
+		self.editMaxSubmissions = TextEditField.TextEditField(
+			self.editPanel,
+			maxLength = 3,
+			sizeYX = (1, 6),
+			positionYX = (self.maxSubmissionsPos[0], self.maxSubmissionsPos[1] + len(self.maxSubmissionsLabel) + 1))
+		self.editMaxSubmissions.setCallback(self.onTextEnter)
+		
+		##Save button.
+		self.savePos = (5, 2)
+		self.saveBtn = Button.Button(
+			parent = self.editPanel,
+			positionYX = self.savePos,
+			label = "Save Changes")
+		self.saveBtn.setCallback(self.onBtnSaveGrade)
 		pass
+			
 	
 	def _createGradeEditPanel(self, size, pos):
 		self.editGradeVisible = False
@@ -226,7 +275,7 @@ class GradeInterface:
 			parent = self.editPanel,
 			positionYX = self.savePos,
 			label = "Save Changes")
-		self.saveBtn.setCallback(self.onBtnSaveGrade)
+		self.saveBtn.setCallback(self.onBtnSaveAssignment)
 	
 	def _clearAssignmentPanel(self):
 		self.editPanel.clear()
@@ -234,6 +283,36 @@ class GradeInterface:
 	
 	def _drawAssignmentEditPanel(self):
 		self.editPanel.clear()
+		
+		##Edit assignment name
+		self.editPanel.addstr(self.assignmentNamePos[0], self.assignmentNamePos[1], self.assignmentNameLabel)
+		self.editAssignmentName.redraw()
+		
+		##Edit due date
+		self.editPanel.addstr(self.datePos[0], self.datePos[1], self.dateLabel)
+		self.editDate.redraw()
+
+		##Edit number of late days
+		self.editPanel.addstr(self.latePos[0], self.latePos[1], self.lateLabel)
+		self.editLate.redraw()
+		
+		##Edit number of allowed submissions
+		self.editPanel.addstr(self.maxSubmissionsPos[0], self.maxSubmissionsPos[1], self.maxSubmissionsLabel)
+		self.editMaxSubmissions.redraw()
+		
+		##Save button
+		self.saveBtn.redraw()
+		
+		##Set up input manager
+		if not self.editAssignmentVisible:
+			self.inputManager.addElement(self.editAssignmentName)
+			self.inputManager.addElement(self.editDate)
+			self.inputManager.addElement(self.editLate)
+			self.inputManager.addElement(self.editMaxSubmissions)
+			self.inputManager.addElement(self.saveBtn)
+			self.editAssignmentVisible = True
+		
+		self.editPanel.box()
 		self.editPanel.refresh()
 		pass
 	
@@ -377,10 +456,17 @@ class GradeInterface:
 	
 	def onSelectAssignment(self):
 		selected = self.pickAssignment.getSelected()
+		##self.displayMessage("Made it into the right function")
 		if len(selected) == 1:
 			assignment = selected[0]
 			if self.assignment != assignment:
+			##	self.displayMessage("Got an assignment")
 				self.assignment = assignment
+				self.displayMessage("The assignment is " + assignment)
+				if self.mode is MODE_INSTRUCTOR and assignment == "<---NEW ASSIGNMENT--->":
+					##self.displayMessage("Made it into the right if statement")
+					self._drawAssignmentEditPanel()
+					
 				if self.mode is MODE_INSTRUCTOR and not self.pickStudentVisible:
 					self.pickStudentVisible = True
 					self.pickStudent.redraw()
@@ -440,3 +526,24 @@ class GradeInterface:
 			self.displayMessage("Grade updated!")
 		else:
 			self.displayMessage("ERROR: Grade not saved.")
+		
+	def onBtnSaveAssignment(self): #{
+		## editAssignmentName editDate editLate
+		try:
+			assignmentName = self.editAssignmentName.getValue()
+			dueDate = self.editDate.getValue()
+			lateDays = self.editLate.getValue()
+			maxSubmissions = self.editMaxSubmissions.getValue()
+		except ValueError:
+			self.displayMessage("Error parsing assignment input")
+			return
+		
+		check = self.parent.courseManager.createAssignment(self.course, assignmentName, dueDate, False, maxSubmissions, lateDays)
+		
+		if check:
+			self.displayMessage("Assignment created")
+			self._clearAssignmentPanel()
+		else:
+			self.displayMessage("Assignment not created")
+		pass
+	#}

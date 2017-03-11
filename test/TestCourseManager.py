@@ -133,47 +133,47 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for creating an assignment
 	##-------------------------------------------------------------------------
 	def test_create_assignment_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		check = self.courseManager.createAssignment("cs240", "Lab1", "2017-03-25", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		check = self.courseManager.createAssignment("cs180", "Lab1", "2017-03-25", False, 3, 3)
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_create_assignment_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs180", "cs240Users")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
 		check = self.courseManager.createAssignment("cs180", "Lab4", "2017-03-25", False, 3, 3)
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_create_assignment_3(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		check = self.courseManager.createAssignment("cs240", "Homework1", "2017-03-25", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		check = self.courseManager.createAssignment("cs180", "Homework1", "2017-03-25", False, 3, 3)
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_create_assignment_already_exists_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Homework1", "2017-03-25", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Homework1", "2017-03-25", False, 3, 3)
 		
-		check = self.courseManager.createAssignment("cs240", "Homework1", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Homework1", "2017-03-25", False, 3, 3)
 		self.assertEqual(check, False)
 	#}
 	
 	def test_create_assignment_already_exists_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab3", "2017-03-25", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab3", "2017-03-25", False, 3, 3)
 		
-		check = self.courseManager.createAssignment("cs240", "Lab3", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Lab3", "2017-03-25", False, 3, 3)
 		self.assertEqual(check, False)
 	#}
 	
 	def test_create_assignment_already_exists_3(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Project3", "2017-03-25", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Project3", "2017-03-25", False, 3, 3)
 		
-		check = self.courseManager.createAssignment("cs240", "Project3", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Project3", "2017-03-25", False, 3, 3)
 		self.assertEqual(check, False)
 	#}
 	
@@ -264,41 +264,43 @@ class TestCourseManager(unittest.TestCase): #{
 		self.assertEqual(check, "True")
 	#}
 	
+	
+	
 	##-------------------------------------------------------------------------
 	## Test cases for enterGrade
 	##-------------------------------------------------------------------------
 	def test_enter_grade_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
 		
-		check = self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 100, 15, "Job well done lad")
+		check = self.courseManager.enterGrade("cs180", "Lab4", "john", 100, 15, "Job well done lad")
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_enter_grade_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
 		
-		check = self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 80, 15, "Not to shabby")
+		check = self.courseManager.enterGrade("cs180", "Lab4", "john", 80, 15, "Not to shabby")
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_enter_grade_does_not_exist_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
 		
-		check = self.courseManager.enterGrade("cs240", "Lab4", "johndoe", 100, 15, "Job well done lad")
+		check = self.courseManager.enterGrade("cs180", "Lab4", "johndoe", 100, 15, "Job well done lad")
 		
 		self.assertEqual(check, False)
 	#}
 	
 	def test_enter_grade_does_not_exist_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
 		
-		check = self.courseManager.enterGrade("cs240", "Lab4", "janedoe", 50, 5, "Need to work harder on assignments")
+		check = self.courseManager.enterGrade("cs180", "Lab4", "janedoe", 50, 5, "Need to work harder on assignments")
 		
 		self.assertEqual(check, False)
 	#}
@@ -307,20 +309,20 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for getGrade
 	##-------------------------------------------------------------------------
 	def test_get_grade_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 15, "Not to shabby")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 90, 15, "Not to shabby")
 		
-		grade = self.courseManager.getGrade("cs240", "Lab4", "smithhe")
+		grade = self.courseManager.getGrade("cs180", "Lab4", "john")
 		self.assertEqual(grade, "90")
 	#}
 	
 	def test_get_grade_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 95, 15, "Not to shabby")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 95, 15, "Not to shabby")
 		
-		grade = self.courseManager.getGrade("cs240", "Lab4", "smithhe")
+		grade = self.courseManager.getGrade("cs180", "Lab4", "john")
 		self.assertEqual(grade, "95")
 	#}
 	
@@ -338,20 +340,20 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for getBonus
 	##-------------------------------------------------------------------------
 	def test_get_bonus_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 100, 15, "Job well done lad")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 100, 15, "Job well done lad")
 		
-		bonus = self.courseManager.getBonus("cs240", "Lab4", "smithhe")
+		bonus = self.courseManager.getBonus("cs180", "Lab4", "john")
 		self.assertEqual(bonus, "15")
 	#}
 	
 	def test_get_bonus_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 80, 5, "Job well done lad")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 80, 5, "Job well done lad")
 		
-		bonus = self.courseManager.getBonus("cs240", "Lab4", "smithhe")
+		bonus = self.courseManager.getBonus("cs180", "Lab4", "john")
 		self.assertEqual(bonus, "5")
 	#}
 	
@@ -369,20 +371,20 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for getFeedback
 	##-------------------------------------------------------------------------
 	def test_get_feedback_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 100, 5, "Job well done lad")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 100, 5, "Job well done lad")
 		
-		feedback = self.courseManager.getFeedback("cs240", "Lab4", "smithhe")
+		feedback = self.courseManager.getFeedback("cs180", "Lab4", "john")
 		self.assertEqual(feedback, "Job well done lad")
 	#}
 	
 	def test_get_feedback_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 80, 5, "Needs some improvement")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 80, 5, "Needs some improvement")
 		
-		feedback = self.courseManager.getFeedback("cs240", "Lab4", "smithhe")
+		feedback = self.courseManager.getFeedback("cs180", "Lab4", "john")
 		self.assertEqual(feedback, "Needs some improvement")
 	#}
 	
@@ -400,20 +402,20 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for editGrade
 	##-------------------------------------------------------------------------
 	def test_edit_grade_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 80, 5, "Needs some improvement")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 80, 5, "Needs some improvement")
 		
-		check = self.courseManager.editGrade("cs240", "Lab4", "smithhe", 95)
+		check = self.courseManager.editGrade("cs180", "Lab4", "john", 95)
 		self.assertEqual(check, True)
 	#}
 	
 	def test_edit_grade_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 5, "Needs some improvement")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 90, 5, "Needs some improvement")
 		
-		check = self.courseManager.editGrade("cs240", "Lab4", "smithhe", 100)
+		check = self.courseManager.editGrade("cs180", "Lab4", "john", 100)
 		self.assertEqual(check, True)
 	#}
 	
@@ -431,20 +433,20 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for editBonus
 	##-------------------------------------------------------------------------
 	def test_edit_bonus_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 5, "Job well done lad")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 90, 5, "Job well done lad")
 		
-		check = self.courseManager.editBonus("cs240", "Lab4", "smithhe", 10)
+		check = self.courseManager.editBonus("cs180", "Lab4", "john", 10)
 		self.assertEqual(check, True)
 	#}
 	
 	def test_edit_bonus_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 10, "Job well done lad")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 90, 10, "Job well done lad")
 		
-		check = self.courseManager.editBonus("cs240", "Lab4", "smithhe", 15)
+		check = self.courseManager.editBonus("cs180", "Lab4", "john", 15)
 		self.assertEqual(check, True)
 	#}
 	
@@ -462,20 +464,20 @@ class TestCourseManager(unittest.TestCase): #{
 	## Test cases for editFeedback
 	##-------------------------------------------------------------------------
 	def test_edit_feedback_1(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 10, "Job well done lad")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 90, 10, "Job well done lad")
 		
-		check = self.courseManager.editFeedback("cs240", "Lab4", "smithhe", "Oustanding Work!")
+		check = self.courseManager.editFeedback("cs180", "Lab4", "john", "Oustanding Work!")
 		self.assertEqual(check, True)
 	#}
 	
 	def test_edit_feedback_2(self): #{
-		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab4", "2017-04-05", False, 3, 3)
-		self.courseManager.enterGrade("cs240", "Lab4", "smithhe", 90, 10, "Job well done lad")
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Lab4", "2017-04-05", False, 3, 3)
+		self.courseManager.enterGrade("cs180", "Lab4", "john", 90, 10, "Job well done lad")
 		
-		check = self.courseManager.editFeedback("cs240", "Lab4", "smithhe", "Worthy of a software knight")
+		check = self.courseManager.editFeedback("cs180", "Lab4", "john", "Worthy of a software knight")
 		self.assertEqual(check, True)
 	#}
 	
@@ -578,6 +580,25 @@ class TestCourseManager(unittest.TestCase): #{
 		assignmentList = self.courseManager.getAssignmentList("cs252")
 		self.assertEqual(assignmentList, assignments)
 	#}
+	
+	##-------------------------------------------------------------------------
+	## Test cases for adding a student submission directory
+	##-------------------------------------------------------------------------
+	def test_create_assignment_with_usergroup_1(self): #{
+		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
+		self.courseManager.createAssignment("cs180", "Homework1", "2017-04-05", False, 3, 3)
+		
+		studentPath = "./courses/cs180/Homework1/john"
+		self.assertEqual(os.path.exists(studentPath), True)
+		
+		studentPath = "./courses/cs180/Homework1/beth"
+		self.assertEqual(os.path.exists(studentPath), True)
+		
+		studentPath = "./courses/cs180/Homework1/larry"
+		self.assertEqual(os.path.exists(studentPath), True)
+	#}
+	
+	
 #}
 
 if __name__ == '__main__':

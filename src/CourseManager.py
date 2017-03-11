@@ -4,6 +4,9 @@ import shutil
 import ConfigManager
 import configparser
 import GradeConfigManager
+import grp
+import pwd
+import stat
 
 class CourseManager:
 	manager = None
@@ -28,12 +31,13 @@ class CourseManager:
 		newCoursePath = path + courseName
 		
 		if os.path.exists(newCoursePath):
-			#print("Course already exists")
+			print("Course already exists")
 			return False
 		
 		try:
 			self.addFolder(newCoursePath)
 		except OSError: 
+			print("OSError")
 			return False
 		
 		courseConfigFile = newCoursePath + "/course.config" ##creates the course config file
@@ -43,6 +47,7 @@ class CourseManager:
 			configFile = open(courseConfigFile, "w")
 			configFile.close()
 		except:
+			print("Config creation error")
 			return False
 		
 		##updates the global config
@@ -50,6 +55,7 @@ class CourseManager:
 		
 		##if the course config file is not created False is returned to indicate an error
 		if check == False:
+			print("ConfigManager failure")
 			return False
 		
 		return True
@@ -89,6 +95,7 @@ class CourseManager:
 	def createAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
 		try:
 			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+			userGroup = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName,'user_group')
 		except configparser.NoSectionError:
 			return False
 		
@@ -108,16 +115,26 @@ class CourseManager:
 		
 		##adds the assignment to the global config file
 		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		
 		if not check:
 			return False
 		
 		##Create the student directories
 		try:
-			self.addFolder(assignmentPath + "/smithhe")
-			##----------------------------------------------------------------
-			##TODO:Section for adding all the students in a userGroup
-			##----------------------------------------------------------------
-		except OSError:
+			group = grp.getgrnam(userGroup)
+			for user in group.gr_mem:
+				#self.addFolder(assignmentPath + "/smithhe")
+				studentFolder = assignmentPath + "/" + user
+				self.addStudentFolder(studentFolder, user)
+				studentConfig = studentFolder + "/grade.config"
+				##create the course config file
+				
+				try:
+					configFile = open(studentConfig, "w")
+					configFile.close()
+				except:
+					return False
+		except KeyError:
 			return False
 		
 		return True
@@ -300,15 +317,23 @@ class CourseManager:
 	##-------------------------------------------------------------------------------------------------------------------------------------
 	
 	def addFolder(self, x): #{
-		##TODO: Set permissions correctly for new directories
-		##NOTE!-------------------------------------------------------------------------------------
-		## mkdir has another parameter that sets permissions for the new directory
-		##!-----------------------------------------------------------------------------------------
 		os.mkdir(x) ##a new directory is made
 	#}
+	
+	def addStudentFolder(self, x, student): #{
+		collection = pwd.getpwnam(student)
+		studentID = collection.pw_uid
+		instructorGroup = self.parent.configManager.getInstructorGroup(self.parent.GLOBAL_PATH)
+		groupInfo = grp.getgrnam(instructorGroup)
+		instructorID = groupInfo.gr_gid
+		os.mkdir(x)
+		os.chown(x, studentID, instructorID)
+		os.chmod(x, stat.S_IRWXG | stat.S_IRWXU)
+	#}
 
+	##removes the directory and all directories and files inside it
 	def deleteFolder(self, x): #{
-		shutil.rmtree(x) ##removes the directory and all directories and files inside it
+		shutil.rmtree(x) 
 	#}
 	
 	##-------------------------------------------------------------------------------------------------------------------------------------
@@ -365,8 +390,6 @@ class CourseManager:
 			
 		return self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "user_group")
 	#}
-
-
 
 
 
