@@ -53,6 +53,15 @@ class TestConfigManager(unittest.TestCase):
 	def test_removeCourseInvalid(self):
 		self.assertFalse(self.cm.removeCourse( "invalidFile.config", "invalidGlobal.config", "proj1"))
 
+	def test_getProjectInfo(self):
+		projInfo = self.cm.getProjectInfo(self.validCourseConfig, 'project1')
+		#print( str(projInfo) )
+		self.assertTrue('False' in projInfo[0]) # test team proj boolean
+		self.assertTrue('5' in projInfo[1]) # test mac submissions
+		self.assertTrue('2018-12-15 00:00:00' in projInfo[2]) # testdue date
+		self.assertTrue('late days' in projInfo[3]) # test late days
+
+
 	def test_courseList(self):
 		res = self.cm.getCourseList(self.validGlobalConfig)
 		self.assertTrue("cs242" in res)
