@@ -33,6 +33,7 @@ class SubmissionManager:
 	def submitAssignment(self, course, assignment, files):
 
 		#groups is a list of all groups the user belongs to
+		#raise Exception(files)
 		
 		user = pwd.getpwuid(os.getuid()).pw_name
 		groups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
@@ -49,9 +50,8 @@ class SubmissionManager:
 
 		today = datetime.now()
 		courseName = self.parent.courseManager.courseNameToPath(course) + "/";
-		projectInfo = self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment) 
-		dueDateString = projectInfo[1][1]
-		print(dueDateString, today)
+		projectDueDate = self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "due") 
+		dueDateString = str(projectDueDate)
 		dueDate = datetime.strptime(dueDateString, "%Y-%m-%d %H:%M:%S")
 		if dueDate < today:
 			print("You cannot submit files past the deadline")
@@ -59,7 +59,7 @@ class SubmissionManager:
 		
 
 		#file path to submit files
-		path = self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_path") + assignment + '/Submissions/' + user + '/'
+		path = self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_path") + '/' + assignment + '/' + user + '/'
 
 		#Check for earlier submissions
 
@@ -69,7 +69,7 @@ class SubmissionManager:
 
 
 		#Check max submissions
-		maxSubmissions = int(projectInfo[0][1])
+		maxSubmissions = int(self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "max_submissions"))
 		if count >= maxSubmissions:
 			print('You have already submitted the maximum number of attempts')
 			return False
@@ -82,6 +82,7 @@ class SubmissionManager:
 				try:
 					tar.add(f)
 				except:
+					#raise Exception(f)
 					print('file ' + f + ' not found')
 
 		

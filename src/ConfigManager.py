@@ -94,13 +94,13 @@ class ConfigManager:
 		return config.sections()
 
 
-	def getProjectInfo( self,courseConfigFile, projectName):
+	def getProjectInfo( self,courseConfigFile, projectName, key):
 		config = configparser.RawConfigParser()
 		config.read(courseConfigFile)
 		conf_sections = config.sections()
 		for proj in conf_sections :
 			if proj == projectName:
-				return config.items(proj)
+				return config[projectName][key]
 		raise Exception("Project not found!")
 
 
