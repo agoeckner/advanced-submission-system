@@ -544,6 +544,12 @@ class GradeInterface:
 		if check:
 			self.displayMessage("Assignment created")
 			self._clearAssignmentPanel()
+			assignments = self.parent.courseManager.getAssignmentList(self.course)				
+			# Add the "New Assignment" Feature.
+			if self.mode is MODE_INSTRUCTOR:
+				assignments.insert(0, "<---NEW ASSIGNMENT--->")
+			self.pickAssignment.setOptions(assignments)
+			self.pickAssignment.redraw()
 		else:
 			self.displayMessage("Assignment not created")
 		pass
