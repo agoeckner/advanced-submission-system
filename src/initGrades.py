@@ -16,8 +16,7 @@ import GradeConfigManager
 import SubmissionManager
 
 class AdvancedSubmissionSystem:
-	#GLOBAL_PATH = "/etc/submission/global.config"
-	GLOBAL_PATH = "./global.config"
+	GLOBAL_PATH = "/etc/submission/global.config"
 	gradeUI = None
 	courseManager = None
 	configManager = None
