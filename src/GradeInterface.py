@@ -443,7 +443,6 @@ class GradeInterface:
 				# Add the "New Assignment" Feature.
 				if self.mode is MODE_INSTRUCTOR:
 					assignments.insert(0, "<---NEW ASSIGNMENT--->")
-					assignments.insert(0, "<---OVERALL GRADES--->")
 				
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
@@ -542,7 +541,6 @@ class GradeInterface:
 			return
 		
 		check = self.parent.courseManager.createAssignment(self.course, assignmentName, dueDate, False, maxSubmissions, lateDays)
-		
 		if check:
 			self.displayMessage("Assignment created")
 			self._clearAssignmentPanel()
