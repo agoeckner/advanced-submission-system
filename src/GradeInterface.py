@@ -342,6 +342,7 @@ class GradeInterface:
 		pass
 
 	def _drawStudent(self):
+		return
 		try:
 			#pass
 			#options = self.parent.submissionManager.getCourseList(),
