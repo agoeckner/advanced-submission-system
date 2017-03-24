@@ -102,7 +102,7 @@ class GradeInterface:
 				title = 'Course',
 				options = self.parent.courseManager.getCourseList(),
 				footer = "",
-				maxSelect = 1,
+				#maxSelect = 1,
 				c_empty = "( )",
 				c_selected = "(X)")
 			self.pickCourse.redraw()
@@ -118,7 +118,7 @@ class GradeInterface:
 				title = 'Assignment',
 				options = [],
 				footer = "",
-				maxSelect = 1,
+				#maxSelect = 1,
 				c_empty = "( )",
 				c_selected = "(X)")
 			self.pickAssignment.redraw()
@@ -348,34 +348,35 @@ class GradeInterface:
 			#options = self.parent.submissionManager.getCourseList(),
 			#TODO: actually need to get the grade here
 			#studentScore = self.parent.GradeConfigManager.getGrade(self, "test")
-			test_file = "../test/testCourse/testProject/student1/Grade.config"
-			f = open(test_file)
-			lines=f.readlines()
-			studentScore = lines[1][8:]
-			bonus = lines[2][8:]
-			total = int(studentScore) + int(bonus)
-			feedback = lines[3][11:]
-			#mean = 100
-			#median = 100
-			#sd = 0
+			# test_file = "../test/testCourse/testProject/student1/Grade.config"
+			# f = open(test_file)
+			# lines=f.readlines()
+			# studentScore = lines[1][8:]
+			# bonus = lines[2][8:]
+			# total = int(studentScore) + int(bonus)
+			# feedback = lines[3][11:]
+			# #mean = 100
+			# #median = 100
+			# #sd = 0
 			
-			self.pickFiles = Picker.Picker(
-				parent = self.panelMain,
-				positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
-				sizeYX = (self.screenSize[0] - 9,
-					2 * int((self.screenSize[1] - 3) / 3)),
-				title = 'Grade and Statistics',
-				#arrow="",
-				options = ["Your score: "+str(studentScore), "Bonus: "+str(bonus), "Total: "+str(total), "Feedback: "+feedback#, "", "Statistics", "", "Mean: "+str(mean), "Median: "+str(median), "Standard Deviation: "+str(sd)
-				],
-				footer = "",
-				maxSelect = 1,
-				c_empty = "",
-				c_selected = "")
-			self.pickFiles.redraw()
-			self.inputManager.addElement(self.pickFiles)
+			# self.pickFiles = Picker.Picker(
+			# 	parent = self.panelMain,
+			# 	positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
+			# 	sizeYX = (self.screenSize[0] - 9,
+			# 		2 * int((self.screenSize[1] - 3) / 3)),
+			# 	title = 'Grade and Statistics',
+			# 	#arrow="",
+			# 	options = ["Your score: "+str(studentScore), "Bonus: "+str(bonus), "Total: "+str(total), "Feedback: "+feedback#, "", "Statistics", "", "Mean: "+str(mean), "Median: "+str(median), "Standard Deviation: "+str(sd)
+			# 	],
+			# 	footer = "",
+			# 	maxSelect = 1,
+			# 	c_empty = "",
+			# 	c_selected = "")
+			#self.pickFiles.redraw()
+			#self.inputManager.addElement(self.pickFiles)
 
-			# Add Grades button.
+			# Exit button.
+			
 			self.btnExit = Button.Button(
 				parent = self.panelMain,
 				positionYX = (self.screenSize[0] - 8,
@@ -383,7 +384,6 @@ class GradeInterface:
 				label = "Exit")
 			self.btnExit.setCallback(exit, 0)
 			self.btnExit.redraw()
-			self.inputManager.addElement(self.btnExit)
 			
 			# # File picker.
 			# self.pickFiles = Picker.Picker(
@@ -448,8 +448,9 @@ class GradeInterface:
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
 				
-				self.pickStudent.setOptions(self._getStudentList(course))
-				self.pickStudent.redraw()
+				if self.mode is MODE_INSTRUCTOR:				
+					self.pickStudent.setOptions(self._getStudentList(course))
+					self.pickStudent.redraw()
 				
 				if not self.pickAssignmentVisible:
 					self.pickAssignmentVisible = True
@@ -472,6 +473,35 @@ class GradeInterface:
 					self.pickStudentVisible = True
 					self.pickStudent.redraw()
 					self.inputManager.addElement(self.pickStudent)
+				if self.mode is MODE_STUDENT:
+					studentScore = self.parent.courseManager.getGrade(self.course, self.assignment, self.student)
+					bonus = self.parent.courseManager.getBonus(self.course, self.assignment, self.student)
+					total = int(studentScore) + int(bonus)
+					feedback = self.parent.courseManager.getFeedback(self.course, self.assignment, self.student)
+					if studentScore is False:
+						studentScore = "None yet."
+						#total = "None yet."
+					if bonus is False:
+						bonus = "None yet."
+					#if feedback is False:
+						#feedback = "None yet."
+
+					self.pickFiles = Picker.Picker(
+					parent = self.panelMain,
+					positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
+					sizeYX = (self.screenSize[0] - 9,
+						2 * int((self.screenSize[1] - 3) / 3)),
+					title = 'Grade Information',
+					#arrow="",
+					options = ["Your score: "+str(studentScore), "Bonus: "+str(bonus), "Total: "+str(total), "Feedback: Well done!"#+str(feedback), "", "Statistics", "", "Mean: "+str(mean), "Median: "+str(median), "Standard Deviation: "+str(sd)
+					],
+					footer = "",
+					maxSelect = 1,
+					c_empty = "",
+					c_selected = "")
+					self.pickFiles.redraw()
+					self.inputManager.addElement(self.pickFiles)
+					#self.inputManager.addElement(self.btnExit)
 	
 	def onSelectStudent(self):
 		selected = self.pickStudent.getSelected()
