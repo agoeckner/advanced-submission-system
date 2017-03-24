@@ -342,7 +342,7 @@ class GradeInterface:
 		pass
 
 	def _drawStudent(self):
-		
+		return
 		try:
 			#pass
 			#options = self.parent.submissionManager.getCourseList(),
@@ -375,7 +375,8 @@ class GradeInterface:
 			#self.pickFiles.redraw()
 			#self.inputManager.addElement(self.pickFiles)
 
-			# Add Grades button.
+			# Exit button.
+			
 			self.btnExit = Button.Button(
 				parent = self.panelMain,
 				positionYX = (self.screenSize[0] - 8,
@@ -490,7 +491,7 @@ class GradeInterface:
 					positionYX = (1, int((self.screenSize[1] - 4) / 3) + 1),
 					sizeYX = (self.screenSize[0] - 9,
 						2 * int((self.screenSize[1] - 3) / 3)),
-					title = 'Grade and Statistics',
+					title = 'Grade Information',
 					#arrow="",
 					options = ["Your score: "+str(studentScore), "Bonus: "+str(bonus), "Total: "+str(total), "Feedback: "+str(feedback)#, "", "Statistics", "", "Mean: "+str(mean), "Median: "+str(median), "Standard Deviation: "+str(sd)
 					],
@@ -500,7 +501,7 @@ class GradeInterface:
 					c_selected = "")
 					self.pickFiles.redraw()
 					self.inputManager.addElement(self.pickFiles)
-					self.inputManager.addElement(self.btnExit)
+					#self.inputManager.addElement(self.btnExit)
 	
 	def onSelectStudent(self):
 		selected = self.pickStudent.getSelected()
