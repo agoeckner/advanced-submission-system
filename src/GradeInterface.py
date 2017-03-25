@@ -516,13 +516,15 @@ class GradeInterface:
 			self.course,
 			self.assignment,
 			self.student,
-			grade)
+			grade
+			0,
+			self.editComment.getValue())
 		if result:
-			self.parent.courseManager.editFeedback(
-				self.course,
-				self.assignment,
-				self.student,
-				self.editComment.getValue())
+			#self.parent.courseManager.editFeedback(
+			#	self.course,
+			#	self.assignment,
+			#	self.student,
+			#	self.editComment.getValue())
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
