@@ -415,10 +415,10 @@ class GradeInterface:
 		blank = ""
 		for i in range(0, self.lastMsgLen):
 			blank += " "
-		self.panelMain.addstr(
-			self.screenSize[0] - 5, 2,
-			blank,
-			curses.A_NORMAL)
+		# self.panelMain.addstr(
+			# self.screenSize[0] - 5, 2,
+			# blank,
+			# curses.A_NORMAL)
 		self.lastMsgLen = len(message)
 		self.panelMain.addstr(
 			self.screenSize[0] - 5, 2,
