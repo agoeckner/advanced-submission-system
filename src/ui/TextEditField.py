@@ -50,9 +50,6 @@ class TextEditField:
 	
 	def getValue(self):
 		value = self.textBox.gather()
-		# Fix curses bug that causes trailing spaces.
-		if len(value) > 1 and value[-1] == ' ':
-			value = value[0:-1]
 		return value
 	
 	def getMaxLength(self):
