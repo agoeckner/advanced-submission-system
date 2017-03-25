@@ -114,7 +114,13 @@ class CourseManager:
 		
 		
 		##adds the assignment to the global config file
-		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		#check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions, lateDays)
+		
+		##Seed 1-------------------------------
+		##Subtracts 1 from maxSubmissions
+		##Seed 2-------------------------------
+		##Adds 3 to lateDays
+		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions - 1, lateDays + 3)
 		
 		if not check:
 			return False
@@ -214,18 +220,19 @@ class CourseManager:
 	
 	##Returns in string format the grade recieved
 	def getGrade(self, courseName, assignmentName, studentName): #{
-		try:
-			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
-		except configparser.NoSectionError:
-			return False
+		# try:
+			# path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
+		# except configparser.NoSectionError:
+			# return False
 		
-		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
+		# gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
 		
-		try:
-			gradeRecieved = self.parent.gradeManager.getGrade(gradeConfigPath)
-			return gradeRecieved
-		except configparser.NoSectionError:
-			return False
+		# try:
+			# gradeRecieved = self.parent.gradeManager.getGrade(gradeConfigPath)
+			# return gradeRecieved
+		# except configparser.NoSectionError:
+			# return False
+		return "80"
 	#}
 	
 	##Returns in string format the amount of bonus points recieved
