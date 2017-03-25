@@ -120,6 +120,9 @@ class CourseManager:
 		##Subtracts 1 from maxSubmissions
 		##Seed 2-------------------------------
 		##Adds 3 to lateDays
+		##Seed 5-------------------------------
+		##Edits the assignmentName
+		assignmentName = assignmentName + "----"
 		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions - 1, lateDays + 3)
 		
 		if not check:
