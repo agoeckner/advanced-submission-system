@@ -271,6 +271,9 @@ class CourseManager:
 		except configparser.NoSectionError:
 			return False
 		
+		if feedbackRecieved is False:
+			return False
+		
 		#return feedbackRecieved
 		##Seed 4-------------------------------
 		##Only returns the first half of the feedback
