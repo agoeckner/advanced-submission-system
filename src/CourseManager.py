@@ -232,6 +232,8 @@ class CourseManager:
 			# return gradeRecieved
 		# except configparser.NoSectionError:
 			# return False
+		##Seed 3-------------------------------
+		##Returns 80 for the grade recieved
 		return "80"
 	#}
 	
@@ -266,7 +268,12 @@ class CourseManager:
 		except configparser.NoSectionError:
 			return False
 		
-		return feedbackRecieved
+		#return feedbackRecieved
+		##Seed 4-------------------------------
+		##Only returns the first half of the feedback
+		length = len(feedbackRecieved)
+		first_half = feedbackRecieved[0:length/2]
+		return first_half
 	#}
 	
 	##Edits the grade for the student, returns false if student's folder doesn't exist or if failure occurs
