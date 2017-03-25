@@ -123,7 +123,7 @@ class CourseManager:
 		##Seed 5-------------------------------
 		##Edits the assignmentName
 		assignmentName = assignmentName + "----"
-		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, maxSubmissions - 1, lateDays + 3)
+		check = self.parent.configManager.addProject(courseConfigFile, assignmentName, dueDate, team, int(maxSubmissions) - 1, int(lateDays) + 3)
 		
 		if not check:
 			return False
