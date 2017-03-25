@@ -205,7 +205,6 @@ class GradeInterface:
 			maxLength = 23,
 			sizeYX = (1, 29),
 			positionYX = (self.assignmentNamePos[0], self.assignmentNamePos[1] + len(self.assignmentNameLabel) + 1))
-		self.editAssignmentName.setCallback(self.onTextEnter)
 		
 		##Edit due date
 		self.dateLabel = "Due date:"
@@ -215,7 +214,6 @@ class GradeInterface:
 			maxLength = 20,
 			sizeYX = (1, 23),
 			positionYX = (self.datePos[0], self.datePos[1] + len(self.dateLabel) + 1))
-		self.editDate.setCallback(self.onTextEnter)
 		
 		##Edit number of late
 		self.lateLabel = "Number of allowed late days:"
@@ -225,7 +223,6 @@ class GradeInterface:
 			maxLength = 3,
 			sizeYX = (1, 6),
 			positionYX = (self.latePos[0], self.latePos[1] + len(self.lateLabel) + 1))
-		self.editLate.setCallback(self.onTextEnter)
 		
 		##Edit max number of submissions
 		self.maxSubmissionsLabel = "Number of allowed submissions"
@@ -235,7 +232,6 @@ class GradeInterface:
 			maxLength = 3,
 			sizeYX = (1, 6),
 			positionYX = (self.maxSubmissionsPos[0], self.maxSubmissionsPos[1] + len(self.maxSubmissionsLabel) + 1))
-		self.editMaxSubmissions.setCallback(self.onTextEnter)
 		
 		##Save button.
 		self.savePos = (5, 2)
@@ -257,7 +253,6 @@ class GradeInterface:
 			maxLength = 6,
 			sizeYX = (1, 9),
 			positionYX = (self.gradePos[0], self.gradePos[1] + len(self.gradeLabel) + 1))
-		self.editGrade.setCallback(self.onTextEnter)
 		
 		# Edit comment
 		self.commentLabel = "Comments:"
@@ -267,7 +262,6 @@ class GradeInterface:
 			maxLength = 42,
 			sizeYX = (1, 45),
 			positionYX = (self.commentPos[0] + 1, self.commentPos[1] + 1))
-		self.editComment.setCallback(self.onTextEnter)
 		
 		# Save button.
 		self.savePos = (5, 2)
