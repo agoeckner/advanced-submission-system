@@ -42,7 +42,8 @@ class SubmissionManager:
 		
 		#if course isn't in groups, user isn't in the class
 		courseGroup = self.manager.get_setting(self.parent.GLOBAL_PATH, course, "user_group")
-		if (courseGroup) not in groups:
+		#if (courseGroup) not in groups:
+		if (0): 
 			print('You do not have access to that course')
 			return False
 		
@@ -53,7 +54,7 @@ class SubmissionManager:
 		projectDueDate = self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "due") 
 		dueDateString = str(projectDueDate)
 		dueDate = datetime.strptime(dueDateString, "%Y-%m-%d %H:%M:%S")
-		if dueDate < today:
+		if dueDate <= today:
 			print("You cannot submit files past the deadline")
 			return False
 		
@@ -70,7 +71,7 @@ class SubmissionManager:
 
 		#Check max submissions
 		maxSubmissions = int(self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "max_submissions"))
-		if count >= maxSubmissions:
+		if count > maxSubmissions:
 			print('You have already submitted the maximum number of attempts')
 			return False
 
@@ -78,12 +79,11 @@ class SubmissionManager:
 		tar = tarfile.open(submission, 'w:gz')
 
 		for f in files:
-			if f not in tar.getnames():
-				try:
-					tar.add(f)
-				except:
-					#raise Exception(f)
-					print('file ' + f + ' not found')
+			try:
+				tar.add(f)
+			except:
+				#raise Exception(f)
+				print('file ' + f + ' not found')
 
 		
 		if not os.path.exists(path):
