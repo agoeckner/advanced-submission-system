@@ -540,7 +540,7 @@ class GradeInterface:
 			self.course,
 			self.assignment,
 			self.student,
-			grade
+			grade,
 			0,
 			self.editComment.getValue())
 		if result:
