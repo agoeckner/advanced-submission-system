@@ -31,7 +31,7 @@ class ConfigManager:
 			return False
 
 		try:
-			dueDate = parse(dueDate)
+			dueDate = dueDate
 		except ValueError:
 			print("ERROR: incorrect format for dueDate specified \n Use format mm-dd-yyyy")
 			return False
@@ -129,7 +129,7 @@ class ConfigManager:
 			return False
 		config.set(courseName, 'course_config_file', courseConfigFile)
 		config.set(courseName, 'course_path', coursePath)
-		config.set(courseName, 'user_group', userGroup)
+		config.set(courseName, 'usergroup', userGroup)
 		## config.set(courseName, 'contact info: ', contactInfo)
 
 		with open(globalConfigFile, 'w+') as f:
@@ -170,7 +170,7 @@ class ConfigManager:
 			return False
 		config.set('Instructors', 'user_group', groupName)
 		
-		with open(globalConfigFile, 'w+') as f:
+		with open(globalConfigFile, 'r+') as f:
 			config.write(f)
 		return True
 		
