@@ -52,7 +52,7 @@ class GradeConfigManager:
 		# method will throw exceptions if section doesn't exist
 		config = self.get_config(path)
 		if (not config):
-			return false
+			return False
 		config.set(section, setting, value)
 		with open(path, "w") as config_file:
 			config.write(config_file)
@@ -84,7 +84,7 @@ class GradeConfigManager:
 			config.add_section(sec_name)
 			config.set(sec_name, 'Grade', str(grade) )
 			config.set(sec_name, 'Bonus', str(bonus) )
-			config.set(sec_name, 'Comment', str(feedback) )
+			config.set(sec_name, 'Comments', str(feedback) )
 
 		except configparser.DuplicateSectionError :
 			print("\t[-] grade already added")
@@ -130,7 +130,7 @@ class GradeConfigManager:
 					return None
 				total_points = "Score: " + str(self.getGrade(gradeConfigFile) ) + " Bonus: " + str( self.getBonus(gradeConfigFile) )
 				gradesDict[studentDir] = total_points
-		return
+		return gradesDict
 
 def main():
 	gcm = GradeConfigManager()

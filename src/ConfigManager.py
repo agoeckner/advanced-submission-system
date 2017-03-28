@@ -31,7 +31,7 @@ class ConfigManager:
 			return False
 
 		try:
-			dueDate = dueDate
+			dueDate = parse(dueDate)
 		except ValueError:
 			print("ERROR: incorrect format for dueDate specified \n Use format mm-dd-yyyy")
 			return False
@@ -94,13 +94,13 @@ class ConfigManager:
 		return config.sections()
 
 
-	def getProjectInfo( self,courseConfigFile, projectName):
+	def getProjectInfo( self,courseConfigFile, projectName, key):
 		config = configparser.RawConfigParser()
 		config.read(courseConfigFile)
 		conf_sections = config.sections()
 		for proj in conf_sections :
 			if proj == projectName:
-				return config.items(proj)
+				return config[projectName][key]
 		raise Exception("Project not found!")
 
 
@@ -129,7 +129,7 @@ class ConfigManager:
 			return False
 		config.set(courseName, 'course_config_file', courseConfigFile)
 		config.set(courseName, 'course_path', coursePath)
-		config.set(courseName, 'usergroup', userGroup)
+		config.set(courseName, 'user_group', userGroup)
 		## config.set(courseName, 'contact info: ', contactInfo)
 
 		with open(globalConfigFile, 'w+') as f:
@@ -170,7 +170,7 @@ class ConfigManager:
 			return False
 		config.set('Instructors', 'user_group', groupName)
 		
-		with open(globalConfigFile, 'r+') as f:
+		with open(globalConfigFile, 'w+') as f:
 			config.write(f)
 		return True
 		
