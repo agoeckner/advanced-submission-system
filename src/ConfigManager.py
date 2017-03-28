@@ -31,7 +31,7 @@ class ConfigManager:
 			return False
 
 		try:
-			dueDate = dueDate
+			dueDate = parse(dueDate)
 		except ValueError:
 			print("ERROR: incorrect format for dueDate specified \n Use format mm-dd-yyyy")
 			return False
