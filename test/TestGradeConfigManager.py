@@ -12,10 +12,11 @@ run using :   python -m unittest -v TestGradeConfigManager
 class TestGradeConfigManager(unittest.TestCase):
 
 	def setUp(self):
+		path_to_repo = os.environ['HOME'] + "/cs408"
 		self.gcm = GradeConfigManager.GradeConfigManager()
-		self.test_dir = os.environ['HOME'] + "/cs408/advanced-submission-system/test/testCourse/testProject"
-		self.validGlobalConfig = os.environ['HOME'] + "/cs408/advanced-submission-system/test/testGlobal.config"
-		self.testStudent = os.environ['HOME'] + "/cs408/advanced-submission-system/test/testCourse/testProject/student1/Grade.config"
+		self.test_dir = path_to_repo + "/advanced-submission-system/test/testCourse/testProject"
+		self.validGlobalConfig = path_to_repo + "/advanced-submission-system/test/testGlobal.config"
+		self.testStudent = path_to_repo + "/advanced-submission-system/test/testCourse/testProject/student1/Grade.config"
 
 	def test_gradeUpdate(self):
 		# check if grades are updated
