@@ -54,7 +54,7 @@ class GradeInterface:
 		try:
 			# UI Setup
 			curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-			curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_CYAN)
+			curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_YELLOW)
 			curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
 			self.screenSize = stdscr.getmaxyx()
 			# Check if size below 24x80.
@@ -239,11 +239,11 @@ class GradeInterface:
 		
 		##Save button.
 		self.savePos = (5, 2)
-		self.saveBtn = Button.Button(
+		self.saveBtn2 = Button.Button(
 			parent = self.editPanel,
 			positionYX = self.savePos,
 			label = "Save Changes")
-		self.saveBtn.setCallback(self.onBtnSaveGrade)
+		self.saveBtn2.setCallback(self.onBtnSaveAssignment)
 		pass
 			
 	
@@ -275,7 +275,7 @@ class GradeInterface:
 			parent = self.editPanel,
 			positionYX = self.savePos,
 			label = "Save Changes")
-		self.saveBtn.setCallback(self.onBtnSaveAssignment)
+		self.saveBtn.setCallback(self.onBtnSaveGrade)
 	
 	def _clearAssignmentPanel(self):
 		self.editPanel.clear()
@@ -301,7 +301,7 @@ class GradeInterface:
 		self.editMaxSubmissions.redraw()
 		
 		##Save button
-		self.saveBtn.redraw()
+		self.saveBtn2.redraw()
 		
 		##Set up input manager
 		if not self.editAssignmentVisible:
@@ -309,7 +309,7 @@ class GradeInterface:
 			self.inputManager.addElement(self.editDate)
 			self.inputManager.addElement(self.editLate)
 			self.inputManager.addElement(self.editMaxSubmissions)
-			self.inputManager.addElement(self.saveBtn)
+			self.inputManager.addElement(self.saveBtn2)
 			self.editAssignmentVisible = True
 		
 		self.editPanel.box()
@@ -546,13 +546,15 @@ class GradeInterface:
 			self.course,
 			self.assignment,
 			self.student,
-			grade)
+			grade
+			0,
+			self.editComment.getValue())
 		if result:
-			self.parent.courseManager.editFeedback(
-				self.course,
-				self.assignment,
-				self.student,
-				self.editComment.getValue())
+			#self.parent.courseManager.editFeedback(
+			#	self.course,
+			#	self.assignment,
+			#	self.student,
+			#	self.editComment.getValue())
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
