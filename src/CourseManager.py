@@ -327,8 +327,8 @@ class CourseManager:
 		groupInfo = grp.getgrnam(instructorGroup)
 		instructorID = groupInfo.gr_gid
 		os.mkdir(x)
-		os.chown(x, studentID, instructorID)
-		os.chmod(x, stat.S_IRWXG | stat.S_IRWXU)
+		#os.chown(x, studentID, instructorID)
+		os.chmod(x, 0o777)
 	#}
 
 	##removes the directory and all directories and files inside it
