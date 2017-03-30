@@ -73,7 +73,7 @@ class SubmissionManager:
 
 		#Check max submissions
 		#maxSubmissions = int(self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "max_submissions"))
-		maxSubmissions = int(self.courseManager.getAssignmentSetting(course, assignment, "max_submissions"))
+		maxSubmissions = int(self.parent.courseManager.getAssignmentSetting(course, assignment, "max_submissions"))
 
 		if count >= maxSubmissions:
 			print('You have already submitted the maximum number of attempts')
