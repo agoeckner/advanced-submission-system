@@ -28,6 +28,7 @@ class TestCourseManager(unittest.TestCase): #{
 		configFile = open("./global.config", "w")
 		configFile.close()
 		
+		self.configManager.addInstructor(self.GLOBAL_PATH, "Instructors")
 	#}
 	
 	def tearDown(self): #{
@@ -134,46 +135,46 @@ class TestCourseManager(unittest.TestCase): #{
 	##-------------------------------------------------------------------------
 	def test_create_assignment_1(self): #{
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
-		check = self.courseManager.createAssignment("cs180", "Lab1", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Lab1", "2017-05-05", False, 3, 3)
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_create_assignment_2(self): #{
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
-		check = self.courseManager.createAssignment("cs180", "Lab4", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Lab4", "2017-05-05", False, 3, 3)
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_create_assignment_3(self): #{
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
-		check = self.courseManager.createAssignment("cs180", "Homework1", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Homework1", "2017-05-05", False, 3, 3)
 		
 		self.assertEqual(check, True)
 	#}
 	
 	def test_create_assignment_already_exists_1(self): #{
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
-		self.courseManager.createAssignment("cs180", "Homework1", "2017-03-25", False, 3, 3)
+		self.courseManager.createAssignment("cs180", "Homework1", "2017-05-05", False, 3, 3)
 		
-		check = self.courseManager.createAssignment("cs180", "Homework1", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Homework1", "2017-05-05", False, 3, 3)
 		self.assertEqual(check, False)
 	#}
 	
 	def test_create_assignment_already_exists_2(self): #{
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
-		self.courseManager.createAssignment("cs180", "Lab3", "2017-03-25", False, 3, 3)
+		self.courseManager.createAssignment("cs180", "Lab3", "2017-05-05", False, 3, 3)
 		
-		check = self.courseManager.createAssignment("cs180", "Lab3", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Lab3", "2017-05-05", False, 3, 3)
 		self.assertEqual(check, False)
 	#}
 	
 	def test_create_assignment_already_exists_3(self): #{
 		self.courseManager.createCourse("./courses/", "cs180", "cs180Users")
-		self.courseManager.createAssignment("cs180", "Project3", "2017-03-25", False, 3, 3)
+		self.courseManager.createAssignment("cs180", "Project3", "2017-05-05", False, 3, 3)
 		
-		check = self.courseManager.createAssignment("cs180", "Project3", "2017-03-25", False, 3, 3)
+		check = self.courseManager.createAssignment("cs180", "Project3", "2017-05-05", False, 3, 3)
 		self.assertEqual(check, False)
 	#}
 	
@@ -182,7 +183,7 @@ class TestCourseManager(unittest.TestCase): #{
 	##-------------------------------------------------------------------------
 	def test_delete_assignment_1(self): #{
 		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Homework5", "2017-03-25", False, 3, 3)
+		self.courseManager.createAssignment("cs240", "Homework5", "2017-05-05", False, 3, 3)
 		
 		check = self.courseManager.deleteAssignment("Homework5", "cs240")
 		self.assertEqual(check, True)
@@ -190,7 +191,7 @@ class TestCourseManager(unittest.TestCase): #{
 	
 	def test_delete_assignment_2(self): #{
 		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Lab6", "2017-03-25", False, 3, 3)
+		self.courseManager.createAssignment("cs240", "Lab6", "2017-05-05", False, 3, 3)
 		
 		check = self.courseManager.deleteAssignment("Lab6", "cs240")
 		self.assertEqual(check, True)
@@ -198,7 +199,7 @@ class TestCourseManager(unittest.TestCase): #{
 	
 	def test_delete_assignment_3(self): #{
 		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Project3", "2017-03-25", False, 3, 3)
+		self.courseManager.createAssignment("cs240", "Project3", "2017-05-05", False, 3, 3)
 		
 		check = self.courseManager.deleteAssignment("Project3", "cs240")
 		self.assertEqual(check, True)
@@ -230,7 +231,7 @@ class TestCourseManager(unittest.TestCase): #{
 	##-------------------------------------------------------------------------
 	def test_modify_assignment_1(self): #{
 		self.courseManager.createCourse("./courses/", "cs240", "cs240Users")
-		self.courseManager.createAssignment("cs240", "Homework5", "2017-03-25", False, 3, 3)
+		self.courseManager.createAssignment("cs240", "Homework5", "2017-05-05", False, 3, 3)
 		self.courseManager.modifyAssignment("cs240", "Homework5", "due", "04/25/2017")
 		
 		check = self.courseManager.getAssignmentSetting("cs240", "Homework5", "due")

@@ -210,6 +210,7 @@ class Picker:
 	def setOptions(self, optionsList):
 		self.all_options = self._buildOptionsTree(optionsList)
 		self.length = len(self.all_options)
+
 		
 	def __init__(
 		self, 

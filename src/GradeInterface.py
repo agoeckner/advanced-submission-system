@@ -437,7 +437,6 @@ class GradeInterface:
 				# Add the "New Assignment" Feature.
 				if self.mode is MODE_INSTRUCTOR:
 					assignments.insert(0, "<---NEW ASSIGNMENT--->")
-					assignments.insert(0, "<---OVERALL GRADES--->")
 				
 				self.pickAssignment.setOptions(assignments)
 				self.pickAssignment.redraw()
@@ -494,8 +493,15 @@ class GradeInterface:
 					c_empty = "",
 					c_selected = "")
 					self.pickFiles.redraw()
-					self.inputManager.addElement(self.pickFiles)
-					#self.inputManager.addElement(self.btnExit)
+					#self.inputManager.addElement(self.pickFiles)
+					self.btnExit = Button.Button(
+						parent = self.panelMain,
+						positionYX = (self.screenSize[0] - 8,
+							2 * int((self.screenSize[1] - 4) / 3) - 4),
+						label = "Exit")
+					self.btnExit.setCallback(exit, 0)
+					self.btnExit.redraw()
+					self.inputManager.addElement(self.btnExit)
 	
 	def onSelectStudent(self):
 		selected = self.pickStudent.getSelected()
@@ -536,7 +542,7 @@ class GradeInterface:
 		except ValueError:
 			self.displayMessage("Please enter a score as a real number.")
 			return
-		result = self.parent.courseManager.editGrade(
+		result = self.parent.courseManager.enterGrade(
 			self.course,
 			self.assignment,
 			self.student,
@@ -544,11 +550,6 @@ class GradeInterface:
 			0,
 			self.editComment.getValue())
 		if result:
-			#self.parent.courseManager.editFeedback(
-			#	self.course,
-			#	self.assignment,
-			#	self.student,
-			#	self.editComment.getValue())
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
@@ -566,7 +567,6 @@ class GradeInterface:
 			return
 		
 		check = self.parent.courseManager.createAssignment(self.course, assignmentName, dueDate, False, maxSubmissions, lateDays)
-		
 		if check:
 			self.displayMessage("Assignment created")
 			self._clearAssignmentPanel()
