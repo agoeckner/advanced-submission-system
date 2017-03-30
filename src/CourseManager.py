@@ -95,7 +95,7 @@ class CourseManager:
 	def createAssignment(self, courseName, assignmentName, dueDate, team, maxSubmissions, lateDays): #{
 		try:
 			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
-			userGroup = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName,'user_group')
+			userGroup = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName,'usergroup')
 		except configparser.NoSectionError:
 			return False
 		
@@ -412,7 +412,7 @@ class CourseManager:
 		except configparser.NoSectionError:
 			return False
 			
-		return self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "user_group")
+		return self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "usergroup")
 	#}
 
 

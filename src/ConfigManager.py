@@ -159,7 +159,7 @@ class ConfigManager:
 	def addInstructor(self, globalConfigFile, groupName):
 		my_file = Path(globalConfigFile)
 		if not my_file.is_file():
-			print("Unable to find "  + courseConfigFile)
+			print("Unable to find "  + globalConfigFile)
 			return False
 		config = configparser.ConfigParser() # get_config(courseConfigFile)
 		config.read(globalConfigFile)
