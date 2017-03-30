@@ -34,6 +34,8 @@ class GradeInterface:
 		self.assignment = ""
 		self.student = ""
 		self.lastMsgLen = 0
+		self.editAssignmentCheck = False
+		self.editGradeCheck = False
 	
 	def show(self):
 		try:
@@ -283,6 +285,7 @@ class GradeInterface:
 	
 	def _drawAssignmentEditPanel(self):
 		self.editPanel.clear()
+		self.editAssignmentCheck = True
 		
 		##Edit assignment name
 		self.editPanel.addstr(self.assignmentNamePos[0], self.assignmentNamePos[1], self.assignmentNameLabel)
@@ -318,6 +321,7 @@ class GradeInterface:
 	
 	def _drawGradeEditPanel(self):
 		self.editPanel.clear()
+		self.editGradeCheck = True
 		
 		# Edit grade
 		self.editPanel.addstr(self.gradePos[0], self.gradePos[1], self.gradeLabel)
@@ -466,20 +470,29 @@ class GradeInterface:
 				if self.mode is MODE_INSTRUCTOR and assignment == "<---NEW ASSIGNMENT--->":
 					##self.displayMessage("Made it into the right if statement")
 					self._drawAssignmentEditPanel()
-					
+					self.student = ""
+				elif self.editAssignmentCheck:
+					self._clearAssignmentPanel()
+					self.removeAssignmentElements()
+				
 				if self.mode is MODE_INSTRUCTOR and not self.pickStudentVisible:
 					self.pickStudentVisible = True
 					self.pickStudent.redraw()
 					self.inputManager.addElement(self.pickStudent)
 	
 	def onSelectStudent(self):
-		selected = self.pickStudent.getSelected()
-		if len(selected) == 1:
-			student = selected[0]
-			if self.student != student:
-				self.student = student
-				self.displayAssignmentInfo(self.course, self.assignment, self.student)
-	
+		if self.assignment != "<---NEW ASSIGNMENT--->":
+			selected = self.pickStudent.getSelected()
+			if len(selected) == 1:
+				student = selected[0]
+				if self.student != student:
+					self.student = student
+					self.displayAssignmentInfo(self.course, self.assignment, self.student)
+		elif self.editGradeCheck:
+			self.pickStudent.redraw()
+			self._clearAssignmentPanel()
+			self.removeGradeElements()
+			
 	def _getStudentList(self, course):
 		try:
 			groupName = self.parent.courseManager.getCourseUserGroup(course)
@@ -520,6 +533,8 @@ class GradeInterface:
 			self.editComment.getValue())
 		if result:
 			self._clearAssignmentPanel()
+			self.removeGradeElements()
+			self.student = ""
 			self.displayMessage("Grade updated!")
 		else:
 			self.displayMessage("ERROR: Grade not saved.")
@@ -545,7 +560,34 @@ class GradeInterface:
 				assignments.insert(0, "<---NEW ASSIGNMENT--->")
 			self.pickAssignment.setOptions(assignments)
 			self.pickAssignment.redraw()
+			#self._clearAssignmentPanel()
+			self.removeAssignmentElements()
+			self.assignment = ""
 		else:
 			self.displayMessage("Assignment not created")
 		pass
+	#}
+	
+	def removeAssignmentElements(self): #{
+		self.editAssignmentCheck = False
+		self.inputManager.elements.remove(self.editAssignmentName)
+		self.inputManager.elements.remove(self.editDate)
+		self.inputManager.elements.remove(self.editLate)
+		self.inputManager.elements.remove(self.editMaxSubmissions)
+		self.inputManager.elements.remove(self.saveBtn2)
+		editPanelPosYX = (self.screenSize[0] - 12, int((self.screenSize[1] - 4) / 3) + 1)
+		editPanelSizeYX = (7, 2 * int((self.screenSize[1] - 3) / 3))
+		self._createAssignmentNewPanel(editPanelSizeYX, editPanelPosYX)
+		#self.assignment = ""
+	#}
+	
+	def removeGradeElements(self): #{
+		self.editGradeCheck = False
+		self.inputManager.elements.remove(self.editGrade)
+		self.inputManager.elements.remove(self.editComment)
+		self.inputManager.elements.remove(self.saveBtn)
+		editPanelPosYX = (self.screenSize[0] - 12, int((self.screenSize[1] - 4) / 3) + 1)
+		editPanelSizeYX = (7, 2 * int((self.screenSize[1] - 3) / 3))
+		self._createGradeEditPanel(editPanelSizeYX, editPanelPosYX)
+		#self.student = ""
 	#}

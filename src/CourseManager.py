@@ -193,6 +193,7 @@ class CourseManager:
 		try:
 			path = self.parent.configManager.get_setting(self.parent.GLOBAL_PATH, courseName, "course_path")
 		except configparser.NoSectionError:
+			print("Config Error")
 			return False
 		
 		gradeConfigPath = path + "/" + assignmentName + "/" + studentName + "/grade.config"
@@ -202,11 +203,14 @@ class CourseManager:
 			gradeConfigFile = open(gradeConfigPath, "w")
 			gradeConfigFile.close()
 		except:
+			print("Error with creating grade config")
+			#print(gradeConfigPath)
 			return False
 		
 		try:
 			check = self.parent.gradeManager.addGrade(gradeConfigPath, gradeRecieved, bonus, feedback)
 		except:
+			print("Grade Config Error")
 			return False
 		
 		return check
@@ -328,7 +332,7 @@ class CourseManager:
 		instructorID = groupInfo.gr_gid
 		os.mkdir(x)
 		#os.chown(x, studentID, instructorID)
-		os.chmod(x, 0o777)
+		os.chmod(x, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
 	#}
 
 	##removes the directory and all directories and files inside it
