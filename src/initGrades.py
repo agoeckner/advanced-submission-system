@@ -38,22 +38,15 @@ class AdvancedSubmissionSystem:
 		if self.configManager.getInstructorGroup(self.GLOBAL_PATH) in groups:
 			mode = GradeInterface.MODE_INSTRUCTOR
 
-		self.configManager = ConfigManager.ConfigManager()
-		self.gradeManager = GradeConfigManager.GradeConfigManager()
-		courseManager = CourseManager.CourseManager(self)
 		
 		self.submissionManager = SubmissionManager.SubmissionManager(self)
-		self.courseManager = CourseManager.CourseManager(self)
 		self.gradeUI = GradeInterface.GradeInterface(self, mode)
 		
-		self.setUp()
 		try:
 			self.gradeUI.show()
 		except KeyboardInterrupt:
 			print("Exited")
-	
-		self.takeDown()
-	
+		
 	def setUp(self): #{
 		os.mkdir("./courses")
 		configFile = open("./global.config", "w")
