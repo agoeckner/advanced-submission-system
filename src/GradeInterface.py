@@ -511,19 +511,14 @@ class GradeInterface:
 		except ValueError:
 			self.displayMessage("Please enter a score as a real number.")
 			return
-		result = self.parent.courseManager.editGrade(
+		result = self.parent.courseManager.enterGrade(
 			self.course,
 			self.assignment,
 			self.student,
-			grade
+			grade,
 			0,
 			self.editComment.getValue())
 		if result:
-			#self.parent.courseManager.editFeedback(
-			#	self.course,
-			#	self.assignment,
-			#	self.student,
-			#	self.editComment.getValue())
 			self._clearAssignmentPanel()
 			self.displayMessage("Grade updated!")
 		else:
