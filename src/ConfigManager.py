@@ -56,7 +56,7 @@ class ConfigManager:
 			config.set(projectName, 'team', str(team) )
 			config.set(projectName, 'max_submissions', str(maxSubmissions) )
 			config.set(projectName, 'due', str(dueDate) )
-			config.set(projectName, 'late days', str(lateDays)  )
+			config.set(projectName, 'late_days', str(lateDays)  )
 		except configparser.DuplicateSectionError :
 			print("\t[-] "  + projectName + " already exists")
 			return False
