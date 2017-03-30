@@ -50,7 +50,10 @@ class SubmissionManager:
 
 		today = datetime.now()
 		courseName = self.parent.courseManager.courseNameToPath(course) + "/";
-		projectDueDate = self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "due") 
+
+		#projectDueDate = self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "due") 
+		projectDueDate = self.parent.courseManager.getAssignmentSetting(course, assignment, "due")
+
 		dueDateString = str(projectDueDate)
 		dueDate = datetime.strptime(dueDateString, "%Y-%m-%d %H:%M:%S")
 		if dueDate < today:
@@ -69,7 +72,9 @@ class SubmissionManager:
 
 
 		#Check max submissions
-		maxSubmissions = int(self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "max_submissions"))
+		#maxSubmissions = int(self.manager.getProjectInfo(courseName + self.manager.get_setting(self.parent.GLOBAL_PATH, course, "course_config_file"), assignment, "max_submissions"))
+		maxSubmissions = int(self.courseManager.getAssignmentSetting(course, assignment, "max_submissions"))
+
 		if count >= maxSubmissions:
 			print('You have already submitted the maximum number of attempts')
 			return False
