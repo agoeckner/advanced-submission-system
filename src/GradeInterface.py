@@ -7,6 +7,7 @@
 import curses
 import grp
 import time
+import sys
 import ProgramException
 import ui.Button as Button
 import ui.InputManager as InputManager
@@ -386,7 +387,7 @@ class GradeInterface:
 				positionYX = (self.screenSize[0] - 8,
 					2 * int((self.screenSize[1] - 4) / 3) - 4),
 				label = "Exit")
-			self.btnExit.setCallback(exit, 0)
+			self.btnExit.setCallback(sys.exit, 0)
 			self.btnExit.redraw()
 			
 			# # File picker.
